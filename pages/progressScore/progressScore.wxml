@@ -1,0 +1,52 @@
+<view class='progressScore'>
+
+<view class="progressScoreContainerHeader">
+			<view class="progressScoreContainerHeaderScore">
+				<view class="progressScoreContainerHeaderAllScore">
+						<view class="progressScoreContainerHeaderAllScoreTag">总分</view>
+						<view class="progressScoreContainerHeaderAllScoreContent" id="allScoreDiv"><span id="allScore"></span>分</view>
+				</view>
+				
+				<view class="progressScoreContainerHeaderAllScore" style="margin-left: 10px;">
+						<view class="progressScoreContainerHeaderAllScoreTag">第<span id="round"></span>轮</view>
+						<view class="progressScoreContainerHeaderAllScoreContent" id="thisScoreDiv"><span id="thisScore"></span>分</view>
+				</view>
+			</view>
+			
+			<!--  
+			<div class="progressScoreContainerHeaderAllScore" style="margin-top: 10px;">
+				<div class="personalAttrDataHeader personalAttrDataHeaderBean" style="float: left;position: relative;top:4px;"></div>
+				<div class="progressScoreContainerHeaderAllScoreContent" style="position: relative;left:-20px;top:1px;">330000</div>	
+			</div>
+			-->
+			<view class="progressScoreContainerHeaderLoveLife">
+				<ul>
+					<li><div class="personalAttrDataHeaderBig personalAttrDataHeaderLoveBig" id="love1"></div></li>
+					<li><div class="personalAttrDataHeaderBig personalAttrDataHeaderLoveBig" id="love2"></div></li>
+					<li><div class="personalAttrDataHeaderBig personalAttrDataHeaderLoveBig" id="love3"></div></li>
+					<li><div class="personalAttrDataHeaderBig personalAttrDataHeaderLoveHollowBig" id="love4"></div></li>
+				</ul>
+			</view>
+			
+			<view class="progressScoreContainerHeader2">
+				<view class="progressScoreContainerHeaderRank">当前名次第<span id="rank"></span>名</view>	
+			</view>
+</view>
+
+ <scroll-view scroll-y scroll-top="{{containerScrollTop}}" scroll-with-animation="true" scroll-into-view="toDom{{currentDom}}" id = "progressScoreContainer" style="position: relative;height:100vh"> 
+  <view class="progressScore" id="progressScore">
+         <view class="progressScoreBar">
+            <view class="trajectory">
+                <view wx:for="{{targets}}" wx:for-item="target" style="left:{{target.left}}%;top:{{target.top}}px;background:url('{{target.bgUrl}}');background-size:100% 100%;" id="toDom{{target.index}}" class="trajectoryLi"></view>
+                <view class="fromDom"  id="fromDom" style="background: url('http://on3s1z2us.bkt.clouddn.com/target.png');background-size:100% 100%;position: absolute;z-index: 100;" animation="{{animationData}}"></view>
+            </view> 
+        </view>
+  </view>
+</scroll-view>
+
+
+
+
+
+
+</view>

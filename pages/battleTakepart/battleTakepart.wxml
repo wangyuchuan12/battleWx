@@ -1,0 +1,25 @@
+<import src="../assembly/baseLayerout/baseLayerout"/>
+<import src="../assembly/attrPlug/attrPlug"/>
+<template is="baseLayerout" data="{{...baseData}}"/>
+<scroll-view class="battleTakepart" scroll-y>
+    <image src="{{imgUrl}}" class="battleTakepartImg"></image>
+   
+    <scroll-view class="battleTakepartMembers" scroll-y>
+      <view class="battleTakepartMember" wx:for="{{members}}" wx:for-item="member">
+        <image src="{{member.imgUrl}}" class="battleTakepartMemberImg"/>
+      </view>
+    </scroll-view>
+
+    <view class="battleTakepartButtons">
+      <view class="battleTakepartButton" bindtap="backClick">返回</view>
+      <view class="battleTakepartButton" bindtap="takepartClick">参与</view>
+    </view>
+
+    <view class="battleTakepartInfo">
+      <view class="battleTakepartInfoTitle">{{battleInfoName}}</view>
+
+      <scroll-view class="battleTakepartInfoContent" scroll-y >
+        {{battleInfoContent}}
+      </scroll-view>
+    </view>
+</scroll-view >

@@ -1,0 +1,15 @@
+{
+  "pages": [
+    "pages/battleTakepart/battleTakepart",
+    "pages/battleInfo/battleInfo",
+    "pages/logs/logs",
+    "pages/progressScore/progressScore",
+    "pages/questionInfo/questionInfo"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "WeChat",
+    "navigationBarTextStyle": "black"
+  }
+}
