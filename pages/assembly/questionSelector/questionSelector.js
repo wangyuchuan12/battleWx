@@ -194,13 +194,14 @@ var questionSelector = {
         }
       }
       selectItems = this.shuffle(selectItems);
+      console.log("selectItems:"+JSON.stringify(selectItems));
+      var index = 0;
       var headerCount = this.data.questionSelectorData.questionSelectorHeaderList.length;
       for (var i = 0; i < headerCount;i++){
-        var item = selectItems[0];
-        selectItems = selectItems.splice(0,1);
+        var item = selectItems[index];
         var headerItem = this.data.questionSelectorData.questionSelectorHeaderList[i];
         if (item != null && headerItem.status==0){
-          
+          index++;
           outThis.setQuestionSelectorHeader(i, item, {
             complete: function () {
               outThis.selectComplete();
