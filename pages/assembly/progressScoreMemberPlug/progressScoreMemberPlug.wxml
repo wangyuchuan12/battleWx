@@ -1,0 +1,9 @@
+<template name="progressScoreMemberPlug">
+  <scroll-view class="progressScoreContainerHeaderMembers" scroll-x="true" style="white-space:nowrap;display:flex;">
+          <view class="progressScoreContainerHeaderMember" wx:for="{{members}}" wx:for-item="member">
+            <image src="{{member.imgUrl}}" class="progressScoreContainerHeaderMemberImg" style="border-radisu:10px;"></image>
+            <progress percent="{{member.percent}}" class="progressScoreContainerHeaderMemberProgress"/>
+            <view class="progressScoreContainerHeaderMemberRank">第{{index+1}}名</view>
+          </view>
+  </scroll-view>
+</template>

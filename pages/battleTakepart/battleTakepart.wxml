@@ -5,7 +5,7 @@
     <image src="{{imgUrl}}" class="battleTakepartImg"></image>
    
     <scroll-view class="battleTakepartMembers" scroll-y>
-      <view class="battleTakepartMember" wx:for="{{members}}" wx:for-item="member">
+      <view class="battleTakepartMember" wx:for="{{members}}" wx:for-item="member" wx:key="id">
         <image src="{{member.imgUrl}}" class="battleTakepartMemberImg"/>
       </view>
     </scroll-view>

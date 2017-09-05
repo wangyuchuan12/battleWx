@@ -1,18 +1,36 @@
 var domain = "http://192.168.1.101";
 //根据code登陆用户bbin
 var loginByJsCodeUrl = domain + "/api/common/login/loginByJsCode";
+var registerUserByJsCode = domain +"/api/common/login/registerUserByJsCode";
 var wxPayConfigUrl = domain + "/api/battle/wxPayConfig";
 
-//请求总函数，是所有请求的工具
-var haha = 1;
-function test(){
-  console.log(haha);
+var token;
+var isLogin;
 
-  haha++;
-}
+var openSettingFlag = false;
+
+var openUserSettingCallbacks = new Array();
+//请求总函数，是所有请求的工具
 
 function getDomain(){
   return domain;
+}
+
+function requestWithLogin(url,params,callback){
+
+  if (!isLogin){
+    requestLogin({
+      success: function () {
+        request(url, params, callback)
+      },
+      fail: function () {
+        callback.fail();
+      }
+    })
+  }else{
+    request(url, params, callback)
+  }
+  
 }
 
 function request(url, params, callback) {
@@ -28,6 +46,7 @@ function request(url, params, callback) {
       'content-type': 'application/x-www-form-urlencoded'
     }
   }
+  params.token = token;
   wx.request({
     url: url,
     data: params,
@@ -93,8 +112,6 @@ function requestWxPayConfig(callback) {
 //支付
 function requestPayMent(params) {
   var timestamp = params.timestamp;
-  console.log("timestamp:" + timestamp);
-
   requestLogin({
     success: function () {
       wx.requestPayment({
@@ -118,55 +135,153 @@ function requestPayMent(params) {
   });
 }
 
-function openSetting(){
+function openSetting(callback){
   wx.openSetting({
     success: function (res) {
-     
+      callback.success(res);
     },
     fail: function () {
-      openSetting();
+      callback.fail();
     }
   });
 }
 
+function openUserInfoSetting(callback){
+  
+  openUserSettingCallbacks.push(callback);
+  if (openSettingFlag){
+    return;
+  }
+  openSettingFlag = true;
+  openSetting({
+      success:function(res){
+        if (res.authSetting["scope.userInfo"]){
+          console.log("success");
+          for (var i = 0; i < openUserSettingCallbacks.length;i++){
+            var callback = openUserSettingCallbacks[i];
+            callback.success();
+          }
+          openSettingFlag = false;
+        }else{
+          console.log("fail");
+          openSettingFlag = false;
+          openUserInfoSetting();
+        }
+      },
+      fail:function(){
+       // console.log("fail2");
+       // openUserInfoSetting();
+      }
+  });
+}
+
+
+function testSetUserInfo(){
+/*  wx.setStorageSync("userInfo",{
+    "code": "1",
+    "nickName": "test", "gender": 1,
+    "avatarUrl": "ss",
+    "openId":123
+  });
+
+  var userInfo = wx.getStorageSync("userInfo");
+
+  console.log("userInfo:"+JSON.stringify(userInfo));*/
+}
+
 //获取用户信息数据
 function getUserInfo(callback) {
-  var userInfo = wx.getStorageSync("userInfo");
+ /* var userInfo = wx.getStorageSync("userInfo");
+  console.log(JSON.stringify(userInfo));
   if (userInfo) {
     callback.success(userInfo);
     return;
-  }
+  }*/
+
   wx.getUserInfo({
     withCredentials: false,
     success: function (res) {
       callback.success(res.userInfo);
     },
     fail: function (res) {
-      openSetting();
+      openUserInfoSetting({
+        success:function(){
+          getUserInfo(callback);
+        }
+      });
     }
   })
 }
 
 
+function requestRegist(callback,code,userInfo){
+  request(registerUserByJsCode,{
+      "code": code,
+      "openId": userInfo.openId,
+      "nickName": userInfo.nickName, "gender": userInfo.gender,
+      "language": userInfo.language, "city": userInfo.city,
+      "province": userInfo.province, "country": userInfo.country,
+      "avatarUrl": userInfo.avatarUrl
+    },{
+      success:function(resp){
+          if(resp.success){
+            //注册成功
+            callback.success();
+          }else{
+            //用户已存在
+            if(resp.errorCode==403){
+              callback.exists();
+            }else{
+              callback.fail();
+            }
+            
+          }
+      },
+      fail:function(resp){
+          //注册失败
+          callback.fail();
+      }
+    });
+}
+
 //请求登陆
 function requestLogin(callback) {
   wx.login({
     success: function (loginCode) {
-      console.log("loginCode:" + loginCode.code);
       getUserInfo({
         success: function (userInfo) {
-
-          console.log(JSON.stringify(userInfo));
           var url = loginByJsCodeUrl;
           request(url, {
-            "code": loginCode.code,
-            "nickName": userInfo.nickName, "gender": userInfo.gender,
-            "language": userInfo.language, "city": userInfo.city,
-            "province": userInfo.province, "country": userInfo.country,
-            "avatarUrl": userInfo.avatarUrl
+            "code": loginCode.code      
           }, {
               success: function (resp) {
-                callback.success(userInfo);
+                if(resp.success){
+                  token = resp.data.token;
+                  isLogin = true;
+                  callback.success(userInfo);
+                }else{
+                  if(resp.errorCode==401){
+                    wx.login({
+                      success:function(loginCode){
+                        requestRegist({
+                          success: function () {
+                            requestLogin(callback);
+                          },
+                          fail: function () {
+                            console.log("fail1")
+                            callback.fail();
+                          },
+                          exists: function () {
+                            console.log("fail2")
+                            callback.fail();
+                          }
+                        }, loginCode.code, userInfo);
+                      }
+                    })
+                    
+                  }
+                }
+               
               },
               fail: function () {
 
@@ -191,7 +306,8 @@ module.exports = {
   requestPayMent: requestPayMent,
   requestLogin: requestLogin,
   requestWxPayConfig: requestWxPayConfig,
-  test:test,
   getDomain:getDomain,
-  requestLogin: requestLogin
+  requestLogin: requestLogin,
+  testSetUserInfo: testSetUserInfo,
+  requestWithLogin:requestWithLogin
 }

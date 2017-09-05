@@ -1,3 +1,5 @@
+var questionSelector = require("../questionSelector/questionSelector.js");
+var progressScoreMember = require("../progressScoreMemberPlug/progressScoreMemberPlug.js");
 function BaseLayerout(config){
 
     var baseConfig = config;
@@ -41,8 +43,25 @@ function BaseLayerout(config){
       });
     }
     
-
+  this.addQuestionSelector = function(){
+    var configData = config.data;
+    var questionSelectorData = questionSelector.questionSelector.data;
+    var data = Object.assign(configData, questionSelectorData);
+    config = Object.assign(config, questionSelector.questionSelector);
+    config.data = data;
+  }
+  this.begin = function(){
     Page(baseConfig);
+  }
+
+  this.addProgressScoreMember = function(){
+    var configData = config.data;
+    var progressScoreMemberData = progressScoreMember.progressScoreMembers.data;
+    var data = Object.assign(configData, progressScoreMemberData);
+    config = Object.assign(config, progressScoreMemberData.progressScoreMembers);
+    config.data = data;
+  }
+   
 }
 
 

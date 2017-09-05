@@ -1,5 +1,6 @@
 /* battleTakepart.wxss */
 @import '../assembly/attrPlug/attrPlug.wxss';
+
 .battleTakepart{
   width:100%;
 	min-height:100vh;

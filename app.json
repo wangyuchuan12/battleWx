@@ -3,8 +3,8 @@
     "pages/battleTakepart/battleTakepart",
     "pages/battleInfo/battleInfo",
     "pages/logs/logs",
-    "pages/progressScore/progressScore",
-    "pages/questionInfo/questionInfo"
+    "pages/questionInfo/questionInfo",
+    "pages/progressScore/progressScore"
   ],
   "window": {
     "backgroundTextStyle": "light",

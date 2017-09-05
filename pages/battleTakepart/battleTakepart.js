@@ -8,7 +8,9 @@ var util = require("../../utils/util.js");
 var baseLayerout = require("../assembly/baseLayerout/baseLayerout.js");
 var app = getApp();
 var headImg = "http://ovcnyik4l.bkt.clouddn.com/d89f42d36c18e16d9900a5cd43e8edf2.png";
-new baseLayerout.BaseLayerout({
+var battleId = 1;
+var index = 2;
+var layerout = new baseLayerout.BaseLayerout({
   /**
    * 页面的初始数据
    */
@@ -23,64 +25,86 @@ new baseLayerout.BaseLayerout({
     members:[]
 
   },
+
+  haha:function(){
+    console.log("haha");
+  },
   
+  isTakepartCache:function(){
+    var key = "isTakepart_"+battleId+"_"+index;
+    var isTakepart = wx.getStorageSync(key);
+    return isTakepart;
+  },
+
+  setTakepartCache:function(){
+    var key = "isTakepart_" + battleId + "_" + index;
+    wx.setStorageSync(key,true);    
+  },
 
   //初始化数据
   init:function(){
+    var outThis = this;
+    var isTakepart = this.isTakepartCache();
 
+    console.log("isTakepart:" + isTakepart);
+    if (isTakepart){
+      outThis.skipToProgress();
+    }
     var outThis = this;
     var flagInfo = false;
     var flagMembers = false;
     var flagLogin = false;
     this.showLoading();
-    this.initBattleInfo({
-        call:function(){
-          if (flagMembers){
-            outThis.hideLoading();
-          }
-          flagInfo = true;
+    outThis.initBattleInfo({
+      success: function (members) {
+        console.log("success");
+        if (flagMembers) {
+          outThis.hideLoading();
         }
-    });
-
-    this.initBattleMembers({
-        call:function(){
-          if(flagInfo){
-            outThis.hideLoading();
-          }
-          flagMembers = true;
-        }
-    });
-
-   this.login({
-      success:function(){
-
+        flagInfo = true;
       },
       fail:function(){
-
+        flagInfo = true;
       }
-   });
+    });
 
-
-    //5秒钟如果没有加载好就提示出错
     setTimeout(function(){
-      if(!flagMembers){
+
+    },5000);
+
+    outThis.initBattleMembers({
+      success: function () {
+        if (flagInfo) {
+          outThis.hideLoading();
+        }
+        flagMembers = true;
+      },
+      fail:function(){
+        flagMembers = true;
+      }
+    });
+
+/*
+    //5秒钟如果没有加载好就提示出错
+    setTimeout(function () {
+      if (!flagMembers) {
         outThis.hideLoading();
         outThis.showToast("加载参赛名单出错");
       }
 
-      if(!flagInfo){
+      if (!flagInfo) {
         outThis.hideLoading();
         outThis.showToast("加载比赛信息出错");
       }
-    },10000);
+    }, 10000);*/
   },
 
   //吃石化比赛信息数据
   initBattleInfo:function(callback){
     var outThis = this;
-    battleRequest.getBattleInfo(1, {
+    battleRequest.getBattleInfo(battleId, {
       success: function (battleInfo) {
-        callback.call();
+        callback.success();
        
         wx.setNavigationBarTitle({
           title: battleInfo.name
@@ -92,7 +116,7 @@ new baseLayerout.BaseLayerout({
         });
       },
       fail: function () {
-        callback.call();
+        callback.fail();
       }
     });
   },
@@ -111,11 +135,9 @@ new baseLayerout.BaseLayerout({
  //初始化参赛人员列表数据
   initBattleMembers:function(callback){
     var outThis = this;
-    battleMembersRequest.getBattleMembers(1,1,{
+    battleMembersRequest.getBattleMembers(battleId,index,{
       success: function (battleMembers) {
-
-       console.log(JSON.stringify(battleMembers));
-       callback.call();
+       callback.success(battleMembers)
         var length = battleMembers.length;
         var members = new Array();
         for (var i = 0; i < battleMembers.length;i++){
@@ -135,13 +157,19 @@ new baseLayerout.BaseLayerout({
 
       },
       fail: function () {
-        callback.call();
+        callback.fail();
       }
     });
   },
 
   backClick:function(){
 
+  },
+
+  skipToProgress:function(){
+    wx.navigateTo({
+      url: '../progressScore/progressScore',
+    });
   },
 
   //点击参赛请求
@@ -159,6 +187,8 @@ new baseLayerout.BaseLayerout({
         outThis.setData({
           members: members
         });
+        outThis.setTakepartCache();
+        outThis.skipToProgress();
       },
       fail:function(errorMsg){
         outThis.hideLoading();
@@ -167,7 +197,14 @@ new baseLayerout.BaseLayerout({
         }else{
           outThis.showToast(errorMsg);
         }
-       
+      },
+      battleIn:function(){
+        outThis.hideLoading();
+        outThis.setTakepartCache();
+        outThis.skipToProgress();
+      },
+      battleEnd:function(){
+        outThis.hideLoading();
       }
     });
 
@@ -227,4 +264,5 @@ new baseLayerout.BaseLayerout({
   onShareAppMessage: function () {
     
   }
-})
+});
+layerout.begin();

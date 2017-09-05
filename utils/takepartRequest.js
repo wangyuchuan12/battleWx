@@ -10,6 +10,12 @@ function battleTakepart(battleId,callback) {
     },
     fail: function (errorMsg) {
       callback.fail(errorMsg);
+    },
+    battleIn:function(){
+      callback.battleIn();
+    },
+    battleEnd:function(){
+      callback.battleEnd();
     }
   });
 }
@@ -17,13 +23,18 @@ function battleTakepart(battleId,callback) {
 function requestBattleTakepart(battleId, callback) {
   var params = new Object();
   params.battleId = battleId;
-  request.request(url, params, {
+  request.requestWithLogin(url, params, {
     success: function (resp) {
       if (resp.success) {
         callback.success(resp.data);
       } else {
-        console.log(JSON.stringify(resp));
-        callback.fail("检查你是否已经参赛");
+        //正在进行中
+        if(resp.errorCode==0){
+          callback.battleIn();
+        //比赛已经结束
+        }else if(resp.errorCode==1){
+          callback.battleEnd();
+        }
       }
     },
     fail: function (resp) {
