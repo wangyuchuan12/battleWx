@@ -1,11 +1,12 @@
 /* questionInfo.wxss */
-
+@import '../assembly/questionInputPlug/questionInputPlug.wxss';
 .subjectContainer{
-	background: RGBA(48,48,56,1);
+	background: RGBA(48,48,56,0.8);
 	width:100%;
-	height: 100vh;
-	overflow: scroll;
-	padding-bottom: 100px;
+  min-height:100vh;
+  max-height:150vh;
+
+  padding-bottom:20px;
 }
 
 .subjectHeader{
@@ -35,22 +36,7 @@
   text-align: left;
 }
 
-.subjectOptions{
-  width:100%;
-}
 
-.subjectOption{
-	background-color: white;
-	width:90%;
-	height: 40px;
-	border-radius:10px;
-	margin: 0px auto;
-	text-align: center;
-	color: black;
-	margin-top: 10px;
-	font-size: 20px;
-  padding-top:10px;
-}
 
 .progress{
   width:80%;

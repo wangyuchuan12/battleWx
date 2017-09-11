@@ -2,16 +2,28 @@ var request = require("../../../utils/battleSubjectsRequest.js");
 var questionSelector = {
   data:{
     questionSelectorData: {
-      questionSelectorHeaderIndex:0,
-      questionSelectorHeaderCount:5,
-      questionSelectorHeaderList: [
-        { imgUrl:"http://ovqk5bop3.bkt.clouddn.com/question2.png" ,status:0,index:0},
-        { imgUrl: "http://ovqk5bop3.bkt.clouddn.com/question2.png" ,status:0,index:1},
-        { imgUrl: "http://ovqk5bop3.bkt.clouddn.com/question2.png" ,status:0,index:2},
-        { imgUrl: "http://ovqk5bop3.bkt.clouddn.com/question2.png" ,status:0,index:3}
-      ],
+      display:"none",
+      questionSelectorHeaderCount:3,
+      questionSelectorHeaderList: [],
       questionSelectorContentList: []
     }
+  },
+
+  setHeaderCount:function(count){
+    
+    var questionSelectorHeaderList = new Array();
+    for(var i=0;i<count;i++){
+      questionSelectorHeaderList.push({
+        imgUrl: "http://ovqk5bop3.bkt.clouddn.com/question2.png",
+        status: 0,
+        index: 0
+      });
+    }
+
+    this.setData({
+      "questionSelectorData.questionSelectorHeaderCount": count,
+      "questionSelectorData.questionSelectorHeaderList": questionSelectorHeaderList
+    });
   },
 
   isQuestionSelectorHeaderReady:function(){
@@ -130,12 +142,13 @@ var questionSelector = {
 
 
   selectComplete:function(){
+    var outThis = this;
     wx.showModal({
       title: "提示",
       content: "确定开始吗",
       success: function (sm) {
         if (sm.confirm) {
-          console.log("confirm");
+          outThis.eventListener.selectComplete();
         } else if (sm.cancel) {
           console.log("cancel");
         }
@@ -231,10 +244,26 @@ var questionSelector = {
     return array;
   },
 
-  initBattleSubjects:function(){
+  hideSelector:function(){
+    this.setData({
+      "questionSelectorData.display":"none"
+    });
+  },
+
+  showSelector:function(){
+    this.setData({
+      "questionSelectorData.display": "block"
+    });
+  },
+
+  initBattleSubjects:function(count,callback){
+    this.setHeaderCount(count);
     var outThis = this;
     request.getBattleSubjects(1,1,{
       success:function(data){
+        if(callback){
+          callback.success();
+        }
         var array = new Array();
         array.push({
           id:"random",
@@ -266,5 +295,4 @@ var questionSelector = {
 
 module.exports = {
   questionSelector: questionSelector
-
 }

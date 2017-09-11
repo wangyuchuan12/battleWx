@@ -1,5 +1,7 @@
 var questionSelector = require("../questionSelector/questionSelector.js");
 var progressScoreMember = require("../progressScoreMemberPlug/progressScoreMemberPlug.js");
+var progressScorePlug = require("../progressScorePlug/progressScorePlug.js");
+var questionInputPlug = require("../questionInputPlug/questionInputPlug.js");
 function BaseLayerout(config){
 
     var baseConfig = config;
@@ -59,6 +61,22 @@ function BaseLayerout(config){
     var progressScoreMemberData = progressScoreMember.progressScoreMembers.data;
     var data = Object.assign(configData, progressScoreMemberData);
     config = Object.assign(config, progressScoreMemberData.progressScoreMembers);
+    config.data = data;
+  }
+
+  this.addProgressScorePlug = function(){
+    var configData = config.data;
+    var progressScorePlugData = progressScorePlug.progressScorePlug.data;
+    var data = Object.assign(configData, progressScorePlugData);
+    config = Object.assign(config, progressScorePlug.progressScorePlug);
+    config.data = data;
+  }
+
+  this.addQuestionInputPlug = function(){
+    var configData = config.data;
+    var questionInputPlugData = questionInputPlug.questionInputPlug.data;
+    var data = Object.assign(configData, questionInputPlugData);
+    config = Object.assign(config, questionInputPlug.questionInputPlug);
     config.data = data;
   }
    

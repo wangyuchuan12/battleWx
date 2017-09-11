@@ -2,10 +2,21 @@ var request = require("request.js");
 
 var domain = request.getDomain();
 var url = domain + "/api/battle/members";
+var battleMembers = wx.getStorageSync("battleMembers");
 
 function getBattleMembers(battleId,index, callback) {
+
+
+  if (battleMembers){
+    if(callback.cache){
+      callback.cache(battleMembers);
+    }
+   
+  }
+  
   requestBattleMembers(battleId,index,{
       success:function(members){
+          wx.setStorageSync("battleMembers", members);
           callback.success(members);
       },
       fail:function(){
@@ -33,5 +44,6 @@ function requestBattleMembers(battleId,index,callback){
 }
 
 module.exports = {
-  getBattleMembers: getBattleMembers
+  getBattleMembers: getBattleMembers,
+  battleMembers: battleMembers
 }

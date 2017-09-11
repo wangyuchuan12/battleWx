@@ -1,0 +1,37 @@
+
+<template name="inputOptions">
+  <view id="subjectOptions" wx:if="{{type==0}}">
+    <view class="subjectOptions">
+      <view class="subjectOption" wx:for="{{options}}" wx:for-item="option" bindtap="selectItemClick" id="{{option.id}}" style="background:{{option.background}}">{{option.content}}</view>
+    </view>
+  </view>
+
+  <view id="inputItem" wx:if="{{type==1}}">
+    <view class="inputItem" id="blankItem">
+      <view class="inputItemInput">
+        <input placeholder="答案({{rightAnswer.length}}个字)" bindinput="inputChange"/>
+      </view>
+      <view class="inputItemButton" bindtap="inputItemClick">确定</view>
+    </view>
+  </view>
+
+  <view id="inputItemFillTerms" wx:if="{{type==2}}">
+    <view class='inputItemFillTerms'>
+    
+      <view class='inputItemFillTermsWorlds'>
+        <view class="inputItemFillTermsWorld" wx:for="{{worlds}}" wx:for-item="world" bindtap="worldClick" id="{{world.id}}">{{world.content}}</view>
+      </view>
+
+
+      <view class='inputItemFillTermsWorldsCheck'>
+        <view class="inputItemFillTermsWorldCheckItem" wx:for="{{worldChecks}}" wx:for-item="worldCheck" wx:if="{{index<=5}}" id="{{worldCheck.id}}" bindtap="worldCheckClick">{{worldCheck.content}}</view>
+      </view>
+      <view class='inputItemFillTermsWorldsCheck'>
+        <view class="inputItemFillTermsWorldCheckItem" wx:for="{{worldChecks}}" wx:for-item="worldCheck" wx:if="{{index<=11&&index>5}}" id="{{worldCheck.id}}" bindtap="worldCheckClick">{{worldCheck.content}}</view>
+      </view>
+      <view class='inputItemFillTermsWorldsCheck'>
+         <view class="inputItemFillTermsWorldCheckItem" wx:for="{{worldChecks}}" wx:for-item="worldCheck" wx:if="{{index<=17&&index>11}}" id="{{worldCheck.id}}" bindtap="worldCheckClick">{{worldCheck.content}}</view>
+      </view>
+    </view>
+  </view>
+</template >

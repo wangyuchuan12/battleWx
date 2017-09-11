@@ -10,15 +10,21 @@ var battleInfo = {
   "headImg": "http://ovcnyik4l.bkt.clouddn.com/d89f42d36c18e16d9900a5cd43e8edf2.png", 
   "isDisplay": 1, 
   "isActivation": 1, 
-  "currentPeriodIndex": 1
+  "currentPeriodIndex": 1,
+  "distance":100
 };
+
+battleInfo = wx.getStorageSync("battleInfo");
+
+
 function getBattleInfo(id,callback){
   requestBattleInfo(id,{
     success:function(data){
+      wx.setStorageSync("battleInfo", data);
       callback.success(data);
     },
     fail:function(){
-      callback.fail(data);
+      callback.fail();
     }
   });
 }
@@ -41,5 +47,6 @@ function requestBattleInfo(id,callback){
 }
 
 module.exports = {
-  getBattleInfo: getBattleInfo
+  getBattleInfo: getBattleInfo,
+  battleInfo: battleInfo
 }

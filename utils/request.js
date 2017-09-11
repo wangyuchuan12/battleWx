@@ -1,7 +1,7 @@
 var domain = "http://192.168.1.101";
 //根据code登陆用户bbin
 var loginByJsCodeUrl = domain + "/api/common/login/loginByJsCode";
-var registerUserByJsCode = domain +"/api/common/login/registerUserByJsCode";
+var registerUserByJsCode = domain +"/api/common/login/registerUserByJsCod";
 var wxPayConfigUrl = domain + "/api/battle/wxPayConfig";
 
 var token;
@@ -165,7 +165,7 @@ function openUserInfoSetting(callback){
         }else{
           console.log("fail");
           openSettingFlag = false;
-          openUserInfoSetting();
+          openUserInfoSetting(callback);
         }
       },
       fail:function(){
@@ -201,6 +201,7 @@ function getUserInfo(callback) {
   wx.getUserInfo({
     withCredentials: false,
     success: function (res) {
+      wx.setStorageSync("userInfo",res.userInfo);
       callback.success(res.userInfo);
     },
     fail: function (res) {

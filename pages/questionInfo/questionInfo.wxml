@@ -1,16 +1,10 @@
+<import src="../assembly/questionInputPlug/questionInputPlug.wxml"/>
 <view class="subjectContainer">
   <view class="subjectHeader">
-    <image class="subjectHeaderImg" src="../resource/question.png"></image>
-    <view class="subjectHeaderImgQuestion">你个问题的答案是什么呀，你又是谁呀，多么好的问题，我来问问题你来回答，这是一件极好的事情，当你又问题的时候及时发文</view>
+    <image class="subjectHeaderImg" src="{{imgUrl}}"></image>
+    <view class="subjectHeaderImgQuestion">{{content}}</view>
   </view>
 
-  <progress percent="20" show-info class="progress"/>
-
-  <view class="subjectOptions">
-    <view class="subjectOption">我爱罗</view>
-    <view class="subjectOption">乔布斯</view>
-
-    <view class="subjectOption">鸣人</view>
-    <view class="subjectOption">佐助</view>
-  </view>
+  <progress percent="{{percent}}" show-info class="progress"/>
+  <template is="inputOptions" data="{{...questionInputData}}"></template>
 </view>

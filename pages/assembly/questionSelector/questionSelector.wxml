@@ -1,11 +1,11 @@
 <!--questionSelector.wxml-->
 <template name="questionSelector">
-  <view class="questionSelector">
+  <view class="questionSelector" style="display:{{display}}">
     <view class="questionSelectorHeader">
       <scroll-view class="questionSelectorHeaderList" scroll-x="true" scroll-left="10" style="white-space:nowrap;display:flex;" >
         <view class="questionSelectorHeaderItem" wx:for="{{questionSelectorHeaderList}}" wx:for-item="questionSelectorHeaderItem" wx:key="id" bindtap="selectBattleHeader" id="{{index}}">
           <image src="{{questionSelectorHeaderItem.imgUrl}}" class="questionSelectorHeaderItemImg"></image>
-          <view class="questionSelectorHeaderItemTest">第{{index+1}}题</view>
+          <view class="questionSelectorHeaderItemText">第{{index+1}}题</view>
         </view>
 
       </scroll-view>

@@ -5,6 +5,7 @@
     "pages/logs/logs",
     "pages/questionInfo/questionInfo",
     "pages/progressScore/progressScore"
+    
   ],
   "window": {
     "backgroundTextStyle": "light",
