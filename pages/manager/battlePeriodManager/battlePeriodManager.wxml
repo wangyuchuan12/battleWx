@@ -1,2 +1,5 @@
-<!--pages/manager/battlePeriodManager/battlePeriodManager.wxml-->
-<text>pages/manager/battlePeriodManager/battlePeriodManager.wxml</text>
+<view class="battlePeriodManager">
+  <view class="battlePeriodManagerButtonns">
+    <text class="fa fa-home" style="width:40px;height:40px;background:red;"></text>
+  </view>
+</view>
