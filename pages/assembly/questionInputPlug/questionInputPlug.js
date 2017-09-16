@@ -4,7 +4,7 @@ var questionInputPlug = {
 
       //0表示选择题 1表示填空题 2表示填词题
       type:0,
-      rightAnswer:"苹果排队",
+      rightAnswer:"",
       answer:"你好",
       rightOption:1,
       questionId: 0,
@@ -226,8 +226,12 @@ var questionInputPlug = {
       "questionInputData.worlds": worlds
     });
 
+  },
 
-
+  setRightAnswer:function(rightAnswer){
+      this.setData({
+        "questionInputData.rightAnswer": rightAnswer
+      });
   },
 
   worldCheckClick:function(e){

@@ -5,6 +5,9 @@ var battleMemberInfoRequest = require("../../utils/battleMemberInfoRequest.js");
 var questionAnswerRequest = require("../../utils/questionAnswerRequest.js");
 
 var questionSelector;
+var battleMemberQuestionAnswerId;
+var battleMemberPaperAnswerId;
+var outThis;
 var layerout = new baseLayerout.BaseLayerout({
   data:{
     imgUrl:"",
@@ -15,52 +18,62 @@ var layerout = new baseLayerout.BaseLayerout({
 
   eventListener:{
     inputSubmit: function (questionId,answer){
+      outThis.showLoading();
       var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
       questionAnswerRequest.requestBattleQuestionAnswer({
-        questionId: questionId,
+        id: questionId,
         type: 0,
-        targetId: memberInfo.id,
+        memberId: memberInfo.id,
+        battleId:memberInfo.battleId,
+        stageIndex:memberInfo.stageIndex,
         answer: answer
       }, {
-          success: function () {
+          success: function (id) {
+            outThis.hideLoading();
             questionSelector.next();
           },
           fail: function () {
-
+            outThis.hideLoading();
           }
         });
     },
     fillSubmit: function (questionId,answer){
-      var outThis = this;
+      outThis.showLoading();
       var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
       questionAnswerRequest.requestBattleQuestionAnswer({
-        questionId: questionId,
+        id: questionId,
         type: 0,
-        targetId: memberInfo.id,
+        memberId: memberInfo.id,
+        battleId: memberInfo.battleId,
+        stageIndex: memberInfo.stageIndex,
         answer: answer
       }, {
-          success: function () {
+          success: function (id) {
+            outThis.hideLoading();
             questionSelector.next();
           },
           fail: function () {
-
+            outThis.hideLoading();
           }
         });
     },
     selectSubmit: function (questionId,optionId){
-      var outThis = this;
+      outThis.showLoading();
       var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
       questionAnswerRequest.requestBattleQuestionAnswer({
-        questionId: questionId,
+        id: questionId,
         type:0,
-        targetId:memberInfo.id,
+        memberId: memberInfo.id,
+        battleId: memberInfo.battleId,
+        stageIndex: memberInfo.stageIndex,
         optionId:optionId
       },{
-        success:function(){
+        success:function(id){
+          outThis.hideLoading();
           questionSelector.next();
         },
         fail:function(){
-
+          outThis.hideLoading();
         }
       });
       
@@ -69,12 +82,11 @@ var layerout = new baseLayerout.BaseLayerout({
 
   setSelectData:function(data){
 
-    console.log(JSON.stringify(data));
-
     this.setData({
       imgUrl:data.imgUrl,
       content:data.question
     });
+    this.hideLoading();
 
     this.setQuestionId(data.id);
     this.setType(0);
@@ -93,6 +105,8 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   setFillData:function(data){
+
+    this.hideLoading();
     this.setQuestionId(data.id);
     this.setData({
       imgUrl: data.imgUrl,
@@ -104,7 +118,10 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   setInputData:function(data){
+
+    this.hideLoading();
     this.setQuestionId(data.id);
+    this.setRightAnswer(data.answer);
     this.setData({
       imgUrl: data.imgUrl,
       content: data.question
@@ -114,16 +131,21 @@ var layerout = new baseLayerout.BaseLayerout({
 
   initView:function(ids){
     var outThis = this;
-    questionSelector = new questionRequest.QuestionSelector(ids,{
-      success:function(){
+
+    var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
+   
+    var battleId = memberInfo.battleId;
+
+    questionSelector = new questionRequest.QuestionSelector(battleId,ids,{
+      success: function (id){
+        battleMemberPaperAnswerId = id
         questionSelector.next();
       },
       fail:function(){
-        console.log("fail");
+
       }
     },{
       step:function(data){
-        console.log(".................step");
         if(data.type==0){
           outThis.setSelectData(data);
         }
@@ -135,17 +157,21 @@ var layerout = new baseLayerout.BaseLayerout({
         }
         
       },
-      complete:function(){
+      complete: function (){
         wx.redirectTo({
-          url: '../progressScore/progressScore',
+          url: '../progressScore/progressScore?battleMemberPaperAnswerId=' + battleMemberPaperAnswerId,
         });
       },
       fail:function(){
         console.log("...............fail");
       }
     });
+
+   
   },
   onLoad: function (options) {
+    outThis = this;
+    this.showLoading();
     this.initView([1,2,3]);
   }
 });

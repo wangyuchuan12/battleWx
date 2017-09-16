@@ -4,10 +4,14 @@ var domain = request.getDomain();
 var url = domain + "/api/battle/battleSubjects";
 
 
-function getBattleSubjects(battleId,periodStageId,callback){
-  requestBattleSubjects(battleId, periodStageId,{
+function getBattleSubjects(battleId,callback){
+  requestBattleSubjects(battleId,{
       success:function(data){
         callback.success(data);
+
+        if(data.isLast==1){
+          callback.isLast();
+        }
       },
       fail:function(){
         callback.fail();
@@ -15,10 +19,9 @@ function getBattleSubjects(battleId,periodStageId,callback){
   })
 }
 
-function requestBattleSubjects(battleId,periodStageId,callback){
+function requestBattleSubjects(battleId,callback){
   var params = new Object();
   params.battleId = battleId;
-  params.periodStageId = periodStageId;
   request.requestWithLogin(url, params, {
     success: function (resp) {
       if (resp.success) {

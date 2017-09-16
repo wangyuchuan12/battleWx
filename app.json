@@ -1,11 +1,13 @@
 {
   "pages": [
+    "pages/manager/battlePeriodManager/battlePeriodManager",
+    "pages/manager/battleInfoManager/battleInfoManager",
     "pages/battleTakepart/battleTakepart",
     "pages/battleInfo/battleInfo",
     "pages/logs/logs",
     "pages/questionInfo/questionInfo",
-    "pages/progressScore/progressScore"
-    
+    "pages/progressScore/progressScore",
+    "pages/battleRank/battleRank"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -17,7 +17,6 @@ function getDomain(){
 }
 
 function requestWithLogin(url,params,callback){
-
   if (!isLogin){
     requestLogin({
       success: function () {
@@ -148,7 +147,10 @@ function openSetting(callback){
 
 function openUserInfoSetting(callback){
   
-  openUserSettingCallbacks.push(callback);
+  if(callback){
+    openUserSettingCallbacks.push(callback);
+  }
+  
   if (openSettingFlag){
     return;
   }
@@ -156,16 +158,14 @@ function openUserInfoSetting(callback){
   openSetting({
       success:function(res){
         if (res.authSetting["scope.userInfo"]){
-          console.log("success");
           for (var i = 0; i < openUserSettingCallbacks.length;i++){
             var callback = openUserSettingCallbacks[i];
             callback.success();
           }
           openSettingFlag = false;
         }else{
-          console.log("fail");
           openSettingFlag = false;
-          openUserInfoSetting(callback);
+          openUserInfoSetting();
         }
       },
       fail:function(){
@@ -269,11 +269,9 @@ function requestLogin(callback) {
                             requestLogin(callback);
                           },
                           fail: function () {
-                            console.log("fail1")
                             callback.fail();
                           },
                           exists: function () {
-                            console.log("fail2")
                             callback.fail();
                           }
                         }, loginCode.code, userInfo);

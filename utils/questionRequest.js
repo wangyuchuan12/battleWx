@@ -1,31 +1,36 @@
 var request = require("request.js");
 
+var questionAnswerRequest = require("questionAnswerRequest.js");
+
 var domain = request.getDomain();
 var battleQuestionUrl = domain + "/api/battle/battleQuestions";
 
 var questionInfoUrl = domain + "/api/question/info";
 
+var questionIds;
 
-
-function QuestionSelector(subjectIds,callback,stepCallback){
-
-  var questionIds;
+function QuestionSelector(battleId, subjectIds,callback,stepCallback){
   var selector = new Object();
 
   requestBattleQuestions(subjectIds,{
     success:function(data){
       questionIds = data;
-      console.log("questionIds:"+questionIds);
-      callback.success()
+      questionAnswerRequest.requestCreatePaperAnswer(battleId, questionIds,{
+        success:function(data){
+          callback.success(data.battleMemberPaperAnswerId);
+        }
+      });
     },
     fail:function(){
       callback.fail();
     }
   });
 
+  
+
+
   var index = 0;
   this.next = function(){
-    console.log("questionIds:"+questionIds+",index:"+index);
     if (index <= questionIds.length-1){
       var id = questionIds[index];
       console.log("id:"+id);

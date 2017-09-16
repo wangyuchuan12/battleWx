@@ -1,3 +1,5 @@
 @import '../assembly/questionSelector/questionSelector.wxss';
 
 @import '../assembly/progressScorePlug/progressScorePlug.wxss';
+
+@import '../assembly/questionResult/questionResult.wxss';

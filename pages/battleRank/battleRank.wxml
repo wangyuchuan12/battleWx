@@ -1,0 +1,23 @@
+<view class="battleRank">
+  <view class="battleRankHeader">
+    <view class="battleRankHeaderGold">
+      <image src="http://ovqk5bop3.bkt.clouddn.com/gold.png" class="battleRankHeaderGoldHat"></image>
+      <image src="{{rankMembers[0].imgUrl}}" class="battleRankHeaderGoldHead"/>
+      <view class="battleRankHeaderGoldRank">NO.1</view>
+      <view class="battleRankHeaderGoldResult">{{rankMembers[0].process}}米<!--{{rankMembers[0].consumeHour}}:{{rankMembers[0].consumeMinute}}分--></view>
+    </view>
+  </view>
+
+  <scroll-view class="battleRankMembers" scroll-y>
+
+  
+    <view class="battleRankMember" wx:for="{{rankMembers}}" wx:for-item="member" wx:if="{{index>0}}">
+      <view class="battleRankMemberRank">NO.{{index+1}}</view>
+      <image src="{{member.imgUrl}}" class="battleRankMemberImg"></image>
+      <view class="battleRankMemberContent">
+        <view class="battleRankMemberContentNickname">{{member.nickname}}</view>
+        <view class="battleRankMemberContentResult">{{member.process}}米 <!--{{member.consumeHour}}:{{member.consumeMinute}}分--></view>
+      </view>
+    </view>  
+  </scroll-view>
+</view>

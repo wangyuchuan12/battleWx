@@ -1,4 +1,7 @@
 <import src="../assembly/questionInputPlug/questionInputPlug.wxml"/>
+<import src="../assembly/baseLayerout/baseLayerout.wxml"/>
+
+<template is="baseLayerout" data="{{...baseData}}"/>
 <view class="subjectContainer">
   <view class="subjectHeader">
     <image class="subjectHeaderImg" src="{{imgUrl}}"></image>

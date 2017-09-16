@@ -4,7 +4,7 @@ var domain = request.getDomain();
 var url = domain + "/api/battle/members";
 var battleMembers = wx.getStorageSync("battleMembers");
 
-function getBattleMembers(battleId,index, callback) {
+function getBattleMembers(battleId, periodIndex, callback) {
 
 
   if (battleMembers){
@@ -14,7 +14,7 @@ function getBattleMembers(battleId,index, callback) {
    
   }
   
-  requestBattleMembers(battleId,index,{
+  requestBattleMembers(battleId, periodIndex,{
       success:function(members){
           wx.setStorageSync("battleMembers", members);
           callback.success(members);
@@ -25,11 +25,11 @@ function getBattleMembers(battleId,index, callback) {
   });
 }
 
-function requestBattleMembers(battleId,index,callback){
+function requestBattleMembers(battleId,periodIndex,callback){
   var params = new Object();
   params.battleId = battleId;
-  params.index = index;
-  request.request(url, params, {
+  params.periodIndex = periodIndex;
+  request.requestWithLogin(url, params, {
     success: function (resp) {
       if (resp.success) {
         callback.success(resp.data);

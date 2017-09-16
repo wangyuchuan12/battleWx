@@ -9,7 +9,7 @@ var baseLayerout = require("../assembly/baseLayerout/baseLayerout.js");
 var app = getApp();
 var headImg = "http://ovcnyik4l.bkt.clouddn.com/d89f42d36c18e16d9900a5cd43e8edf2.png";
 var battleId = 1;
-var index = 2;
+var index = 1;
 var layerout = new baseLayerout.BaseLayerout({
   /**
    * 页面的初始数据
@@ -50,7 +50,6 @@ var layerout = new baseLayerout.BaseLayerout({
     this.showLoading();
     outThis.initBattleInfo({
       success: function (members) {
-        console.log("success");
         if (flagMembers) {
           outThis.hideLoading();
         }
@@ -102,7 +101,7 @@ var layerout = new baseLayerout.BaseLayerout({
   //吃石化比赛信息数据
   initBattleInfo:function(callback){
     var outThis = this;
-    battleRequest.getBattleInfo(battleId, {
+    battleRequest.getBattleInfo(battleId,{
       success: function (battleInfo) {
         callback.success();
        
@@ -147,10 +146,14 @@ var layerout = new baseLayerout.BaseLayerout({
     battleMembersRequest.getBattleMembers(battleId,index,{
       cache: function (battleMembers){
         var members = new Array();
-        for (var i = 0; i < battleMembers.length; i++) {
-          members.push({
-            imgUrl: battleMembers[i].headImg
-          });
+        var length = 0;
+        if (battleMembers != null && battleMembers.length>0){
+          length = battleMembers.length;
+          for (var i = 0; i < battleMembers.length; i++) {
+            members.push({
+              imgUrl: battleMembers[i].headImg
+            });
+          }
         }
         for (var i = 0; i < 50 - length; i++) {
           members.push({
@@ -194,7 +197,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
   skipToProgress:function(){
     wx.redirectTo({
-      url: '../progressScore/progressScore',
+      url: '../progressScore/progressScore?model=0&battleId='+battleId+"&periodIndex="+index
     });
   },
 
@@ -229,6 +232,7 @@ var layerout = new baseLayerout.BaseLayerout({
       },
       battleEnd:function(){
         outThis.hideLoading();
+        outThis.skipToProgress();
       }
     });
 
