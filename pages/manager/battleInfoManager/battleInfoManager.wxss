@@ -1,8 +1,5 @@
 .battleInfoManagerSubjects{
   width:100%;
-
-  border-bottom:3px solid RGBA(228,239,249,1);
-
   padding-bottom:10px;
 }
 
@@ -15,11 +12,15 @@
 
   margin: 1%;
 
+  text-align: center;
+
+  position: relative;
+
  
 }
 
 .battleInfoManagerSubjectImg{
-  width:100px;
+  width:100%;
   height:100px;
   display: block;
 }
@@ -88,11 +89,37 @@
 .battleInfoManagerPeriodAdd{
   text-align: center;
 
-  background:green;
+  background:RGBA(255,164,4,1);
 
   color:white;
 
   padding-top:10px;
 
   padding-bottom:10px;
+
+  width:90%;
+
+  border-radius:20px;
+
+  margin: 0 auto;
+}
+
+.battleInfoManagerSubjectAddIcon{
+  font-size:100px;
+
+  color:green;
+}
+
+.battleInfoManagerSubjectDel{
+  position: absolute;
+  right:2px;
+  top:1px;
+  z-index:1000;
+  font-size:20px;
+  background:white;
+  padding-top:1px;
+  padding-left:1px;
+  padding-bottom: 1px;
+  padding-right: 1px;
+  border-radius:2px;
 }

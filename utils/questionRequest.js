@@ -9,9 +9,9 @@ var questionInfoUrl = domain + "/api/question/info";
 
 var questionIds;
 
-function QuestionSelector(battleId, subjectIds,callback,stepCallback){
+function QuestionSelector(battleId, ids,callback,stepCallback){
   var selector = new Object();
-
+  /*
   requestBattleQuestions(subjectIds,{
     success:function(data){
       questionIds = data;
@@ -23,6 +23,14 @@ function QuestionSelector(battleId, subjectIds,callback,stepCallback){
     },
     fail:function(){
       callback.fail();
+    }
+  });*/
+
+  questionIds = ids;
+
+  questionAnswerRequest.requestCreatePaperAnswer(battleId, questionIds, {
+    success: function (data) {
+      callback.success(data.battleMemberPaperAnswerId);
     }
   });
 

@@ -170,9 +170,16 @@ var layerout = new baseLayerout.BaseLayerout({
    
   },
   onLoad: function (options) {
+
+    var questionIds = options.questionIds;
+    
+    console.log("questionIds:"+questionIds);
+
+    var questionsArray = questionIds.split(",");
+
     outThis = this;
     this.showLoading();
-    this.initView([1,2,3]);
+    this.initView(questionsArray);
   }
 });
 

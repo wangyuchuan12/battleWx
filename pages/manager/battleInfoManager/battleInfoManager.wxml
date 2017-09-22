@@ -1,53 +1,45 @@
-<view class="battleInfoManager">
-  <view class="battleInfoManagerSubjects">
-    <view class="battleInfoManagerSubject">
-      <image src="http://7xlw44.com1.z0.glb.clouddn.com/070f672c-9456-4d66-bddd-5a3a17639b7e" class="battleInfoManagerSubjectImg"></image>
-      <view class="battleInfoManagerSubjectName">火影忍者</view>
-    </view>
-    <view class="battleInfoManagerSubject">
-      <image src="http://7xlw44.com1.z0.glb.clouddn.com/070f672c-9456-4d66-bddd-5a3a17639b7e" class="battleInfoManagerSubjectImg"></image>
-      <view class="battleInfoManagerSubjectName">火影忍者</view>
-    </view>
-    <view class="battleInfoManagerSubject">
-      <image src="http://7xlw44.com1.z0.glb.clouddn.com/070f672c-9456-4d66-bddd-5a3a17639b7e" class="battleInfoManagerSubjectImg"></image>
-      <view class="battleInfoManagerSubjectName">火影忍者</view>
-    </view>
-    <view class="battleInfoManagerSubject">
-      <image src="http://7xlw44.com1.z0.glb.clouddn.com/070f672c-9456-4d66-bddd-5a3a17639b7e" class="battleInfoManagerSubjectImg"></image>
-      <view class="battleInfoManagerSubjectName">火影忍者</view>
-    </view>
+<view class="battleInfoManager" catchtap="">
 
-    <view class="battleInfoManagerSubject">
-      <image src="http://ovqk5bop3.bkt.clouddn.com/add.png" class="battleInfoManagerSubjectImg"></image>
-    </view>
-  </view>
-  
-  <view class="battleInfoManagerPeriods">
+  <block wx:if="{{subjects.length>0}}">
+    <view class="battleInfoManagerSubjects">
+    
+      <view class="battleInfoManagerSubject" wx:for="{{subjects}}" wx:for-item="subject">
+        <image src="{{subject.imgUrl}}" class="battleInfoManagerSubjectImg"></image>
+        <view class="battleInfoManagerSubjectName">{{subject.name}}</view>
+        <block wx:if="{{subject.status==0}}">
+          <view class="battleInfoManagerSubjectDel fa fa-window-close" bindtap='subjectDelPre' id="pre_{{index}}"></view>
+        </block>
 
-    <view class="battleInfoManagerPeriodAdd">新增</view>
-    <view class="battleInfoManagerPeriod">
-      <view class="battleInfoManagerPeriodHeader">
-        <view class="battleInfoManagerPeriodHeaderName">第1期</view>
-        <view class="battleInfoManagerPeriodHeaderNum">10/20</view>
-        <view class="battleInfoManagerPeriodHeaderStatus">启动</view>
+        <block wx:if="{{subject.status==1}}">
+          <view class="battleInfoManagerSubjectDel" catchtap='subjectDelDo' id="do_{{index}}" style="font-size:10px;font-weight:bolder;">删除</view>
+        </block>
+      </view>
+    
+      <view class="battleInfoManagerSubject" bindtap='addSubjectClick'>
+        <view class="fa fa-plus-square battleInfoManagerSubjectAddIcon"></view>
       </view>
     </view>
-
-    <view class="battleInfoManagerPeriod">
-      <view class="battleInfoManagerPeriodHeader">
-        <view class="battleInfoManagerPeriodHeaderName">第1期</view>
-        <view class="battleInfoManagerPeriodHeaderNum">10/20</view>
-        <view class="battleInfoManagerPeriodHeaderStatus">进行中</view>
+  </block>
+  <block wx:else>
+    <view class="battleInfoManagerSubjects" style='text-align:center;'>    
+      <view class="battleInfoManagerSubject" bindtap='addSubjectClick'>
+        <view class="fa fa-plus-square battleInfoManagerSubjectAddIcon"></view>
       </view>
     </view>
+  </block>  
+  <view class="battleInfoManagerPeriods" >
 
-    <view class="battleInfoManagerPeriod">
-      <view class="battleInfoManagerPeriodHeader">
-        <view class="battleInfoManagerPeriodHeaderName">第1期</view>
-        <view class="battleInfoManagerPeriodHeaderNum">10/20</view>
-        <view class="battleInfoManagerPeriodHeaderStatus">进行中</view>
+    <view class="battleInfoManagerPeriodAdd" bindtap="addPeriodClick">新增期</view>
+    
+    <block wx:for="{{periods}}" wx:for-item="period">
+      <view class="battleInfoManagerPeriod">
+        <view class="battleInfoManagerPeriodHeader">
+          <view class="battleInfoManagerPeriodHeaderName">第{{index+1}}期</view>
+          <view class="battleInfoManagerPeriodHeaderNum">{{period.num}}/{{period.total}}</view>
+          <view class="battleInfoManagerPeriodHeaderStatus">启动</view>
+        </view>
       </view>
-    </view>
+    </block>
   
   </view>
 

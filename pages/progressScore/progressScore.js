@@ -14,8 +14,23 @@ var layerout = new baseLayerout.BaseLayerout({
   },
   eventListener:{
     selectComplete:function(questions,stageIndex){
+      var questionIds;
+      
+      for(var i=0;i<questions.length;i++){
+        var questionArray = questions[i].questions;
+        if (questionArray && questionArray.length>0){
+          for (var j = 0; j < questionArray.length; j++) {
+            var questionId = questionArray[j];
+            if (!questionIds) {
+              questionIds = questionId;
+            } else {
+              questionIds = questionIds + "," + questionId;
+            }
+          }
+        }
+      }
       wx.redirectTo({
-        url: '../questionInfo/questionInfo?questions='+questions+"&stageIndex="+stageIndex,
+        url: '../questionInfo/questionInfo?questionIds=' + questionIds+"&stageIndex="+stageIndex,
       });
     }
   },

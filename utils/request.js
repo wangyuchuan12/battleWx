@@ -3,7 +3,7 @@ var domain = "http://192.168.1.101";
 var loginByJsCodeUrl = domain + "/api/common/login/loginByJsCode";
 var registerUserByJsCode = domain +"/api/common/login/registerUserByJsCod";
 var wxPayConfigUrl = domain + "/api/battle/wxPayConfig";
-
+var loadFileUrl = domain + "/api/common/resource/upload";
 var token;
 var isLogin;
 
@@ -32,7 +32,39 @@ function requestWithLogin(url,params,callback){
   
 }
 
+function requestUpload(filePath,callback){
+  var sessionId = wx.getStorageSync("SESSIONID");
+  var header;
+  if (sessionId) {
+    header = {
+      'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+      'Cookie': 'JSESSIONID=' + sessionId
+    }
+  } else {
+    header = {
+      'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+    }
+  }
+  wx.uploadFile({
+    url: loadFileUrl,
+    filePath: filePath,
+    name: 'file',
+    header: header,
+    success: function (resp) {
+      if(resp.statusCode==200){
+        callback.success(JSON.parse(resp.data));
+      }else{
+        callback.fail();
+      }
+    },
+    fail: function () {
+      callback.fail();
+    }
+  });
+}
+
 function request(url, params, callback) {
+  console.log("url:"+url);
   var sessionId = wx.getStorageSync("SESSIONID");
   var header;
   if (sessionId) {
@@ -308,5 +340,7 @@ module.exports = {
   getDomain:getDomain,
   requestLogin: requestLogin,
   testSetUserInfo: testSetUserInfo,
-  requestWithLogin:requestWithLogin
+  requestWithLogin:requestWithLogin,
+  requestUpload: requestUpload
+  
 }

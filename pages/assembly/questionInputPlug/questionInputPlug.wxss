@@ -106,7 +106,7 @@
 	
 	vertical-align: top;
 
-  padding-top:10px;
+  line-height:40px;
 }
 
 .subjectOptions{

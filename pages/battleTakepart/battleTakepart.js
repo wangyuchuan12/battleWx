@@ -192,7 +192,9 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   backClick:function(){
-
+    wx.navigateTo({
+      url: '../manager/battleInfoManager/battleInfoManager'
+    });
   },
 
   skipToProgress:function(){
