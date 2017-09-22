@@ -7,9 +7,26 @@ var stagesUrl = request.getDomain()+"/api/manager/stages";
 var questionsUrl = request.getDomain()+"/api/manager/questions";
 var addStageUrl = request.getDomain() + "/api/manager/addStage";
 var addQuestionsUrl = request.getDomain() + "/api/manager/addQuestion";
+var updateStageUrl = request.getDomain() + "/api/manager/updateStage";
 
-function requestionAddStage(periodId,num,callback){
+function requestAddStage(periodId,num,callback){
   request.request(addStageUrl,{periodId: periodId, num: num}, {
+    success: function (resp) {
+      if (resp.success) {
+        console.log("resp.data:"+JSON.stringify(resp.data));
+        callback.success(resp.data);
+      } else {
+        callback.fail();
+      }
+    },
+    fail: function () {
+      callback.fail();
+    }
+  });
+}
+
+function requestUpdateStage(stageId,num,callback){
+  request.request(updateStageUrl, { stageId: stageId, num: num }, {
     success: function (resp) {
       if (resp.success) {
         callback.success();
@@ -138,5 +155,6 @@ module.exports = {
   requestStages: requestStages,
   requestQuestions: requestQuestions,
   requestAddQuestion: requestAddQuestion,
-  requestionAddStage: requestionAddStage
+  requestAddStage: requestAddStage,
+  requestUpdateStage: requestUpdateStage
 }

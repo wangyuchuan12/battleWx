@@ -33,6 +33,29 @@ function BaseLayerout(config){
       });
     }
 
+    baseConfig.showConfirm = function(title,content,callback,confirmText,cancelText){
+      if(!confirmText){
+        confirmText = "确定";
+      }
+
+      if(!cancelText){
+        cancelText = "取消"
+      }
+      wx.showModal({
+        title:title,
+        content:content,
+        confirmText:confirmText,
+        cancelText:cancelText,
+        success:function(sm){
+          if(sm.confirm){
+            callback.confirm();
+          }else if(sm.cancel){
+            callback.cancel();
+          }
+        }
+      });
+    }
+
     baseConfig.hideToast = function(){
       this.setData({
         "baseData.hiddenToast": true,

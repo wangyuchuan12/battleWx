@@ -26,7 +26,7 @@ var layerout = new baseLayerout.BaseLayerout({
       {id:2},
       {id:3}
     ],
-    selectQuestionNumId:"questionNum4",
+    selectQuestionNum:0,
     questionNums:[{
       num:4,
       id:"questionNum4"
@@ -154,24 +154,57 @@ var layerout = new baseLayerout.BaseLayerout({
     }]
   },
 
+  addStageClick:function(e){
+    var num = 7;
+    this.showLoading();
+    var outThis = this;
+    battleManagerRequest.requestAddStage(1,num, {
+      success: function (stage) {
+        outThis.showToast("成功");
+        outThis.hideLoading();
+        outThis.initStages({
+          success:function(){
+            console.log("stage:"+JSON.stringify(stage));
+            outThis.setData({
+              selectQuestionNum:num,
+              selectStageId: stage.id
+            })
+          }
+        });
+      },
+      fail: function () {
+        outThis.hideLoading();
+        outThis.showToast("失败");
+      }
+    });
+  },
+
   addQuestionClick:function(){
     this.setData({
       model:1
     });
+
+    this.emptyContent();
   },
 
   questionNumClick:function(e){
+    this.showLoading();
     var outThis = this;
     var id = e.currentTarget.id;
     var questionNums = this.data.questionNums;
-    for (var i = 0; i < questionNums.length;i++){
+    for (var i = 0; i < questionNums.length; i++) {
       var questionNum = questionNums[i];
-      if(questionNum.id==id){
-        battleManagerRequest.requestionAddStage(1, questionNum.num,{
-          success:function(){
+      if (questionNum.id == id) {
+        battleManagerRequest.requestUpdateStage(this.data.selectStageId, questionNum.num, {
+          success: function () {
             outThis.showToast("成功");
+            outThis.hideLoading();
+            outThis.setData({
+              selectQuestionNum: questionNum.num
+            });
           },
-          fail:function(){
+          fail: function () {
+            outThis.hideLoading();
             outThis.showToast("失败");
           }
         });
@@ -463,7 +496,24 @@ var layerout = new baseLayerout.BaseLayerout({
     })
   },
 
+  stageManagerClick:function(){
+    this.setData({
+      "model":2
+    });
+    this.initQuestionNum();
+  },
+
+  saveQuetionCancelClick:function(){
+    this.setData({
+      "model":0
+    });
+
+    this.initQuestions();
+  },
+
   saveQuestionClick:function(){
+    
+    var outThis = this;
     var stageId = this.data.selectStageId;
     var subjectId = this.data.selectSubjectId;
     var questionType = this.data.questionType;
@@ -478,6 +528,58 @@ var layerout = new baseLayerout.BaseLayerout({
     var selectOption3 = this.data.selectOption3;
     var selectOption4 = this.data.selectOption4;
 
+    if(!imgUrl){
+      this.showToast("请选择一张图片");
+      return;
+    }
+
+    if(!question){
+      this.showToast("请输入问题");
+      return;
+    }
+
+    if(questionType=="0"){
+      if (!selectOption1 || !selectOption2 || !selectOption3 ||!selectOption4){
+        this.showToast("选项请输入完整");
+        return;
+      }
+    }
+
+    if(questionType=="1"){
+      if (!answer){
+        this.showToast("请输入答案");
+        return;
+      }
+
+      if(answer.length>5){
+        this.showToast("输入答案不能超过5个字");
+        return;
+      }
+    }
+
+    if(questionType=="2"){
+      var worlds = this.data.worlds;
+      var worldChecks = this.data.worldChecks;
+      for (var i = 0; i < worlds.length; i++) {
+        var world = worlds[i];
+        if(!world.content){
+          this.showToast("答案请选择完整");
+          return;
+        }
+      }
+
+      for (var i = 0; i < worldChecks.length; i++) {
+        var worldCheck = worldChecks[i];
+        if (!worldCheck.content) {
+          this.showToast("内容请输入完整");
+          return;
+        }
+      }
+
+
+    }
+
+    this.showLoading();
 
     if(questionType==2){
       answer="";
@@ -532,13 +634,53 @@ var layerout = new baseLayerout.BaseLayerout({
 
       },{
       success:function(){
-        console.log("success");
+        outThis.hideLoading();
+        outThis.showConfirm("添加成功","是否继续添加",{
+          confirm:function(){
+            outThis.emptyContent();
+          },
+          cancel:function(){
+              outThis.setData({
+                model:0
+              });
+              outThis.initQuestions();
+          }
+        },"继续添加","返回");
       },
       fail:function(){
-        console.log("fail");
+        outThis.hideLoading();
       }
     });
 
+  },
+
+  emptyContent:function(){
+    var worldChecks = this.data.worldChecks;
+    var worlds = this.data.worlds;
+    for(var i=0;i<worlds.length;i++){
+      var world = worlds[i];
+      world.content="";
+      world.status=0;
+      world.targetIndex = null;
+    }
+    for(var i=0;i<worldChecks.length;i++){
+      var worldCheck = worldChecks[i];
+      worldCheck.content="";
+      worldCheck.status=2;
+    }
+
+    this.setData({
+      selectOption1: "",
+      selectOption2: "",
+      selectOption3: "",
+      selectOption4: "",
+      question: "",
+      answer: "",
+      isImg: 0,
+      imgUrl: "",
+      worldChecks: worldChecks,
+      worlds: worlds
+    })
   },
 
   switchSelect:function(){
@@ -594,6 +736,7 @@ var layerout = new baseLayerout.BaseLayerout({
   stageItemClick:function(e){
     var id = e.currentTarget.id;
     var stages = this.data.stages;
+    
     for(var i=0;i<stages.length;i++){
       var stage = stages[i];
       if(stage.id==id){
@@ -602,10 +745,35 @@ var layerout = new baseLayerout.BaseLayerout({
         });
       }
     }
-    this.initQuestions();
+    if (this.data.model == 0) {
+      this.initQuestions();
+    }else if(this.data.model == 1){
+      console.log("2");
+    }else if(this.data.model==2){
+      this.initQuestionNum();
+    }
+    
   },
 
-  initStages:function(){
+  initQuestionNum:function(){
+
+    console.log("initQuestionNum");
+    var outThis = this;
+    var selectStageId = this.data.selectStageId;
+    var stages = this.data.stages;
+    for(var i=0;i<stages.length;i++){
+      var stage = stages[i];
+      if (stage.id == selectStageId){
+        var questionNum = stage.questionNum;
+        console.log("questionNum:" + questionNum);
+        outThis.setData({
+          selectQuestionNum:questionNum
+        })
+      }
+    }
+  },
+
+  initStages:function(callback){
     var outThis = this;
     battleManagerRequest.requestStages(1,{
       success:function(stages){
@@ -619,12 +787,17 @@ var layerout = new baseLayerout.BaseLayerout({
             var stage = stages[i];
             stageDataArray.push({
               id: stage.id,
-              index: stage.index
+              index: stage.index,
+              questionNum:stage.questionCount
             });
           }
           outThis.setData({
             stages: stageDataArray
           });
+        }
+
+        if(callback&&callback.success){
+          callback.success();
         }
         
       },

@@ -1,8 +1,10 @@
+<import src="../../assembly/baseLayerout/baseLayerout.wxml"/>
+<template is="baseLayerout" data="{{...baseData}}"/>
 <view class="battlePeriodManager">
   
   <view class="battlePeriodManagerButtonns">
   <block wx:if="{{model==0}}">
-    <view class="battlePeriodManagerButtonn">
+    <view class="battlePeriodManagerButtonn" bindtap='stageManagerClick'>
       <view class="battlePeriodManagerButtonnIcon fa fa-leaf"></view>
       <view class="battlePeriodManagerButtonnText">关卡管理</view>
     </view>
@@ -21,7 +23,7 @@
 
   <block wx:if="{{model==1}}">
 
-    <view class="battlePeriodManagerButtonn">
+    <view class="battlePeriodManagerButtonn" bindtap='saveQuetionCancelClick'>
       <view class="battlePeriodManagerButtonnIcon fa fa-chevron-circle-left"></view>
       <view class="battlePeriodManagerButtonnText">取消</view>
     </view>
@@ -39,33 +41,27 @@
 
   <block wx:if="{{model==2}}">
 
-    <view class="battlePeriodManagerButtonn">
+    <view class="battlePeriodManagerButtonn" bindtap='saveQuetionCancelClick'>
       <view class="battlePeriodManagerButtonnIcon fa fa-chevron-circle-left"></view>
       <view class="battlePeriodManagerButtonnText">取消</view>
     </view>
 
-    <view class="battlePeriodManagerButtonn">
+    <view class="battlePeriodManagerButtonn" bindtap="addStageClick">
       <view class="battlePeriodManagerButtonnIcon fa fa-plus-circle"></view>
       <view class="battlePeriodManagerButtonnText">新增</view>
     </view>
-
-    <view class="battlePeriodManagerButtonn">
-      <view class="battlePeriodManagerButtonnIcon fa fa-floppy-o"></view>
-      <view class="battlePeriodManagerButtonnText">保存</view>
-    </view>
-
      
   </block>
   </view>
 
 
-  <view class="battlePeriodManagerStages" >
+  <scroll-view class="battlePeriodManagerStages" scroll-y>
 
     <block wx:for="{{stages}}" wx:for-item="stage">
       <view class="battlePeriodManagerStage" style="background:green;color:white" wx:if="{{stage.id==selectStageId}}">第{{stage.index}}关</view>
       <view class="battlePeriodManagerStage" bindtap="stageItemClick" wx:else id="{{stage.id}}">第{{stage.index}}关</view>
     </block>
-  </view>
+  </scroll-view>
 
   <scroll-view class="battlePeriodManagerSubjects" scroll-x style="white-space:nowrap;display:flex;" wx:if="{{model==1||model==0}}">
     <block wx:for="{{subjects}}" wx:for-item="subject">
@@ -86,6 +82,7 @@
   </scroll-view>
 
 <block wx:if="{{model==1}}">
+  <scroll-view style="height: 50vh;position:relative;" scroll-y>
 
   <view class="addSubjectImg" bindtap='imgClick' style='background:RGBA(44,51,59,1);border-top:1px solid RGBA(33,39,47,1);'>
 
@@ -95,7 +92,7 @@
     class="addSubjectImgEl" wx:if="{{isImg==1}}"></image>
   </view>
 
-  <textarea class="battlePeriodManagerQuestion" placeholder='请输入问题' bindinput='questionInputChange'></textarea>
+  <input class="battlePeriodManagerQuestion" placeholder='请输入问题' bindinput='questionInputChange' value="{{question}}"></input>
 
   <view class="battlePeriodManagerEdit">
     <view class="battlePeriodManagerEditTab">
@@ -149,7 +146,7 @@
     <block wx:if="{{questionType==1}}">
       <view class="battlePeriodManagerEditBlank">
         <view class="battlePeriodManagerEditSelectItem">
-        <input class="battlePeriodManagerEditSelectItemInput" placeholder='请输入答案' bindinput='answerInputChange'/></view>
+        <input class="battlePeriodManagerEditSelectItemInput" placeholder='请输入答案' bindinput='answerInputChange' value='{{answer}}'/></view>
       </view>
     </block>
     
@@ -226,6 +223,8 @@
 
 
   </view>
+
+  </scroll-view>
 </block>
 
 <block wx:if="{{model==0}}">
@@ -276,9 +275,14 @@
   </block>
 
   <block wx:if="{{model==2}}">
-    <view class="battlePeriodManagerQuestionCountTitle">选择题目数量</view>
+   <!-- <view class="battlePeriodManagerQuestionCountTitle">选择题目数量</view> -->
     <view class="battlePeriodManagerQuestionCount">
-      <view class="battlePeriodManagerQuestionNum" wx:for="{{questionNums}}" wx:for-item="questionNum" id="{{questionNum.id}}" bindtap='questionNumClick'>{{questionNum.num}}</view>
+      <block wx:for="{{questionNums}}" wx:for-item="questionNum">
+        <view class="battlePeriodManagerQuestionNum"  id="{{questionNum.id}}" bindtap='questionNumClick' 
+        wx:if="{{questionNum.num!=selectQuestionNum}}">{{questionNum.num}}</view>
+        <view class="battlePeriodManagerQuestionNum"  id="{{questionNum.id}}" bindtap='questionNumClick' style="background:red;"
+        wx:else>{{questionNum.num}}</view>
+      </block>
     </view>
   </block>
 </view>
