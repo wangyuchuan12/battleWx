@@ -191,9 +191,9 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
-  backClick:function(){
+  managerClick:function(){
     wx.navigateTo({
-      url: '../manager/battleInfoManager/battleInfoManager'
+      url: '../manager/battleInfoManager/battleInfoManager?battleId='+battleId
     });
   },
 

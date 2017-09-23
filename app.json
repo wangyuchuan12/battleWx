@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/battleTakepart/battleTakepart",
+    "pages/manager/battleInfoSave/battleInfoSave",
     "pages/manager/battlePeriodManager/battlePeriodManager",
     "pages/manager/battleInfoManager/battleInfoManager",
     "pages/manager/addSubject/addSubject",

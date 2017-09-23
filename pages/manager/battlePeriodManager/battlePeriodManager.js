@@ -1,31 +1,45 @@
 var baseLayerout = require("../../assembly/baseLayerout/baseLayerout.js");
 var battleManagerRequest = require("../../../utils/battleManagerRequest.js");
 var resourceRequest = require("../../../utils/resourceRequest.js");
+var util = require("../../../utils/util.js");
 var layerout = new baseLayerout.BaseLayerout({
 
   /**
    * 页面的初始数据
    */
   data: {
+    battleId:null,
+    periodId:null,
     //0表示显示模式 1表示出题模式，2表示关卡管理
     model:0,
     subjects:[],
     questionType:0,
-    selectOption1:"",
-    selectOption2:"",
-    selectOption3:"",
-    selectOption4:"",
     selectSubjectId:null,
     selectStageId:null,
     question:"",
     answer:"",
     isImg:0,
     imgUrl:"",
-    stages:[
-      {id:1},
-      {id:2},
-      {id:3}
-    ],
+    //0表示添加 1表示修改
+    saveModel:0,
+    stages:[],
+    selectOptions:[{
+      content:"1",
+      isRight:1,
+      id:"selectOption1"
+    },{
+      content:"2",
+      isRight:0,
+      id:"selectOption2"
+    },{
+      content:"3",
+      isRight:0,
+      id:"selectOption3"
+    },{
+      content:"4",
+      isRight:0,
+      id:"selectOption4"
+    }],
     selectQuestionNum:0,
     questionNums:[{
       num:4,
@@ -154,21 +168,36 @@ var layerout = new baseLayerout.BaseLayerout({
     }]
   },
 
+  deleteQuestionClick:function(){
+    var outThis = this;
+    battleManagerRequest.requestDelQuestion(this.data.questionId,{
+        success:function(){
+          outThis.initQuestions();
+          outThis.setData({
+            model:0
+          });
+        },
+        fail:function(){
+
+        }
+    });
+  },
+
   addStageClick:function(e){
     var num = 7;
     this.showLoading();
     var outThis = this;
-    battleManagerRequest.requestAddStage(1,num, {
+    var periodId = this.data.periodId;
+    battleManagerRequest.requestAddStage(periodId,num, {
       success: function (stage) {
         outThis.showToast("成功");
         outThis.hideLoading();
         outThis.initStages({
           success:function(){
-            console.log("stage:"+JSON.stringify(stage));
             outThis.setData({
+              selectStageId: stage.id,
               selectQuestionNum:num,
-              selectStageId: stage.id
-            })
+            });
           }
         });
       },
@@ -181,7 +210,8 @@ var layerout = new baseLayerout.BaseLayerout({
 
   addQuestionClick:function(){
     this.setData({
-      model:1
+      model:1,
+      saveModel:0
     });
 
     this.emptyContent();
@@ -197,7 +227,6 @@ var layerout = new baseLayerout.BaseLayerout({
       if (questionNum.id == id) {
         battleManagerRequest.requestUpdateStage(this.data.selectStageId, questionNum.num, {
           success: function () {
-            outThis.showToast("成功");
             outThis.hideLoading();
             outThis.setData({
               selectQuestionNum: questionNum.num
@@ -209,6 +238,84 @@ var layerout = new baseLayerout.BaseLayerout({
           }
         });
         break;
+      }
+    }
+  },
+
+  itemInfo:function(e){
+    var outThis = this;
+    var id = e.currentTarget.id;
+    var items = this.data.items;
+
+    
+    for(var i=0;i<items.length;i++){
+      var item = items[i];
+      if(item.id==id){
+        battleManagerRequest.requestQuestionInfo(item.questionId,{
+          success:function(question){
+
+            var worldChecks = outThis.data.worldChecks;
+            var worlds = outThis.data.worlds;
+            if (question.type==2){
+              var fillWords = question.fillWords;
+
+              var rightAnswer = question.answer;
+
+              for (var i = 0; i < rightAnswer.length; i++) {
+                if (rightAnswer[i] && worlds[i]) {
+                  worlds[i].content = rightAnswer[i];
+                  worlds[i].status = 0;
+                }
+              }
+
+              for(var i=0;i<fillWords.length;i++){
+                var fillWord = fillWords[i];
+                if(worldChecks[i]){
+                  worldChecks[i].content = fillWord,
+                  
+                  worldChecks[i].status = 1;
+
+                  for(var j=0;j<worlds.length;j++){
+                    if (worlds[j].content == fillWord && worlds[j].status==0){
+                      worlds[j].targetIndex = worldChecks[i].index;
+                      worlds[j].status = 1;
+                      worldChecks[i].status=0;
+                    }
+                  }
+                }
+              }
+
+            }
+            var options = question.options;
+            var selectOptions = new Array();
+            if(options){
+              for (var i = 0; i < options.length; i++) {
+                var option = options[i];
+                selectOptions.push({
+                  id: option.id,
+                  content: option.content,
+                  isRight: option.isRight
+                });
+              }
+            }
+            outThis.setData({
+              model: 1,
+              questionType: question.type,
+              question: question.question,
+              answer: question.answer,
+              isImg: 1,
+              imgUrl: question.imgUrl,
+              worldChecks: worldChecks,
+              worlds: worlds,
+              selectOptions: selectOptions,
+              saveModel:1,
+              questionId:id
+            });
+          },
+          fail:function(){
+
+          }
+        });
       }
     }
   },
@@ -447,7 +554,8 @@ var layerout = new baseLayerout.BaseLayerout({
             question:question.question,
             type:question.type,
             rightAnswer:question.answer,
-            imgUrl:question.imgUrl
+            imgUrl:question.imgUrl,
+            questionId:question.questionId
           });
         }
         outThis.setData({
@@ -460,27 +568,37 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
-  selectOption1InputChange: function (e) {
+  selectRightOptionClick:function(e){
+    var id = e.currentTarget.id;
+    
+    var selectOptions = this.data.selectOptions;
+
+    for (var i = 0; i < selectOptions.length; i++) {
+      var selectOption = selectOptions[i];
+      if (selectOption.id == id) {
+        selectOption.isRight = 1
+      }else{
+        selectOption.isRight = 0
+      }
+    }
     this.setData({
-      "selectOption1": e.detail.value
-    })
+      "selectOptions": selectOptions
+    });
   },
 
-  selectOption2InputChange: function (e) {
-    this.setData({
-      "selectOption2": e.detail.value
-    })
-  },
+  selectOptionInputChange: function (e) {
+    var id = e.currentTarget.id;
+    var selectOptions = this.data.selectOptions;
 
-  selectOption3InputChange: function (e) {
+    for(var i=0;i<selectOptions.length;i++){
+      var selectOption = selectOptions[i];
+      if(selectOption.id==id){
+        selectOption.content = e.detail.value;
+      }
+     
+    }
     this.setData({
-      "selectOption3": e.detail.value
-    })
-  },
-
-  selectOption4InputChange: function (e) {
-    this.setData({
-      "selectOption4": e.detail.value
+      "selectOptions":selectOptions
     });
   },
 
@@ -514,19 +632,17 @@ var layerout = new baseLayerout.BaseLayerout({
   saveQuestionClick:function(){
     
     var outThis = this;
+    var selectOptions = this.data.selectOptions;
     var stageId = this.data.selectStageId;
     var subjectId = this.data.selectSubjectId;
     var questionType = this.data.questionType;
     var question = this.data.question;
     var imgUrl = this.data.imgUrl;
     var answer = this.data.answer;
+    var questionId = this.data.questionId;
 
     var fillWords="";
 
-    var selectOption1 = this.data.selectOption1;
-    var selectOption2 = this.data.selectOption2;
-    var selectOption3 = this.data.selectOption3;
-    var selectOption4 = this.data.selectOption4;
 
     if(!imgUrl){
       this.showToast("请选择一张图片");
@@ -538,10 +654,36 @@ var layerout = new baseLayerout.BaseLayerout({
       return;
     }
 
+    if (util.isEmojiCharacter(question)){
+      this.showToast("问题不能包含表情字符");
+      return;
+    }
+
+    if(question.length>20){
+      this.showToast("问题输入不能超过20个字符");
+      return;
+    }
+
     if(questionType=="0"){
-      if (!selectOption1 || !selectOption2 || !selectOption3 ||!selectOption4){
-        this.showToast("选项请输入完整");
-        return;
+      for (var i = 0; i < selectOptions.length;i++){
+        var selectOption = selectOptions[i];
+        if(!selectOption.content){
+          this.showToast("选项请输入完整");
+          return;
+        }
+
+        if(selectOption.content.length>10){
+          this.showToast("选项不能超过10个字节");
+          return;
+        }
+
+
+        if (util.isEmojiCharacter(selectOption.content)) {
+          this.showToast("选项内容不能包含表情字符");
+          return;
+        }
+
+
       }
     }
 
@@ -553,6 +695,11 @@ var layerout = new baseLayerout.BaseLayerout({
 
       if(answer.length>5){
         this.showToast("输入答案不能超过5个字");
+        return;
+      }
+
+      if (util.isEmojiCharacter(answer)) {
+        this.showToast("答案内容不能包含表情字符");
         return;
       }
     }
@@ -572,6 +719,11 @@ var layerout = new baseLayerout.BaseLayerout({
         var worldCheck = worldChecks[i];
         if (!worldCheck.content) {
           this.showToast("内容请输入完整");
+          return;
+        }
+
+        if (util.isEmojiCharacter(worldCheck.content)) {
+          this.showToast("内容不能包含表情字符");
           return;
         }
       }
@@ -596,67 +748,81 @@ var layerout = new baseLayerout.BaseLayerout({
 
     var optionsArray= new Array();
 
-    optionsArray.push({
-      content: selectOption1,
-      isRight:1,
-      seq:1
-    });
-
-    optionsArray.push({
-      content: selectOption2,
-      isRight: 0,
-      seq: 2
-    });
-
-    optionsArray.push({
-      content: selectOption3,
-      isRight: 0,
-      seq: 3
-    });
-
-    optionsArray.push({
-      content: selectOption4,
-      isRight: 0,
-      seq: 4
-    });
+    for(var i=0;i<selectOptions.length;i++){
+      optionsArray.push({
+        content:selectOptions[i].content,
+        isRight: selectOptions[i].isRight,
+        seq:i+1,
+        id: selectOptions[i].id
+      });
+    }
 
 
-    battleManagerRequest.requestAddQuestion(
-      {
-        stageId:stageId,
-        subjectId:subjectId,
-        questionType:questionType,
-        question:question,
-        imgUrl:imgUrl,
-        options:JSON.stringify(optionsArray),
-        answer:answer,
-        fillWords: fillWords
+    var saveModel = this.data.saveModel;
 
-      },{
-      success:function(){
-        outThis.hideLoading();
-        outThis.showConfirm("添加成功","是否继续添加",{
-          confirm:function(){
-            outThis.emptyContent();
+    if(saveModel==0){
+      battleManagerRequest.requestAddQuestion(
+        {
+          stageId: stageId,
+          subjectId: subjectId,
+          questionType: questionType,
+          question: question,
+          imgUrl: imgUrl,
+          options: JSON.stringify(optionsArray),
+          answer: answer,
+          fillWords: fillWords
+
+        }, {
+          success: function () {
+            outThis.hideLoading();
+            outThis.showConfirm("添加成功", "是否继续添加", {
+              confirm: function () {
+                outThis.emptyContent();
+              },
+              cancel: function () {
+                outThis.setData({
+                  model: 0
+                });
+                outThis.initQuestions();
+              }
+            }, "继续添加", "返回");
           },
-          cancel:function(){
-              outThis.setData({
-                model:0
-              });
-              outThis.initQuestions();
+          fail: function () {
+            outThis.hideLoading();
           }
-        },"继续添加","返回");
-      },
-      fail:function(){
-        outThis.hideLoading();
-      }
-    });
+        });
+    }else if(saveModel==1){
+      battleManagerRequest.requestUpdateQuestion(
+        {
+          battleQuestionId:questionId,
+          stageId: stageId,
+          subjectId: subjectId,
+          questionType: questionType,
+          question: question,
+          imgUrl: imgUrl,
+          options: JSON.stringify(optionsArray),
+          answer: answer,
+          fillWords: fillWords
 
+        }, {
+          success: function () {
+            outThis.hideLoading();
+            outThis.setData({
+              model: 0
+            });
+            outThis.initQuestions();
+          },
+          fail: function () {
+            outThis.hideLoading();
+          }
+        });
+    }
   },
 
   emptyContent:function(){
     var worldChecks = this.data.worldChecks;
     var worlds = this.data.worlds;
+    var selectOptions = this.data.selectOptions;
     for(var i=0;i<worlds.length;i++){
       var world = worlds[i];
       world.content="";
@@ -669,11 +835,13 @@ var layerout = new baseLayerout.BaseLayerout({
       worldCheck.status=2;
     }
 
+    for (var i = 0; i < selectOptions.length;i++){
+      var selectOption = selectOptions[i];
+      selectOption.content = "";
+    }
+
     this.setData({
-      selectOption1: "",
-      selectOption2: "",
-      selectOption3: "",
-      selectOption4: "",
+      selectOptions: selectOptions,
       question: "",
       answer: "",
       isImg: 0,
@@ -741,7 +909,8 @@ var layerout = new baseLayerout.BaseLayerout({
       var stage = stages[i];
       if(stage.id==id){
         this.setData({
-          selectStageId:id
+          selectStageId:id,
+          selectQuestionNum: stage.questionNum
         });
       }
     }
@@ -756,8 +925,6 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   initQuestionNum:function(){
-
-    console.log("initQuestionNum");
     var outThis = this;
     var selectStageId = this.data.selectStageId;
     var stages = this.data.stages;
@@ -765,7 +932,6 @@ var layerout = new baseLayerout.BaseLayerout({
       var stage = stages[i];
       if (stage.id == selectStageId){
         var questionNum = stage.questionNum;
-        console.log("questionNum:" + questionNum);
         outThis.setData({
           selectQuestionNum:questionNum
         })
@@ -775,7 +941,8 @@ var layerout = new baseLayerout.BaseLayerout({
 
   initStages:function(callback){
     var outThis = this;
-    battleManagerRequest.requestStages(1,{
+    var periodId = this.data.periodId;
+    battleManagerRequest.requestStages(periodId,{
       success:function(stages){
         if(stages&&stages.length>0){
           outThis.setData({
@@ -809,7 +976,8 @@ var layerout = new baseLayerout.BaseLayerout({
 
   initSubjects: function () {
     var outThis = this;
-    battleManagerRequest.requestBattleSubjects(1, {
+    var battleId = this.data.battleId;
+    battleManagerRequest.requestBattleSubjects(battleId, {
       success: function (subjects) {
         if(subjects&&subjects.length>0){
           outThis.setData({
@@ -843,6 +1011,14 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var periodId = options.periodId;
+    var battleId = options.battleId;
+
+    this.setData({
+      battleId:battleId,
+      periodId:periodId
+    });
+
     this.initSubjects();
     this.initStages();
   },

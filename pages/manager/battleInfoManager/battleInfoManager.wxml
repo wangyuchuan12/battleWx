@@ -1,5 +1,20 @@
 <view class="battleInfoManager" catchtap="">
 
+  <view class="addSubjectImg" bindtap='imgClick' style=''>
+
+    <view class="fa fa-camera addSubjectImgCamera" wx:if="{{isImg==0}}"></view>
+
+    <image src="{{imgUrl}}" 
+    class="addSubjectImgEl" wx:if="{{isImg==1}}"></image>
+  </view>
+
+  <view class="battleTakepartInfo">
+      <view class="battleTakepartInfoTitle">{{battleInfoName}}</view>
+
+      <scroll-view class="battleTakepartInfoContent" scroll-y >
+        {{battleInfoContent}}
+      </scroll-view>
+  </view>
   <block wx:if="{{subjects.length>0}}">
     <view class="battleInfoManagerSubjects">
     
@@ -29,10 +44,13 @@
   </block>  
   <view class="battleInfoManagerPeriods" >
 
+    <view class="battleInfoManagerPeriodAdd" bindtap='updateBattleInfoClick'>修改基本信息</view>
+
     <view class="battleInfoManagerPeriodAdd" bindtap="addPeriodClick">新增期</view>
     
+    
     <block wx:for="{{periods}}" wx:for-item="period">
-      <view class="battleInfoManagerPeriod">
+      <view class="battleInfoManagerPeriod" id="{{period.id}}" bindtap='periodInfoClick'>
         <view class="battleInfoManagerPeriodHeader">
           <view class="battleInfoManagerPeriodHeaderName">第{{index+1}}期</view>
           <view class="battleInfoManagerPeriodHeaderNum">{{period.num}}/{{period.total}}</view>
@@ -40,6 +58,7 @@
         </view>
       </view>
     </block>
+    
   
   </view>
 

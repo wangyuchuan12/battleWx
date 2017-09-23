@@ -33,8 +33,8 @@
       <view class="battlePeriodManagerButtonnText">保存</view>
     </view>
 
-    <view class="battlePeriodManagerButtonn">
-      <view class="battlePeriodManagerButtonnIcon fa fa-times"></view>
+    <view class="battlePeriodManagerButtonn" wx:if="{{saveModel==1}}" bindtap='deleteQuestionClick'>
+      <view class="battlePeriodManagerButtonnIcon fa fa-trash"></view>
       <view class="battlePeriodManagerButtonnText">删除</view>
     </view>
   </block>
@@ -123,21 +123,11 @@
     
     <block wx:if="{{questionType==0}}">
       <view class="battlePeriodManagerEditSelect">
-        <view class="battlePeriodManagerEditSelectItem">
+        <view class="battlePeriodManagerEditSelectItem" wx:for="{{selectOptions}}" wx:for-item="selectOption" id="{{selectOption.id}}" bindtap='selectRightOptionClick'>
           <input class="battlePeriodManagerEditSelectItemInput" 
-          placeholder='正确选项' value="{{selectOption1}}" bindinput="selectOption1InputChange"/>
-        </view>
-        <view class="battlePeriodManagerEditSelectItem">
-          <input class="battlePeriodManagerEditSelectItemInput" 
-          placeholder='错误选项' value="{{selectOption2}}" bindinput="selectOption2InputChange"/>
-        </view>
-        <view class="battlePeriodManagerEditSelectItem">
-          <input class="battlePeriodManagerEditSelectItemInput" 
-          placeholder='错误选项' value="{{selectOption3}}" bindinput="selectOption3InputChange"/>
-        </view>
-        <view class="battlePeriodManagerEditSelectItem">
-          <input class="battlePeriodManagerEditSelectItemInput" 
-          placeholder='错误选项' value="{{selectOption4}}" bindinput="selectOption4InputChange"/>
+          placeholder='请输入选项' bindinput="selectOptionInputChange" value="{{selectOption.content}}" id="{{selectOption.id}}"/>
+          <view class="battlePeriodManagerEditSelectItemIcon fa fa-check-circle" wx:if="{{selectOption.isRight==1}}"></view>
+          <view class="battlePeriodManagerEditSelectItemIcon fa fa-times-circle" style='color:red;'  bindtap='selectRightOptionClick' wx:else></view>
         </view>
       </view>
     </block>
@@ -229,7 +219,7 @@
 
 <block wx:if="{{model==0}}">
   <scroll-view scroll-y="true" class="battlePeriodManagerResults">
-      <view class="questionResultItem" wx:for="{{items}}" wx:for-item="item">
+      <view class="questionResultItem" wx:for="{{items}}" wx:for-item="item" id="{{item.id}}" bindtap='itemInfo'>
         <image src="{{item.imgUrl}}" class="questionResultItemImg"></image>
         <scroll-view class="questionResultItemContent" scroll-y>
           <view class="questionResultItemContentItem">

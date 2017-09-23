@@ -1,7 +1,7 @@
-var domain = "http://192.168.1.101";
+var domain = "http://www.chengxihome.com";
 //根据code登陆用户bbin
 var loginByJsCodeUrl = domain + "/api/common/login/loginByJsCode";
-var registerUserByJsCode = domain +"/api/common/login/registerUserByJsCod";
+var registerUserByJsCode = domain +"/api/common/login/registerUserByJsCode";
 var wxPayConfigUrl = domain + "/api/battle/wxPayConfig";
 var loadFileUrl = domain + "/api/common/resource/upload";
 var token;

@@ -5,9 +5,123 @@ var addSubjectUrl = request.getDomain()+"/api/manager/addSubject";
 var delSubjectUrl = request.getDomain() + "/api/manager/delSubject";
 var stagesUrl = request.getDomain()+"/api/manager/stages";
 var questionsUrl = request.getDomain()+"/api/manager/questions";
+var questionInfoUrl = request.getDomain() + "/api/question/info";
 var addStageUrl = request.getDomain() + "/api/manager/addStage";
 var addQuestionsUrl = request.getDomain() + "/api/manager/addQuestion";
+var updateQuestionsUrl = request.getDomain() + "/api/manager/updateQuestion";
+var delQuestionsUrl = request.getDomain() + "/api/manager/delQuestion";
 var updateStageUrl = request.getDomain() + "/api/manager/updateStage";
+
+var addPeriodUrl = request.getDomain() + "/api/manager/addPeriod";
+
+var battleImgUpdateUrl= request.getDomain() + "/api/manager/addPeriod";
+
+var battleInfoUrl = request.getDomain() + "/api/manager/battleInfo";
+
+var updateBattleInfoUrl = request.getDomain() + "/api/manager/updateBattleInfo";
+
+var addBattleInfoUrl = request.getDomain() + "/api/manager/addBattleInfo";
+
+function requestAddBattleInfo(params,callback){
+  request.request(addBattleInfoUrl, {
+    name: params.name,
+    instruction: params.instruction,
+    headImg: params.headImg
+  }, {
+      success: function (resp) {
+        if (resp.success) {
+          callback.success(resp.data);
+        } else {
+          callback.fail();
+        }
+      },
+      fail: function () {
+        callback.fail();
+      }
+    });
+}
+
+function requestUpdateBattleInfo(params,callback){
+  request.request(updateBattleInfoUrl, { 
+            battleId: params.battleId,
+            name: params.name,
+            instruction: params.instruction,
+            headImg: params.headImg
+    }, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
+      } else {
+        callback.fail();
+      }
+    },
+    fail: function () {
+      callback.fail();
+    }
+  });
+}
+
+function requestBattleInfo(battleId,callback){
+  request.request(battleInfoUrl,{battleId: battleId}, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
+      } else {
+        callback.fail();
+      }
+    },
+    fail: function () {
+      callback.fail();
+    }
+  });
+}
+
+function requestBattleImgUpdate(battleId, imgUrl, callback) {
+  request.request(battleImgUpdateUrl,{battleId:battleId,imgUrl:imgUrl}, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
+      } else {
+        callback.fail();
+      }
+    },
+    fail: function () {
+      callback.fail();
+    }
+  });
+}
+
+
+function requestAddPeriod(battleId,callback){
+  request.request(addPeriodUrl, {battleId:battleId}, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
+      } else {
+        callback.fail();
+      }
+    },
+    fail: function () {
+      callback.fail();
+    }
+  });
+}
+
+
+function requestDelQuestion(id,callback){
+  request.request(delQuestionsUrl, { id: id}, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
+      } else {
+        callback.fail();
+      }
+    },
+    fail: function () {
+      callback.fail();
+    }
+  });
+}
 
 function requestAddStage(periodId,num,callback){
   request.request(addStageUrl,{periodId: periodId, num: num}, {
@@ -30,6 +144,21 @@ function requestUpdateStage(stageId,num,callback){
     success: function (resp) {
       if (resp.success) {
         callback.success();
+      } else {
+        callback.fail();
+      }
+    },
+    fail: function () {
+      callback.fail();
+    }
+  });
+}
+
+function requestQuestionInfo(id,callback){
+  request.request(questionInfoUrl, { id: id}, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
       } else {
         callback.fail();
       }
@@ -132,6 +261,21 @@ function requestDelSubject(subjectId,callback){
   });
 }
 
+function requestUpdateQuestion(params,callback){
+  request.request(updateQuestionsUrl, params, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success();
+      } else {
+        callback.fail();
+      }
+    },
+    fail: function () {
+      callback.fail();
+    }
+  });
+}
+
 function requestAddQuestion(params,callback){
   request.request(addQuestionsUrl,params, {
     success: function (resp) {
@@ -155,6 +299,14 @@ module.exports = {
   requestStages: requestStages,
   requestQuestions: requestQuestions,
   requestAddQuestion: requestAddQuestion,
+  requestUpdateQuestion: requestUpdateQuestion,
   requestAddStage: requestAddStage,
-  requestUpdateStage: requestUpdateStage
+  requestUpdateStage: requestUpdateStage,
+  requestQuestionInfo: requestQuestionInfo,
+  requestDelQuestion: requestDelQuestion,
+  requestAddPeriod: requestAddPeriod,
+  requestBattleImgUpdate: requestBattleImgUpdate,
+  requestBattleInfo: requestBattleInfo,
+  requestUpdateBattleInfo: requestUpdateBattleInfo,
+  requestAddBattleInfo: requestAddBattleInfo
 }
