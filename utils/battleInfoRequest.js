@@ -17,8 +17,8 @@ var battleInfo = {
 battleInfo = wx.getStorageSync("battleInfo");
 
 
-function getBattleInfo(id,callback){
-  requestBattleInfo(id,{
+function getBattleInfo(id,roomId,callback){
+  requestBattleInfo(id,roomId,{
     success:function(data){
       wx.setStorageSync("battleInfo", data);
       callback.success(data);
@@ -29,9 +29,10 @@ function getBattleInfo(id,callback){
   });
 }
 
-function requestBattleInfo(id,callback){
+function requestBattleInfo(id,roomId,callback){
   var params = new Object();
   params.id = id;
+  params.roomId = roomId;
   request.request(url,params,{
     success:function(resp){
       if(resp.success){

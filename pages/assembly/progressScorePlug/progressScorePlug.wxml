@@ -6,12 +6,12 @@
           <view class="progressScoreContainerHeaderScore">
             <view class="progressScoreContainerHeaderAllScore">
                 <view class="progressScoreContainerHeaderAllScoreTag">总距离</view>
-                <view class="progressScoreContainerHeaderAllScoreContent" id="allScoreDiv"><span id="allScore">{{distance}}</span>米</view>
+                <view class="progressScoreContainerHeaderAllScoreContent" id="allScoreDiv"><span id="allScore">{{distance*10}}</span>米</view>
             </view>
             
             <view class="progressScoreContainerHeaderAllScore" style="margin-left: 10px;">
                 <view class="progressScoreContainerHeaderAllScoreTag">进度</view>
-                <view class="progressScoreContainerHeaderAllScoreContent" id="thisScoreDiv"><span id="thisScore">{{progress}}</span>米</view>
+                <view class="progressScoreContainerHeaderAllScoreContent" id="thisScoreDiv"><span id="thisScore">{{progress*10}}</span>米</view>
             </view>
           </view>
           
@@ -38,7 +38,11 @@
             <view class="progressScoreBar">
                 <view class="trajectory">
                     <view wx:for="{{targets}}" wx:for-item="target" style="left:{{target.left}}%;top:{{target.top}}px;background:url('{{target.bgUrl}}');background-size:100% 100%;" id="toDom{{target.index}}" class="trajectoryLi" wx:key="id"></view>
-                    <view class="fromDom"  id="fromDom" style="background: url('http://on3s1z2us.bkt.clouddn.com/target.png');background-size:100% 100%;position: absolute;z-index: 100;" animation="{{animationData}}"></view>
+
+                    <block wx:for="{{positions}}" wx:for-item="position">
+                      <view  class="fromDom"  id="fromDom" 
+                        style="background: url('{{position.imgUrl}}');background-size:100% 100%;position:absolute;z-index: 1000;left:{{position.left}}px;top:{{position.top}}px;" animation="{{position.animationData}}"></view>
+                    </block>
                 </view> 
             </view>
       </view>

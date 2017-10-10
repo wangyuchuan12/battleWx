@@ -5,7 +5,7 @@ var questionInputPlug = {
       //0表示选择题 1表示填空题 2表示填词题
       type:0,
       rightAnswer:"",
-      answer:"你好",
+      answer:"",
       rightOption:1,
       questionId: 0,
       worldChecks:[{
@@ -109,6 +109,16 @@ var questionInputPlug = {
   setQuestionId:function(questionId){
     this.setData({
       "questionInputData.questionId":questionId
+    });
+  },
+
+  empty:function(){
+    this.setData({
+      type: 0,
+      rightAnswer: "",
+      answer: "",
+      rightOption: 1,
+      questionId: 0
     });
   },
 

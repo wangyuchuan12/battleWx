@@ -1,4 +1,4 @@
-var domain = "http://www.chengxihome.com";
+var domain = "http://192.168.1.100";
 //根据code登陆用户bbin
 var loginByJsCodeUrl = domain + "/api/common/login/loginByJsCode";
 var registerUserByJsCode = domain +"/api/common/login/registerUserByJsCode";

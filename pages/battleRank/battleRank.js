@@ -1,5 +1,6 @@
 var baseLayerout = require("../assembly/baseLayerout/baseLayerout.js");
 var request = require("../../utils/battleMembersRequest.js");
+var membersRankUtil = require("../../utils/membersRankUtil.js");
 var layerout = new baseLayerout.BaseLayerout({
   data:{
     rankMembers:[/*{
@@ -32,9 +33,9 @@ var layerout = new baseLayerout.BaseLayerout({
       imgUrl: "http://ooe8ianrr.bkt.clouddn.com/znm123.png"
     }*/]
   },
-  initRankData: function (battleId) {
+  initRankData: function (battleId,index,roomId) {
     var outThis = this;
-    request.getBattleMembers(battleId, 0, {
+    request.getBattleMembers(battleId, index, roomId,{
       success: function (data) {
         if (data) {
           var members = new Array();
@@ -45,6 +46,7 @@ var layerout = new baseLayerout.BaseLayerout({
               imgUrl: data[i].headImg
             });
           }
+          membersRankUtil.rankByProcess(members);
           outThis.setData({
             rankMembers:members
           });
@@ -57,7 +59,9 @@ var layerout = new baseLayerout.BaseLayerout({
   },
   onLoad: function (options) {
     var battleId = options.battleId;
-    this.initRankData(battleId);
+    var roomId = options.roomId;
+    var periodIndex = options.periodIndex;
+    this.initRankData(battleId,periodIndex,roomId);
   }
 });
 

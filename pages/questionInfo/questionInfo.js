@@ -13,13 +13,17 @@ var layerout = new baseLayerout.BaseLayerout({
     imgUrl:"",
     content:"",
     percent:10,
-    questionId:0
+    questionId:0,
+    rightCount:0,
+    wrongCount:0,
+    process:0
   },
 
   eventListener:{
     inputSubmit: function (questionId,answer){
       outThis.showLoading();
       var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
+      console.log("memberInfo:"+JSON.stringify(memberInfo));
       questionAnswerRequest.requestBattleQuestionAnswer({
         id: questionId,
         type: 0,
@@ -28,9 +32,24 @@ var layerout = new baseLayerout.BaseLayerout({
         stageIndex:memberInfo.stageIndex,
         answer: answer
       }, {
-          success: function (id) {
+          success: function (data) {
+            var rightCount = outThis.data.rightCount;
+            var wrongCount = outThis.data.wrongCount;
+            var process = outThis.data.process;
+            if(data.right){
+              rightCount++;
+              process = process+data.process;
+            }else{
+              wrongCount++;
+            }
+            outThis.setData({
+              rightCount:rightCount,
+              wrongCount:wrongCount,
+              process:process
+            });
             outThis.hideLoading();
             questionSelector.next();
+            outThis.empty();
           },
           fail: function () {
             outThis.hideLoading();
@@ -38,6 +57,7 @@ var layerout = new baseLayerout.BaseLayerout({
         });
     },
     fillSubmit: function (questionId,answer){
+      console.log("questionId2:" + questionId);
       outThis.showLoading();
       var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
       questionAnswerRequest.requestBattleQuestionAnswer({
@@ -48,9 +68,24 @@ var layerout = new baseLayerout.BaseLayerout({
         stageIndex: memberInfo.stageIndex,
         answer: answer
       }, {
-          success: function (id) {
+          success: function (data) {
+            var process = outThis.data.process;
+            var rightCount = outThis.data.rightCount;
+            var wrongCount = outThis.data.wrongCount;
+            if (data.right) {
+              rightCount++;
+              process = process + data.process;
+            } else {
+              wrongCount++;
+            }
+            outThis.setData({
+              rightCount: rightCount,
+              wrongCount: wrongCount,
+              process: process
+            })
             outThis.hideLoading();
             questionSelector.next();
+            outThis.empty();
           },
           fail: function () {
             outThis.hideLoading();
@@ -60,6 +95,7 @@ var layerout = new baseLayerout.BaseLayerout({
     selectSubmit: function (questionId,optionId){
       outThis.showLoading();
       var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
+      console.log("memberInfo stageIndex:" + memberInfo.stageIndex);
       questionAnswerRequest.requestBattleQuestionAnswer({
         id: questionId,
         type:0,
@@ -68,9 +104,24 @@ var layerout = new baseLayerout.BaseLayerout({
         stageIndex: memberInfo.stageIndex,
         optionId:optionId
       },{
-        success:function(id){
+        success:function(data){
+          var rightCount = outThis.data.rightCount;
+          var wrongCount = outThis.data.wrongCount;
+          var process = outThis.data.process;
+          if (data.right) {
+            rightCount++;
+            process = process + data.process;
+          } else {
+            wrongCount++;
+          }
+          outThis.setData({
+            rightCount: rightCount,
+            wrongCount: wrongCount,
+            process: process
+          })
           outThis.hideLoading();
           questionSelector.next();
+          outThis.empty();
         },
         fail:function(){
           outThis.hideLoading();
@@ -124,7 +175,8 @@ var layerout = new baseLayerout.BaseLayerout({
     this.setRightAnswer(data.answer);
     this.setData({
       imgUrl: data.imgUrl,
-      content: data.question
+      content: data.question,
+      "questionInputData.answer":""
     });
     this.setType(1);
   },
@@ -136,9 +188,12 @@ var layerout = new baseLayerout.BaseLayerout({
    
     var battleId = memberInfo.battleId;
 
-    questionSelector = new questionRequest.QuestionSelector(battleId,ids,{
-      success: function (id){
+
+    questionSelector = new questionRequest.QuestionSelector(battleId, ids,{
+      success: function (id,stageIndex){
         battleMemberPaperAnswerId = id
+        memberInfo.stageIndex = stageIndex;
+        battleMemberInfoRequest.setBattleMemberInfoFromCache(memberInfo);
         questionSelector.next();
       },
       fail:function(){
@@ -158,9 +213,17 @@ var layerout = new baseLayerout.BaseLayerout({
         
       },
       complete: function (){
-        wx.redirectTo({
-          url: '../progressScore/progressScore?battleMemberPaperAnswerId=' + battleMemberPaperAnswerId,
+        /*wx.navigateTo({
+          url: '../progressScore/progressScore?battleMemberPaperAnswerId=' + battleMemberPaperAnswerId
+        });*/
+        var pages = getCurrentPages();
+        var prevPage = pages[pages.length-2];
+        
+        wx.navigateBack({
+          
         });
+
+        prevPage.startResult(outThis.data.rightCount, outThis.data.wrongCount, outThis.data.process, battleMemberPaperAnswerId);
       },
       fail:function(){
         console.log("...............fail");
@@ -170,10 +233,7 @@ var layerout = new baseLayerout.BaseLayerout({
    
   },
   onLoad: function (options) {
-
     var questionIds = options.questionIds;
-    
-    console.log("questionIds:"+questionIds);
 
     var questionsArray = questionIds.split(",");
 

@@ -84,7 +84,7 @@ function BaseLayerout(config){
     var configData = config.data;
     var progressScoreMemberData = progressScoreMember.progressScoreMembers.data;
     var data = Object.assign(configData, progressScoreMemberData);
-    config = Object.assign(config, progressScoreMemberData.progressScoreMembers);
+    config = Object.assign(config, progressScoreMember.progressScoreMembers);
     config.data = data;
   }
 

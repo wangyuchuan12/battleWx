@@ -15,30 +15,37 @@ function setTakepartCache(battleId,index) {
 }
 
 
-function battleTakepart(battleId,index,callback) {
-  requestBattleTakepart(battleId, {
+function battleTakepart(battleId,index,roomId,callback) {
+  console.log("sssss");
+  requestBattleTakepart(battleId,roomId, {
     success: function (member) {
+      console.log("success");
       setTakepartCache(battleId,index);
       callback.success(member);
     },
     fail: function (errorMsg) {
+      console.log("fail");
       callback.fail(errorMsg);
     },
     battleIn:function(){
+      console.log("battleIn");
       setTakepartCache(battleId, index);
       callback.battleIn();
     },
     battleEnd:function(){
+      console.log("battleEnd");
       callback.battleEnd();
     }
   });
 }
 
-function requestBattleTakepart(battleId, callback) {
+function requestBattleTakepart(battleId, roomId,callback) {
   var params = new Object();
   params.battleId = battleId;
+  params.roomId = roomId;
   request.requestWithLogin(url, params, {
     success: function (resp) {
+      console.log(JSON.stringify(resp));
       if (resp.success) {
         callback.success(resp.data);
       } else {
@@ -48,6 +55,8 @@ function requestBattleTakepart(battleId, callback) {
         //比赛已经结束
         }else if(resp.errorCode==1){
           callback.battleEnd();
+        }else{
+          callback.fail("没有比赛的阶段");
         }
       }
     },

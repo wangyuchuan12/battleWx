@@ -24,39 +24,13 @@ var questionResultPlug = {
       }*/]
     }
   },
-  initQuestionResultData: function (battleMemberPaperAnswerId,callback){
-    var outThis = this;
-    request.requestQuestionResults(battleMemberPaperAnswerId,{
-      success:function(results){
-
-        var items = new Array();
-        for(var i=0;i<results.length;i++){
-
-          var options;
-          
-          if (results[i].options){
-            options = results[i].options.split(",");
-          }
-          
-          
-          items.push({
-            question: results[i].question,
-            type: results[i].type,
-            answer: results[i].answer,
-            rightAnswer: results[i].rightAnswer,
-            options: options,
-            imgUrl: results[i].imgUrl
-          });
-        }
-        callback.success();
-        outThis.setData({
-          questionResultPlugData:{
-            items:items
-          }
-        });
-      },
-      fail:function(){
-        callback.fail();
+  questinResultClose:function(){
+    this.eventListener.questinResultClose();
+  },
+  setItems:function(items){
+    this.setData({
+      questionResultPlugData: {
+        items: items
       }
     });
   }

@@ -32,6 +32,7 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   imgClick: function () {
+    /*
     var outThis = this;
     resourceRequest.openLoadFile({
       success: function (path) {
@@ -51,7 +52,7 @@ var layerout = new baseLayerout.BaseLayerout({
       fail: function () {
         console.log("fail");
       }
-    });
+    });*/
   },
 
   subjectDelPre:function(e){

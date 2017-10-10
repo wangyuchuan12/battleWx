@@ -1,5 +1,6 @@
 /* battleTakepart.wxss */
 @import '../assembly/attrPlug/attrPlug.wxss';
+@import '../assembly/baseLayerout/baseLayerout.wxss';
 
 .battleTakepart{
   width:100%;
@@ -51,13 +52,12 @@
 
 .battleTakepartButton{
   display: inline-block;
-  width:100px;
-  height:40px;
-  background-color:green;
-  margin: 5px;
-  border-radius:5px;
-  padding-top: 15px;
-  color:white;
+  width:47%;
+  background-color:white;
+  color:black;
+
+  border:1px solid RGBA(235,235,235,1);
+
 }
 
 .battleTakepartInfo{

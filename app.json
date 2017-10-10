@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/battleTakepart/battleTakepart",
+    "pages/battleRank/battleRank",
     "pages/manager/battleInfoSave/battleInfoSave",
     "pages/manager/battlePeriodManager/battlePeriodManager",
     "pages/manager/battleInfoManager/battleInfoManager",
@@ -8,8 +9,7 @@
     "pages/battleInfo/battleInfo",
     "pages/logs/logs",
     "pages/questionInfo/questionInfo",
-    "pages/progressScore/progressScore",
-    "pages/battleRank/battleRank"
+    "pages/progressScore/progressScore"
     
   ],
   "window": {

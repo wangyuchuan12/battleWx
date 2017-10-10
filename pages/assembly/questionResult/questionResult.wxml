@@ -1,6 +1,7 @@
 
 <template name="questionResult">
   <view class="questionResult" style="display:block">
+  <view class="questinSelectorCloseButton fa fa-times-circle" bindtap='questinResultClose'></view>
     <scroll-view scroll-y="true" style="height:100%;">
       <view class="questionResultItem" wx:for="{{items}}" wx:for-item="item">
         <image src="{{item.imgUrl}}" class="questionResultItemImg"></image>
@@ -47,7 +48,7 @@
     </scroll-view>
 
     
-    <view class="questionResultButtons">
+    <view class="questionResultButtons" style="display:none;">
       <!--  
       <view class="questionResultButton">确定</view>
 

@@ -12,7 +12,7 @@ function requestBattleQuestionAnswer(params,callback){
   request.requestWithLogin(questionAnswerUrl,params,{
     success:function(resp){
       if(resp.success){
-        callback.success(resp.data.battleMemberPaperAnswerId);
+        callback.success(resp.data);
       }else{
         callback.fail();
       }
@@ -41,7 +41,7 @@ function requestQuestionResults(battleMemberPaperAnswerId,callback){
   });
 }
 
-function requestCreatePaperAnswer(battleId,questions,callback){
+function requestCreatePaperAnswer(battleId, questions,callback){
 
   var params = new Object();
   params.questions = questions;
@@ -53,8 +53,9 @@ function requestCreatePaperAnswer(battleId,questions,callback){
 
         console.log("...........resp.data:"+resp.data);
         callback.success(resp.data);
-        var data = resp.data;
-        battleMemberInfoRequest.getBattleMemberInfoFromCache().stageIndex = data.stageIndex;
+    
+      }else{
+        console.log(resp.errorMsg);
       }
      
     },

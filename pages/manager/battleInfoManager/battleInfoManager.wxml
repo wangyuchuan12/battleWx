@@ -30,22 +30,26 @@
         </block>
       </view>
     
+    <!--
       <view class="battleInfoManagerSubject" bindtap='addSubjectClick'>
         <view class="fa fa-plus-square battleInfoManagerSubjectAddIcon"></view>
       </view>
+    -->
     </view>
   </block>
+  <!--
   <block wx:else>
     <view class="battleInfoManagerSubjects" style='text-align:center;'>    
       <view class="battleInfoManagerSubject" bindtap='addSubjectClick'>
         <view class="fa fa-plus-square battleInfoManagerSubjectAddIcon"></view>
       </view>
     </view>
-  </block>  
+  </block> 
+  --> 
   <view class="battleInfoManagerPeriods" >
 
+    <view class="battleInfoManagerPeriodAdd" bindtap='addSubjectClick'>添加主题</view>
     <view class="battleInfoManagerPeriodAdd" bindtap='updateBattleInfoClick'>修改基本信息</view>
-
     <view class="battleInfoManagerPeriodAdd" bindtap="addPeriodClick">新增期</view>
     
     

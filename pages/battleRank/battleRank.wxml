@@ -4,7 +4,7 @@
       <image src="http://ovqk5bop3.bkt.clouddn.com/gold.png" class="battleRankHeaderGoldHat"></image>
       <image src="{{rankMembers[0].imgUrl}}" class="battleRankHeaderGoldHead"/>
       <view class="battleRankHeaderGoldRank">NO.1</view>
-      <view class="battleRankHeaderGoldResult">{{rankMembers[0].process}}米<!--{{rankMembers[0].consumeHour}}:{{rankMembers[0].consumeMinute}}分--></view>
+      <view class="battleRankHeaderGoldResult">{{rankMembers[0].process}}米</view>
     </view>
   </view>
 

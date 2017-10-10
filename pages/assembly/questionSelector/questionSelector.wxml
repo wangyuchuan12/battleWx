@@ -1,7 +1,10 @@
 <!--questionSelector.wxml-->
 <template name="questionSelector">
+  
   <view class="questionSelector" style="display:{{display}}">
+  
     <view class="questionSelectorHeader">
+      <view class="questinSelectorCloseButton fa fa-times-circle" bindtap='questinSelectorClose'></view>
       <scroll-view class="questionSelectorHeaderList" scroll-x="true" scroll-left="10" style="white-space:nowrap;display:flex;" >
         <view class="questionSelectorHeaderItem" wx:for="{{questionSelectorHeaderList}}" wx:for-item="questionSelectorHeaderItem" wx:key="id" bindtap="selectBattleHeader" id="{{index}}">
           <image src="{{questionSelectorHeaderItem.imgUrl}}" class="questionSelectorHeaderItemImg"></image>

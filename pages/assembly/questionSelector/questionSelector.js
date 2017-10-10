@@ -5,8 +5,7 @@ var questionSelector = {
       display:"none",
       questionSelectorHeaderCount:3,
       questionSelectorHeaderList: [],
-      questionSelectorContentList: [],
-      stageIndex:0
+      questionSelectorContentList: []
     }
   },
 
@@ -143,7 +142,7 @@ var questionSelector = {
   },
 
 
-  selectComplete: function (stageIndex){
+  selectComplete: function (){
     var outThis = this;
     wx.showModal({
       title: "提示",
@@ -151,7 +150,7 @@ var questionSelector = {
       success: function (sm) {
         if (sm.confirm) {
           var selectContentList = outThis.data.questionSelectorData.questionSelectorContentList;
-          outThis.eventListener.selectComplete(selectContentList, stageIndex);
+          outThis.eventListener.selectComplete(selectContentList);
         } else if (sm.cancel) {
           console.log("cancel");
         }
@@ -159,6 +158,10 @@ var questionSelector = {
     });
   },
 
+  questinSelectorClose:function(){
+    this.eventListener.questinSelectorClose();
+  },
+  
   getFirstHeaderIndex:function(){
     var list = this.data.questionSelectorData.questionSelectorHeaderList;
     for(var index=0;index<list.length;index++){
@@ -171,8 +174,6 @@ var questionSelector = {
   },
 
   selectBattleSubject:function(e){
-
-    var stageIndex = this.data.questionSelectorData.stageIndex;
     var outThis = this;
     var id = e.currentTarget.id;
     var questionSelectorContentList = this.data.questionSelectorData.questionSelectorContentList;
@@ -190,7 +191,7 @@ var questionSelector = {
               item.num = num;
               outThis.setQuestionSelectorHeader(index, item, {
                 complete: function () {
-                  outThis.selectComplete(stageIndex);
+                  outThis.selectComplete();
                 }
               });
             }
@@ -222,7 +223,7 @@ var questionSelector = {
           index++;
           outThis.setQuestionSelectorHeader(i, item, {
             complete: function () {
-              outThis.selectComplete(stageIndex);
+              outThis.selectComplete();
             }
           });
           var num = item.num;
@@ -255,10 +256,7 @@ var questionSelector = {
     });
   },
 
-  showSelector:function(stageIndex){
-    this.setData({
-      "questionSelectorData.stageIndex":stageIndex
-    });
+  showSelector:function(){
 
     this.setData({
       "questionSelectorData.display": "block"

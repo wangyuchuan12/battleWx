@@ -1,15 +1,18 @@
 // battleTakepart.js
 var request = require("../../utils/request.js");
 var battleRequest = require("../../utils/battleInfoRequest.js");
+var battleMemberInfoRequest = require("../../utils/battleMemberInfoRequest.js");
 var battleMembersRequest = require("../../utils/battleMembersRequest.js");
 var takepartRequest = require("../../utils/takepartRequest.js");
 var test = require("../../utils/test.js");
 var util = require("../../utils/util.js");
+var battleTakepartCache = require("../../utils/cache/battleTakepartCache.js");
 var baseLayerout = require("../assembly/baseLayerout/baseLayerout.js");
 var app = getApp();
 var headImg = "http://ovcnyik4l.bkt.clouddn.com/d89f42d36c18e16d9900a5cd43e8edf2.png";
 var battleId = 1;
 var index = 1;
+var roomId = 1;
 var layerout = new baseLayerout.BaseLayerout({
   /**
    * 页面的初始数据
@@ -22,7 +25,31 @@ var layerout = new baseLayerout.BaseLayerout({
 
     battleInfoName:"",
 
-    members:[]
+    members:[{
+      imgUrl:"http://otsnwem87.bkt.clouddn.com/user.png"
+    },{
+      imgUrl: "http://otsnwem87.bkt.clouddn.com/user.png" 
+      }, {
+        imgUrl: "http://otsnwem87.bkt.clouddn.com/user.png"
+    }, {
+      imgUrl: "http://otsnwem87.bkt.clouddn.com/user.png"
+      }, {
+        imgUrl: "http://otsnwem87.bkt.clouddn.com/user.png"
+    }, {
+      imgUrl: "http://otsnwem87.bkt.clouddn.com/user.png"
+      }, {
+        imgUrl: "http://otsnwem87.bkt.clouddn.com/user.png"
+    }, {
+      imgUrl: "http://otsnwem87.bkt.clouddn.com/user.png"
+    }],
+
+    isManager:0,
+
+    status:0,
+
+    maxinum:8,
+
+    mininum:1
 
   },
 
@@ -30,78 +57,54 @@ var layerout = new baseLayerout.BaseLayerout({
     console.log("haha");
   },
   
+
+  skipToRank:function(){
+    wx.navigateTo({
+      url: '../battleRank/battleRank?battleId='+battleId+"&periodIndex="+index+"&roomId="+roomId
+    });
+  },
   
 
   //初始化数据
   init:function(){
 
+    var outThis = this;
     this.setData({
       imgUrl: battleRequest.battleInfo.headImg,
       battleInfoContent: battleRequest.battleInfo.instruction,
       battleInfoName: battleRequest.battleInfo.name
     });
-  
-    var outThis = this;
-    
-    var outThis = this;
-    var flagInfo = false;
-    var flagMembers = false;
-    var flagLogin = false;
+
     this.showLoading();
-    outThis.initBattleInfo({
-      success: function (members) {
-        if (flagMembers) {
-          outThis.hideLoading();
-        }
-        flagInfo = true;
+  
+    this.initBattleInfo({
+      success:function(){
+        outThis.initMemberInfo({
+          success:function(){
+            outThis.initBattleMembers({
+              success:function(){
+                outThis.hideLoading();
+              },
+              fail:function(){
+
+              }
+            });
+          },
+          fail:function(){
+
+          }
+        })
       },
       fail:function(){
-        flagInfo = true;
+
       }
     });
-
-    setTimeout(function(){
-
-    },5000);
-
-    outThis.initBattleMembers({
-      success: function () {
-        if (flagInfo) {
-          outThis.hideLoading();
-        }
-        flagMembers = true;
-      },
-      fail:function(){
-        flagMembers = true;
-      }
-    });
-
-    /*var isTakepart = takepartRequest.isTakepartCache(battleId,index);
-    console.log("isTakepart:" + isTakepart);
-    if (isTakepart) {
-      outThis.skipToProgress();
-      return;
-    }*/
-
-
-    //5秒钟如果没有加载好就提示出错
-    setTimeout(function () {
-      if (!flagMembers) {
-        outThis.hideLoading();
-        outThis.showToast("加载参赛名单出错");
-      }
-
-      if (!flagInfo) {
-        outThis.hideLoading();
-        outThis.showToast("加载比赛信息出错");
-      }
-    }, 10000);
   },
 
   //吃石化比赛信息数据
   initBattleInfo:function(callback){
     var outThis = this;
-    battleRequest.getBattleInfo(battleId,{
+    battleRequest.getBattleInfo(battleId,roomId,{
       success: function (battleInfo) {
         callback.success();
        
@@ -111,7 +114,8 @@ var layerout = new baseLayerout.BaseLayerout({
         outThis.setData({
           imgUrl: battleInfo.headImg,
           battleInfoName: battleInfo.name,
-          battleInfoContent: battleInfo.instruction
+          battleInfoContent: battleInfo.instruction,
+          maxinum:battleInfo.maxinum
         });
       },
       fail: function () {
@@ -123,6 +127,24 @@ var layerout = new baseLayerout.BaseLayerout({
   login:function(callback){
     request.requestLogin({
       success:function(){
+        callback.success();
+      },
+      fail:function(){
+        callback.fail();
+      }
+    });
+  },
+
+  initMemberInfo:function(callback){
+    console.log(JSON.stringify("callback:"+callback));
+    var outThis = this;
+    battleMemberInfoRequest.getBattleMemberInfo(battleId,{
+      success:function(memberInfo){
+        outThis.setData({
+          status:memberInfo.status,
+          isManager:memberInfo.isManager,
+          roomId:roomId
+        });
         callback.success();
       },
       fail:function(){
@@ -143,7 +165,11 @@ var layerout = new baseLayerout.BaseLayerout({
       members: members
     });
     var outThis = this;
-    battleMembersRequest.getBattleMembers(battleId,index,{
+    var roomId = this.data.roomId;
+    var maxinum = this.data.maxinum;
+
+    console.log("maxinum:"+maxinum);
+    battleMembersRequest.getBattleMembers(battleId,index,roomId,{
       cache: function (battleMembers){
         var members = new Array();
         var length = 0;
@@ -155,7 +181,7 @@ var layerout = new baseLayerout.BaseLayerout({
             });
           }
         }
-        for (var i = 0; i < 50 - length; i++) {
+        for (var i = 0; i < maxinum - length; i++) {
           members.push({
             imgUrl: "http://otsnwem87.bkt.clouddn.com/user.png"
           });
@@ -166,6 +192,7 @@ var layerout = new baseLayerout.BaseLayerout({
         });
       },
       success: function (battleMembers) {
+       battleTakepartCache.members = battleMembers;
        callback.success(battleMembers)
         var length = battleMembers.length;
         var members = new Array();
@@ -174,7 +201,7 @@ var layerout = new baseLayerout.BaseLayerout({
             imgUrl: battleMembers[i].headImg
           });
         }
-        for(var i = 0;i<50-length;i++){
+        for (var i = 0; i < maxinum-length;i++){
           members.push({
             imgUrl: "http://otsnwem87.bkt.clouddn.com/user.png"
           });
@@ -198,8 +225,8 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   skipToProgress:function(){
-    wx.redirectTo({
-      url: '../progressScore/progressScore?model=0&battleId='+battleId+"&periodIndex="+index
+    wx.navigateTo({
+      url: '../progressScore/progressScore?model=0&battleId='+battleId+"&periodIndex="+index+"&roomId="+roomId
     });
   },
 
@@ -208,7 +235,7 @@ var layerout = new baseLayerout.BaseLayerout({
     var outThis = this;
     var members = outThis.data.members;
     this.showLoading();
-    takepartRequest.battleTakepart(battleId,index,{
+    takepartRequest.battleTakepart(battleId,index,roomId,{
       success:function(member){
         outThis.hideLoading();
         outThis.showToast("报名成功");
@@ -218,6 +245,14 @@ var layerout = new baseLayerout.BaseLayerout({
         outThis.setData({
           members: members
         });
+        var battleMembers = battleTakepartCache.members;
+        if(!battleMembers){
+          battleMembers = new Array();
+        }
+        battleMembers.push(member);
+
+        battleTakepartCache.members = battleMembers;
+
         outThis.skipToProgress();
       },
       fail:function(errorMsg){
@@ -257,7 +292,7 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    
+    console.log("onShow");
   },
 
   /**
@@ -292,7 +327,11 @@ var layerout = new baseLayerout.BaseLayerout({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-    
+    return {
+      title: this.data.battleInfoName,
+      desc: this.data.battleInfoContent,
+      path: this.data.path
+    }
   }
 });
 layerout.begin();

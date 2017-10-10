@@ -7,8 +7,15 @@ data: {
     //进度
     progress:0,
     currentDom: 0,
-    animationData: {},
     loveList: [],
+    positions:[/*{
+      id:"myDom",
+      begin:10,
+      end:20,
+      animationData: {},
+      imgUrl:"http://on3s1z2us.bkt.clouddn.com/target.png",
+      isMy:1
+    }*/],
     targets: [{
       left: 12.5,
       top: 1900,
@@ -625,10 +632,22 @@ setDistance:function(distance){
   });
 },
 
+getProcess:function(){
+  var process = this.data.progressScoreData.progress;
+
+  return process;
+},
+
 setProgress:function(progress){
   this.setData({
     "progressScoreData.progress": progress
   });
+},
+
+addProcess:function(process){
+  var oldProcess = this.data.progressScoreData.progress;
+  var newProcess = oldProcess + process;
+  this.setProcess(newProcess);
 },
 
 setLove: function(limit, residule) {
@@ -650,6 +669,39 @@ setLove: function(limit, residule) {
     "progressScoreData.loveList": loveList
   })
 
+},
+
+
+getLoveLimit:function(){
+  var loveList = this.data.progressScoreData.loveList;
+  if(!loveList){
+    return 0;
+  }else{
+    return loveList.length;
+  }
+},
+
+getLoveCount:function(){
+  var loveCount = 0;
+  var loveList = this.data.progressScoreData.loveList;
+  for(var i=0;i<loveList.length;i++){
+    var love = loveList[i];
+    if(love.type==1){
+      loveCount++;
+    }
+  }
+  return loveCount;
+},
+
+getPosition:function(id){
+  var positions = this.data.progressScoreData.positions;
+  for(var i=0;i<positions.length;i++){
+    var position = positions[i];
+    if(position.id==id){
+      return position;
+    }
+  }
+  return null;
 },
 
 containerScrollToDom: function(index) {
@@ -705,8 +757,55 @@ domRes: function(index, callback) {
   }).exec();
 },
 
+
+location:function(id,index){
+  var positions = this.data.progressScoreData.positions;
+  var position;
+  var positionIndex = 0;
+  for (var i = 0; i < positions.length; i++) {
+    var p = positions[i];
+    if (p.id == id) {
+      position = p;
+      positionIndex = i;
+    }
+  }
+
+  var outThis = this;
+  outThis.containerRes({
+    success: function (res) {
+      var scrollTop = res.scrollTop;
+      var scrollLeft = res.scrollLeft;
+      outThis.domRes(index, {
+        success: function (res) {
+          var top = res.top + scrollTop - 10;
+          var left = res.left + scrollLeft;
+          var leftKey = "progressScoreData.positions[" + positionIndex+"].left";
+          var topKey = "progressScoreData.positions[" + positionIndex + "].top";
+          outThis.setData({
+            [leftKey]:left,
+            [topKey]:top
+          });
+        }
+      })
+    }
+  })
+},
+
 //运行到某个节点
-toPosition: function(index, callback) {
+toPosition: function(id,index, callback){
+  var positions = this.data.progressScoreData.positions;
+  var position;
+  var positionIndex = 0;
+  for(var i=0;i<positions.length;i++){
+    var p = positions[i];
+    if(p.id==id){
+      position = p;
+      positionIndex = i;
+    }
+  }
+
+  position.begin = index;
+
   var duration = 500;
   var outThis = this;
   outThis.containerRes({
@@ -719,30 +818,66 @@ toPosition: function(index, callback) {
             duration: duration,
             timingFunction: 'linear'
           });
-          animation.top(res.top + scrollTop - 10).left(res.left + scrollLeft).step();
-          outThis.setData({
-            "progressScoreData.animationData": animation.export()
-          });
-
-          if (callback && callback.success) {
-            setTimeout(function () {
+          setTimeout(function () {
+            if (callback && callback.success) {
               callback.success(index);
-            }, duration);
-          }
+            }
+          }, duration-10);
+          var top = res.top + scrollTop - 10;
+          var left = res.left + scrollLeft;
+          animation.top(top).left(left).step();
+          var animationKey = "progressScoreData.positions[" + positionIndex + "].animationData";
+          var beginKey = "progressScoreData.positions[" + positionIndex + "].begin";
+          outThis.setData({
+            [animationKey]: animation.export(),
+            [beginKey]: index
+          });
         }
       })
     }
   })
 },
 
-trendBetween: function(begin, end) {
+setPositions:function(positions){
+  this.setData({
+    "progressScoreData.positions":positions
+  });
+
+  for(var i=0;i<positions.length;i++){
+    var position = positions[i];
+    this.location(position.id,position.begin);
+  }
+},
+
+getPositions:function(){
+  return this.data.progressScoreData.positions;
+},
+
+startTravel:function(id){
+  console.log("id:"+id);
+  var positions = this.data.progressScoreData.positions;
+  var position;
+  for(var i=0;i<positions.length;i++){
+     if(positions[i].id==id){
+       position = positions[i];
+     }
+  }
+  this.trendBetween(id,position.begin,position.end);
+},
+
+trendBetween: function(id,begin, end,callback) {
+
+  console.log("id:"+id+",begin:"+begin+",end:"+end);
   var outThis = this;
-  if (begin < end) {
-    this.toPosition(begin, {
+  if (begin <= end) {
+    this.toPosition(id,begin, {
       success: function (index) {
         var index = index + 1;
-        outThis.trendBetween(index, end);
+        outThis.trendBetween(id,index, end,callback);
         outThis.containerScrollToDom(index);
+        if(begin>=end){
+          callback.success();
+        }
       }
     });
   }

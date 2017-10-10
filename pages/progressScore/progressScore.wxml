@@ -5,16 +5,31 @@
 <import src="../assembly/baseLayerout/baseLayerout.wxml"/>
 
 <template is="baseLayerout" data="{{...baseData}}"/>
+
+<view class="displayPanel" wx:if="{{displayPanel==1}}">
+  <view class="">第{{stageIndex}}关</view>
+  <view class="">答对{{rightCount}}题</view>
+  <view class="">答错{{wrongCount}}题</view>
+  <view class="">前进{{process*10}}米</view>
+  <view class="" style="background:RGBA(255,255,255,0.5);margin:0 auto;margin-top:20px;width:80%;border-radius:10px;" bindtap="showQuestionResult">查看答题结果   </view>
+
+  <view class="" style="background:RGBA(4,190,2,0.5);;margin:0 auto;margin-top:10px;width:80%;border-radius:10px;" bindtap="startSelector" wx:if="{{isLast==0}}">下一关 </view>
+
+  <view class="gray" style="background:RGBA(4,190,2,0.5);;margin:0 auto;margin-top:10px;width:80%;border-radius:10px;" wx:if="{{isLast==1}}">已答完</view>
+</view>
+
 <view>
 
 
 
   <view style="position:absolute;width:100%;height:100%;z-index:10000000;display:{{questionResultDisplay}};">
     <template is="questionResult" data="{{...questionResultPlugData}}"></template>
+   
   </view>
 
-  <view style="position:absolute;width:100%;height:100%;z-index:100000;display:{{questionSelectorDisplay}}">
-    <template is="questionSelector" data="{{...questionSelectorData}}"></template>
+  <view style="position:absolute;width:100%;height:100%;z-index:100000000;display:{{questionSelectorDisplay}}">
+    <template is="questionSelector" data="{{...questionSelectorData}}">
+    </template>
   </view>
 
   <view style="position:absolute;width:100%;height:100%;z-index:10000">
@@ -22,5 +37,13 @@
   </view>
   <view style="position:absolute;width:100%;height:100%;">
   <template is="progressScorePlug" data="{{...progressScoreData}}"></template>
+  </view>
+
+  <view class="progressScoreButtons" style="z-index:20000;">
+    <view class="progressScoreStartButton" style="background:RGBA(4,190,2,0.9);" bindtap='startSelector' wx:if="{{isLast==0}}">开始</view>
+    <view class="progressScoreStartButton gray" style="background:RGBA(4,190,2,0.9);"  wx:if="{{isLast==1}}">开始</view>
+    <view class="progressScoreRankButton" style="background:RGBA(255,255,255,0.5);color:black;" bindtap="skipToRank">排名</view>
+    <view class="progressScoreRecordButton" style="background:RGBA(255,255,255,0.5);color:black;">记录</view>
+    <view class="progressScoreBackButton" bindtap='skipToTakepart' style="background:RGBA(255,255,255,0.5);color:black;">返回</view>
   </view>
 </view>
