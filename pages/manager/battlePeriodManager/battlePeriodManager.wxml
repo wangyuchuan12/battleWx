@@ -15,9 +15,9 @@
     </view>
 
 
-    <view class="battlePeriodManagerButtonn">
+    <view class="battlePeriodManagerButtonn" bindtap="startUpPeriodClick">
       <view class="battlePeriodManagerButtonnIcon fa fa-play-circle"></view>
-      <view class="battlePeriodManagerButtonnText">启动本期</view>
+      <view class="battlePeriodManagerButtonnText">启动题库</view>
     </view>
   </block>
 

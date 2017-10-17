@@ -4,8 +4,8 @@ var domain = request.getDomain();
 var url = domain + "/api/battle/battleSubjects";
 
 
-function getBattleSubjects(battleId,callback){
-  requestBattleSubjects(battleId,{
+function getBattleSubjects(battleId,roomId,callback){
+  requestBattleSubjects(battleId, roomId,{
       success:function(data){
         callback.success(data);
 
@@ -19,9 +19,10 @@ function getBattleSubjects(battleId,callback){
   })
 }
 
-function requestBattleSubjects(battleId,callback){
+function requestBattleSubjects(battleId, roomId,callback){
   var params = new Object();
   params.battleId = battleId;
+  params.roomId = roomId;
   request.requestWithLogin(url, params, {
     success: function (resp) {
       if (resp.success) {

@@ -10,9 +10,8 @@ var battleTakepartCache = require("../../utils/cache/battleTakepartCache.js");
 var baseLayerout = require("../assembly/baseLayerout/baseLayerout.js");
 var app = getApp();
 var headImg = "http://ovcnyik4l.bkt.clouddn.com/d89f42d36c18e16d9900a5cd43e8edf2.png";
-var battleId = 1;
-var index = 1;
-var roomId = 1;
+var battleId = null;
+var roomId = null;
 var layerout = new baseLayerout.BaseLayerout({
   /**
    * 页面的初始数据
@@ -45,6 +44,8 @@ var layerout = new baseLayerout.BaseLayerout({
 
     isManager:0,
 
+    isOwner:0,
+
     status:0,
 
     maxinum:8,
@@ -53,14 +54,16 @@ var layerout = new baseLayerout.BaseLayerout({
 
   },
 
-  haha:function(){
-    console.log("haha");
+  createClick:function(){
+    wx.navigateTo({
+      url: '../battleRoomEdit/battleRoomEdit?battleId='+battleId
+    });
   },
   
 
   skipToRank:function(){
     wx.navigateTo({
-      url: '../battleRank/battleRank?battleId='+battleId+"&periodIndex="+index+"&roomId="+roomId
+      url: '../battleRank/battleRank?battleId='+battleId+"&roomId="+roomId
     });
   },
   
@@ -86,12 +89,14 @@ var layerout = new baseLayerout.BaseLayerout({
                 outThis.hideLoading();
               },
               fail:function(){
-
+                outThis.showToast("网络异常");
+                outThis.hideLoading();
               }
             });
           },
           fail:function(){
-
+            outThis.showToast("网络异常");
+            outThis.hideLoading();
           }
         })
       },
@@ -115,7 +120,8 @@ var layerout = new baseLayerout.BaseLayerout({
           imgUrl: battleInfo.headImg,
           battleInfoName: battleInfo.name,
           battleInfoContent: battleInfo.instruction,
-          maxinum:battleInfo.maxinum
+          maxinum:battleInfo.maxinum,
+          isOwner:battleInfo.isOwner
         });
       },
       fail: function () {
@@ -136,15 +142,15 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   initMemberInfo:function(callback){
-    console.log(JSON.stringify("callback:"+callback));
     var outThis = this;
-    battleMemberInfoRequest.getBattleMemberInfo(battleId,{
+    battleMemberInfoRequest.getBattleMemberInfo(battleId,roomId,{
       success:function(memberInfo){
         outThis.setData({
           status:memberInfo.status,
           isManager:memberInfo.isManager,
           roomId:roomId
         });
+        battleMemberInfoRequest.setBattleMemberInfoFromCache(memberInfo);
         callback.success();
       },
       fail:function(){
@@ -169,7 +175,7 @@ var layerout = new baseLayerout.BaseLayerout({
     var maxinum = this.data.maxinum;
 
     console.log("maxinum:"+maxinum);
-    battleMembersRequest.getBattleMembers(battleId,index,roomId,{
+    battleMembersRequest.getBattleMembers(battleId,roomId,{
       cache: function (battleMembers){
         var members = new Array();
         var length = 0;
@@ -226,7 +232,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
   skipToProgress:function(){
     wx.navigateTo({
-      url: '../progressScore/progressScore?model=0&battleId='+battleId+"&periodIndex="+index+"&roomId="+roomId
+      url: '../progressScore/progressScore?model=0&battleId='+battleId+"&roomId="+roomId
     });
   },
 
@@ -235,7 +241,7 @@ var layerout = new baseLayerout.BaseLayerout({
     var outThis = this;
     var members = outThis.data.members;
     this.showLoading();
-    takepartRequest.battleTakepart(battleId,index,roomId,{
+    takepartRequest.battleTakepart(battleId,roomId,{
       success:function(member){
         outThis.hideLoading();
         outThis.showToast("报名成功");
@@ -246,6 +252,7 @@ var layerout = new baseLayerout.BaseLayerout({
           members: members
         });
         var battleMembers = battleTakepartCache.members;
+
         if(!battleMembers){
           battleMembers = new Array();
         }
@@ -278,7 +285,8 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.init();
+    roomId = options.roomId;
+    battleId = options.battleId
   },
 
   /**
@@ -292,7 +300,7 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    console.log("onShow");
+    this.init();
   },
 
   /**

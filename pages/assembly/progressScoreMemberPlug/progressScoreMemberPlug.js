@@ -18,7 +18,7 @@ var progressScoreMembers={
       var process = member.process;
       var percent =0;
       if(process){
-        percent = process/12;
+        percent = process/12*10;
       }
       members.push({
         imgUrl:ms[i].headImg,

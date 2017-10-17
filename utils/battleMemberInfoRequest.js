@@ -34,8 +34,8 @@ function setBattleMemberInfoFromCache(memberInfo){
   wx.setStorageSync("memberInfo", memberInfo);
 }
 
-function getBattleMemberInfo(id, callback) {
-  requestBattleMemberInfo(id,{
+function getBattleMemberInfo(id,roomId,callback) {
+  requestBattleMemberInfo(id,roomId,{
     success:function(m){
       memberInfo = m;
       wx.setStorageSync("memberInfo", memberInfo);
@@ -47,8 +47,8 @@ function getBattleMemberInfo(id, callback) {
   });
 }
 
-function requestBattleMemberInfo(battleId, callback) {
-  request.requestWithLogin(url,{battleId:battleId},{
+function requestBattleMemberInfo(battleId,roomId,callback) {
+  request.requestWithLogin(url,{battleId:battleId,roomId:roomId},{
     success:function(resp){
       if(resp.success){
         callback.success(resp.data);

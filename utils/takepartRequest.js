@@ -3,24 +3,11 @@ var request = require("request.js");
 var domain = request.getDomain();
 var url = domain + "/api/battle/takepart";
 
-function isTakepartCache(battleId,index) {
-  var key = "isTakepart_" + battleId + "_" + index;
-  var isTakepart = wx.getStorageSync(key);
-  return isTakepart;
-}
 
-function setTakepartCache(battleId,index) {
-  var key = "isTakepart_" + battleId + "_" + index;
-  wx.setStorageSync(key, true);
-}
-
-
-function battleTakepart(battleId,index,roomId,callback) {
+function battleTakepart(battleId,roomId,callback) {
   console.log("sssss");
   requestBattleTakepart(battleId,roomId, {
     success: function (member) {
-      console.log("success");
-      setTakepartCache(battleId,index);
       callback.success(member);
     },
     fail: function (errorMsg) {
@@ -28,12 +15,10 @@ function battleTakepart(battleId,index,roomId,callback) {
       callback.fail(errorMsg);
     },
     battleIn:function(){
-      console.log("battleIn");
-      setTakepartCache(battleId, index);
+
       callback.battleIn();
     },
     battleEnd:function(){
-      console.log("battleEnd");
       callback.battleEnd();
     }
   });
@@ -67,6 +52,5 @@ function requestBattleTakepart(battleId, roomId,callback) {
 }
 
 module.exports = {
-  battleTakepart: battleTakepart,
-  isTakepartCache: isTakepartCache
+  battleTakepart: battleTakepart
 }

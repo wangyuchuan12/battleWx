@@ -41,12 +41,13 @@ function requestQuestionResults(battleMemberPaperAnswerId,callback){
   });
 }
 
-function requestCreatePaperAnswer(battleId, questions,callback){
+function requestCreatePaperAnswer(battleId, questions,roomId,callback){
 
   var params = new Object();
   params.questions = questions;
   params.type = 0;
   params.battleId = battleId;
+  params.roomId = roomId;
   request.requestWithLogin(createPaperAnswerUrl, params, {
     success:function(resp){
       if(resp.success){

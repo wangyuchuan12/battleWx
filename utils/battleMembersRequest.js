@@ -9,7 +9,7 @@ function setBattleMembersCache(members){
   battleMembers = members;
 }
 
-function getBattleMembers(battleId, periodIndex,roomId, callback) {
+function getBattleMembers(battleId,roomId, callback) {
   if (battleMembers){
     if(callback.cache){
       callback.cache(battleMembers);
@@ -17,7 +17,7 @@ function getBattleMembers(battleId, periodIndex,roomId, callback) {
    
   }
   
-  requestBattleMembers(battleId, periodIndex,roomId,{
+  requestBattleMembers(battleId,roomId,{
       success:function(members){
           wx.setStorageSync("battleMembers", members);
           callback.success(members);
@@ -28,10 +28,9 @@ function getBattleMembers(battleId, periodIndex,roomId, callback) {
   });
 }
 
-function requestBattleMembers(battleId,periodIndex,roomId,callback){
+function requestBattleMembers(battleId,roomId,callback){
   var params = new Object();
   params.battleId = battleId;
-  params.periodIndex = periodIndex;
   params.roomId = roomId;
   request.requestWithLogin(url, params, {
     success: function (resp) {

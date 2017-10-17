@@ -33,9 +33,9 @@ var layerout = new baseLayerout.BaseLayerout({
       imgUrl: "http://ooe8ianrr.bkt.clouddn.com/znm123.png"
     }*/]
   },
-  initRankData: function (battleId,index,roomId) {
+  initRankData: function (battleId,roomId) {
     var outThis = this;
-    request.getBattleMembers(battleId, index, roomId,{
+    request.getBattleMembers(battleId, roomId,{
       success: function (data) {
         if (data) {
           var members = new Array();
@@ -60,8 +60,7 @@ var layerout = new baseLayerout.BaseLayerout({
   onLoad: function (options) {
     var battleId = options.battleId;
     var roomId = options.roomId;
-    var periodIndex = options.periodIndex;
-    this.initRankData(battleId,periodIndex,roomId);
+    this.initRankData(battleId,roomId);
   }
 });
 

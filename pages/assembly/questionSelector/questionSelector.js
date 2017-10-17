@@ -1,4 +1,5 @@
 var request = require("../../../utils/battleSubjectsRequest.js");
+var roomId;
 var questionSelector = {
   data:{
     questionSelectorData: {
@@ -263,10 +264,10 @@ var questionSelector = {
     });
   },
 
-  initBattleSubjects:function(count,battleId,callback){
+  initBattleSubjects:function(count,battleId,roomId,callback){
     this.setHeaderCount(count);
     var outThis = this;
-    request.getBattleSubjects(battleId,{
+    request.getBattleSubjects(battleId,roomId,{
       success:function(data){
         if(callback){
           callback.success();

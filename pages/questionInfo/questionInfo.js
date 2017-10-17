@@ -30,7 +30,8 @@ var layerout = new baseLayerout.BaseLayerout({
         memberId: memberInfo.id,
         battleId:memberInfo.battleId,
         stageIndex:memberInfo.stageIndex,
-        answer: answer
+        answer: answer,
+        roomId:memberInfo.roomId
       }, {
           success: function (data) {
             var rightCount = outThis.data.rightCount;
@@ -66,7 +67,8 @@ var layerout = new baseLayerout.BaseLayerout({
         memberId: memberInfo.id,
         battleId: memberInfo.battleId,
         stageIndex: memberInfo.stageIndex,
-        answer: answer
+        answer: answer,
+        roomId: memberInfo.roomId
       }, {
           success: function (data) {
             var process = outThis.data.process;
@@ -102,7 +104,8 @@ var layerout = new baseLayerout.BaseLayerout({
         memberId: memberInfo.id,
         battleId: memberInfo.battleId,
         stageIndex: memberInfo.stageIndex,
-        optionId:optionId
+        optionId: optionId,
+        roomId: memberInfo.roomId
       },{
         success:function(data){
           var rightCount = outThis.data.rightCount;
@@ -181,7 +184,7 @@ var layerout = new baseLayerout.BaseLayerout({
     this.setType(1);
   },
 
-  initView:function(ids){
+  initView:function(ids,roomId){
     var outThis = this;
 
     var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
@@ -189,7 +192,7 @@ var layerout = new baseLayerout.BaseLayerout({
     var battleId = memberInfo.battleId;
 
 
-    questionSelector = new questionRequest.QuestionSelector(battleId, ids,{
+    questionSelector = new questionRequest.QuestionSelector(battleId, ids,roomId,{
       success: function (id,stageIndex){
         battleMemberPaperAnswerId = id
         memberInfo.stageIndex = stageIndex;
@@ -216,14 +219,11 @@ var layerout = new baseLayerout.BaseLayerout({
         /*wx.navigateTo({
           url: '../progressScore/progressScore?battleMemberPaperAnswerId=' + battleMemberPaperAnswerId
         });*/
-        var pages = getCurrentPages();
-        var prevPage = pages[pages.length-2];
-        
+
         wx.navigateBack({
-          
+
         });
 
-        prevPage.startResult(outThis.data.rightCount, outThis.data.wrongCount, outThis.data.process, battleMemberPaperAnswerId);
       },
       fail:function(){
         console.log("...............fail");
@@ -232,14 +232,22 @@ var layerout = new baseLayerout.BaseLayerout({
 
    
   },
+
+  onUnload: function () {
+    var pages = getCurrentPages();
+    var prevPage = pages[pages.length - 2];
+    prevPage.startResult(outThis.data.rightCount, outThis.data.wrongCount, outThis.data.process, battleMemberPaperAnswerId);
+  },
+
   onLoad: function (options) {
     var questionIds = options.questionIds;
+    var roomId = options.roomId;
 
     var questionsArray = questionIds.split(",");
 
     outThis = this;
     this.showLoading();
-    this.initView(questionsArray);
+    this.initView(questionsArray,roomId);
   }
 });
 

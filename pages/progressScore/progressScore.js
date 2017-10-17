@@ -51,7 +51,8 @@ var layerout = new baseLayerout.BaseLayerout({
       outThis.setData({
         stageIndex:stageIndex
       });
-      battleStageTakepartRequest.stageTakepart(outThis.data.battleId,subjectIds,{
+      var roomId = outThis.data.roomId;
+      battleStageTakepartRequest.stageTakepart(outThis.data.battleId,subjectIds,roomId,{
         success:function(data){
           console.log("data:"+JSON.stringify(data));
           var ids = data.questionIds;
@@ -69,7 +70,7 @@ var layerout = new baseLayerout.BaseLayerout({
             }
           }
           wx.navigateTo({
-            url: '../questionInfo/questionInfo?questionIds=' + questionIds + "&stageIndex=" + stageIndex,
+            url: '../questionInfo/questionInfo?questionIds=' + questionIds + "&stageIndex=" + stageIndex+"&roomId="+roomId,
           });
 
         },
@@ -134,9 +135,11 @@ var layerout = new baseLayerout.BaseLayerout({
     setTimeout(function(){
       outThis.trendBetween(memberInfo.id, begin, end, {
         success: function () {
-          console.log("isLast:" + outThis.data.isLast);
           if (outThis.data.isLast == 1) {
+            outThis.showQuestionResult();
             outThis.skipToRank();
+          }else{
+            outThis.showQuestionResult();
           }
         },
         fail: function () {
@@ -204,11 +207,12 @@ var layerout = new baseLayerout.BaseLayerout({
       this.showToast("爱心不足，请充值");
       return;
     }
+    var roomId = this.data.roomId;
    
     var battleId = this.data.battleId;
     var subjectCount = this.data.subjectCount;
     var outThis = this;
-    this.initBattleSubjects(subjectCount, battleId,{
+    this.initBattleSubjects(subjectCount, battleId,roomId,{
       success: function () {
         outThis.hideLoading();
         outThis.setData({
@@ -287,7 +291,7 @@ var layerout = new baseLayerout.BaseLayerout({
       roomId: roomId
     });
 
-    battleMemberInfoRequest.getBattleMemberInfo(1,{
+    battleMemberInfoRequest.getBattleMemberInfo(battleId,roomId,{
       success:function(memberInfo){
         outThis.setLove(memberInfo.loveCount, memberInfo.loveResidule);
         outThis.setProgress(memberInfo.process);

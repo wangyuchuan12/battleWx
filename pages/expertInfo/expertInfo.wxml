@@ -1,0 +1,33 @@
+<view class="expertInfo">
+  <view class="expertInfoHeader">
+    <image src="http://7xlw44.com1.z0.glb.clouddn.com/0042aeda-d8a5-4222-b79d-1416ab222898" class="battleTakepartImg"></image>
+    <view class="expertInfoHeaderName">动漫卡通</view>
+  </view>
+  <view class="expertInfoItems">
+    <view class="expertInfoItemUser">
+      <image src="http://7xlw44.com1.z0.glb.clouddn.com/0042aeda-d8a5-4222-b79d-1416ab222898" class="expertInfoItemUserImg"></image>
+      <view class="expertInfoItemUserNickname">川川</view>
+    </view>
+    <view class="expertInfoItem">
+      微信号:{{wechat}}
+    </view>
+    <view class="expertInfoItem">
+      手机号:{{phonenum}}
+    </view>
+    <view class="expertInfoItem" wx:if="{{status==0}}">
+      状态:审核中
+    </view>
+     <view class="expertInfoItem" wx:if="{{status==1}}">
+      状态:审核通过
+    </view>
+     <view class="expertInfoItem" wx:if="{{status==2}}">
+      状态:撤销资格
+    </view>
+  </view>
+
+  <view class="expertInfoButtons" wx:if="{{identity==0}}">
+    <button>接受</button>
+    <button>拒绝</button>
+  </view>
+
+</view>

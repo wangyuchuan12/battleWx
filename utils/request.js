@@ -69,12 +69,12 @@ function request(url, params, callback) {
   var header;
   if (sessionId) {
     header = {
-      'content-type': 'application/x-www-form-urlencoded',
+      'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
       'Cookie': 'JSESSIONID=' + sessionId
     }
   } else {
     header = {
-      'content-type': 'application/x-www-form-urlencoded'
+      'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
     }
   }
   params.token = token;
@@ -82,7 +82,7 @@ function request(url, params, callback) {
     url: url,
     data: params,
     header: header,
-    method: "get",
+    method: "post",
     complete: function (res) {
       console.log("complete");
     },

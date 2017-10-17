@@ -31,7 +31,7 @@ function getBattleInfo(id,roomId,callback){
 
 function requestBattleInfo(id,roomId,callback){
   var params = new Object();
-  params.id = id;
+  params.battleId = id;
   params.roomId = roomId;
   request.request(url,params,{
     success:function(resp){

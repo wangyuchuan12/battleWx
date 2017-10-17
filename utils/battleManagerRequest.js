@@ -22,6 +22,8 @@ var updateBattleInfoUrl = request.getDomain() + "/api/manager/updateBattleInfo";
 
 var addBattleInfoUrl = request.getDomain() + "/api/manager/addBattleInfo";
 
+var startUpPeriodUrl = request.getDomain() + "/api/manager/startUpPeriod";
+
 function requestAddBattleInfo(params,callback){
   request.request(addBattleInfoUrl, {
     name: params.name,
@@ -291,6 +293,23 @@ function requestAddQuestion(params,callback){
   });
 }
 
+function requestStartUpPeriod(periodId,callback){
+  var params = new Object();
+  params.periodId = periodId;
+  request.request(startUpPeriodUrl, params, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success();
+      } else {
+        callback.fail();
+      }
+    },
+    fail: function () {
+      callback.fail();
+    }
+  });
+}
+
 module.exports = {
   requestBattleSubjects: requestBattleSubjects,
   requestBattlePeriods: requestBattlePeriods,
@@ -308,5 +327,6 @@ module.exports = {
   requestBattleImgUpdate: requestBattleImgUpdate,
   requestBattleInfo: requestBattleInfo,
   requestUpdateBattleInfo: requestUpdateBattleInfo,
-  requestAddBattleInfo: requestAddBattleInfo
+  requestAddBattleInfo: requestAddBattleInfo,
+  requestStartUpPeriod: requestStartUpPeriod
 }

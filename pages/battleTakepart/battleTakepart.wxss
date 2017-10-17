@@ -91,3 +91,14 @@
   padding-top:10px;
   max-height: 20vh;
 }
+
+.battleTakepartSecondButtons{
+  text-align: center;
+  padding-top:20px;
+}
+
+.battleTakepartSecondButton{
+  font-size:10px;
+  display:inline-block;
+  width:100px;
+}

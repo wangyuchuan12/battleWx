@@ -168,6 +168,20 @@ var layerout = new baseLayerout.BaseLayerout({
     }]
   },
 
+  startUpPeriodClick:function(){
+    var periodId = this.data.periodId;
+    battleManagerRequest.requestStartUpPeriod(periodId, {
+      success: function () {
+        wx.navigateBack({
+          
+        });
+      },
+      fail: function () {
+
+      }
+    });
+  },
+
   deleteQuestionClick:function(){
     var outThis = this;
     battleManagerRequest.requestDelQuestion(this.data.questionId,{

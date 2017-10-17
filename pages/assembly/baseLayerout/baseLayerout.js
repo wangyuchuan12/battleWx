@@ -3,8 +3,8 @@ var progressScoreMember = require("../progressScoreMemberPlug/progressScoreMembe
 var progressScorePlug = require("../progressScorePlug/progressScorePlug.js");
 var questionInputPlug = require("../questionInputPlug/questionInputPlug.js");
 var questionResultPlug = require("../questionResult/questionResult.js");
+var selectInputPlug = require("../selectInput/selectInput.js");
 function BaseLayerout(config){
-
     var baseConfig = config;
     var data = config.data;
     if(!data){
@@ -76,7 +76,7 @@ function BaseLayerout(config){
     config = Object.assign(config, questionSelector.questionSelector);
     config.data = data;
   }
-  this.begin = function(){
+  this.begin = function(abc){
     Page(baseConfig);
   }
 
@@ -107,12 +107,18 @@ function BaseLayerout(config){
   this.addQuestionResult = function(){
     var configData = config.data;
     var questionResultPlugData = questionResultPlug.questionResultPlug.data;
-    console.log("questionResultPlugData:"+JSON.stringify(questionResultPlugData));
     var data = Object.assign(configData, questionResultPlugData);
     config = Object.assign(config, questionResultPlug.questionResultPlug);
     config.data = data;
   }
-   
+
+  this.addSelectInput = function(){
+    var configData = config.data;
+    var selectInputData = selectInputPlug.selectInputPlug.data;
+    var data = Object.assign(configData, selectInputData);
+    config = Object.assign(config, selectInputPlug.selectInputPlug);
+    config.data = data;
+  }
 }
 
 

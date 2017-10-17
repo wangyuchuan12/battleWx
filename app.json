@@ -1,5 +1,9 @@
 {
   "pages": [
+    "pages/battleRoomEdit/battleRoomEdit",
+    "pages/confirmPeriodList/confirmPeriodList",
+    "pages/applyExpert/applyExpert",
+    "pages/expertInfo/expertInfo",
     "pages/battleTakepart/battleTakepart",
     "pages/battleRank/battleRank",
     "pages/manager/battleInfoSave/battleInfoSave",
@@ -10,7 +14,6 @@
     "pages/logs/logs",
     "pages/questionInfo/questionInfo",
     "pages/progressScore/progressScore"
-    
   ],
   "window": {
     "backgroundTextStyle": "light",

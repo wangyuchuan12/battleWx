@@ -12,6 +12,8 @@
 
     <view class="battleTakepartButtons">
       <button class="battleTakepartButton" bindtap="managerClick" style='width:23%;' wx:if="{{isManager}}">管理</button>
+      <button class="battleTakepartButton" bindtap="" style='width:23%;' wx:elif="{{isOwner}}">退出</button>
+      <button class="battleTakepartButton" bindtap="createClick" style='width:23%;' wx:else>创建</button>
       <button class="battleTakepartButton" open-type="share" style="width:25%;background:RGBA(141,165,234,1);">邀请</button>
       <button class="battleTakepartButton" bindtap="takepartClick" style="width:45%;background:RGBA(255,164,4,1);" wx:if="{{status==0}}">               参加
       </button>
@@ -22,7 +24,14 @@
       </button>
     </view>
 
-    <view class="battleTakepartInfo">
+    <view class="battleTakepartSecondButtons">
+      <view class="battleTakepartSecondButton">
+        <view>重新开始</view>
+      </view>
+      <view class="battleTakepartSecondButton">返回主页</view>
+    </view>
+
+    <view class="battleTakepartInfo" style="display:none;">
       <view class="battleTakepartInfoTitle">{{battleInfoName}}</view>
 
       <scroll-view class="battleTakepartInfoContent" scroll-y >

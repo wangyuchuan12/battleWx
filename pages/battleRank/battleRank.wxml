@@ -4,7 +4,7 @@
       <image src="http://ovqk5bop3.bkt.clouddn.com/gold.png" class="battleRankHeaderGoldHat"></image>
       <image src="{{rankMembers[0].imgUrl}}" class="battleRankHeaderGoldHead"/>
       <view class="battleRankHeaderGoldRank">NO.1</view>
-      <view class="battleRankHeaderGoldResult">{{rankMembers[0].process}}米</view>
+      <view class="battleRankHeaderGoldResult">{{rankMembers[0].process*10}}米</view>
     </view>
   </view>
 
@@ -16,7 +16,7 @@
       <image src="{{member.imgUrl}}" class="battleRankMemberImg"></image>
       <view class="battleRankMemberContent">
         <view class="battleRankMemberContentNickname">{{member.nickname}}</view>
-        <view class="battleRankMemberContentResult">{{member.process}}米 <!--{{member.consumeHour}}:{{member.consumeMinute}}分--></view>
+        <view class="battleRankMemberContentResult">{{member.process*10}}米 <!--{{member.consumeHour}}:{{member.consumeMinute}}分--></view>
       </view>
     </view>  
   </scroll-view>
