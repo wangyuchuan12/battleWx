@@ -8,11 +8,12 @@ var questionSelector;
 var battleMemberQuestionAnswerId;
 var battleMemberPaperAnswerId;
 var outThis;
+var interval;
 var layerout = new baseLayerout.BaseLayerout({
   data:{
     imgUrl:"",
-    content:"",
-    percent:10,
+    content:"答题开始",
+    percent:0,
     questionId:0,
     rightCount:0,
     wrongCount:0,
@@ -213,12 +214,42 @@ var layerout = new baseLayerout.BaseLayerout({
         else if(data.type==2){
           outThis.setFillData(data);
         }
+
+        var percent = 0;
+        var allUnit = 200;
+        var unit = 0;
+
+        outThis.setData({
+          percent: percent
+        });
+
+        if(interval){
+          clearInterval(interval);
+        }
+
+        interval = setInterval(function(){
+          unit++;
+          percent = parseInt(unit/allUnit*100);
+          outThis.setData({
+            percent: percent
+          });
+          if(percent>=100){
+            clearInterval(interval);
+            var questionId = outThis.getQuestionId();
+            outThis.eventListener.inputSubmit(questionId,"");
+          }
+        },100);
+        
         
       },
       complete: function (){
         /*wx.navigateTo({
           url: '../progressScore/progressScore?battleMemberPaperAnswerId=' + battleMemberPaperAnswerId
         });*/
+
+        if (interval) {
+          clearInterval(interval);
+        }
 
         wx.navigateBack({
 

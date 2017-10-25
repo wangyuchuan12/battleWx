@@ -5,7 +5,8 @@ var layerout = new baseLayerout.BaseLayerout({
   data:{
     isImg:0,
     imgUrl:"",
-    name:""
+    name:"",
+    battleId:""
   },
   nameInputChange: function (e) {
     this.setData({
@@ -13,7 +14,7 @@ var layerout = new baseLayerout.BaseLayerout({
     })
   },
   submitClick:function(){
-    battleManagerRequest.requestAddSubject(1, this.data.name, this.data.imgUrl, {
+    battleManagerRequest.requestAddSubject(this.data.battleId, this.data.name, this.data.imgUrl, {
       success:function(resp){
         wx.navigateBack({
           
@@ -24,6 +25,14 @@ var layerout = new baseLayerout.BaseLayerout({
       }
     });
   },
+
+  onLoad: function (options) {
+    var battleId = options.battleId;
+    this.setData({
+      battleId: battleId
+    });
+  },
+
   imgClick:function(){
     var outThis = this;
     resourceRequest.openLoadFile({

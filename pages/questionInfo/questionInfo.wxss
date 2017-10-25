@@ -42,3 +42,14 @@
   width:80%;
   margin: 0 auto;
 }
+
+.subjectHeaderNoImg{
+  text-align: center;
+  color: white;
+  font-weight: bolder;
+  padding-top:120px;
+  padding-bottom:40px;
+  padding-left:20px;
+  padding-right:20px;
+  font-size:30px;
+}

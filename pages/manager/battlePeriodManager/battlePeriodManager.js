@@ -169,6 +169,7 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   startUpPeriodClick:function(){
+    var outThis = this;
     var periodId = this.data.periodId;
     battleManagerRequest.requestStartUpPeriod(periodId, {
       success: function () {
@@ -176,8 +177,8 @@ var layerout = new baseLayerout.BaseLayerout({
           
         });
       },
-      fail: function () {
-
+      fail: function (errorMsg) {
+        outThis.showToast(errorMsg);
       }
     });
   },
@@ -236,14 +237,26 @@ var layerout = new baseLayerout.BaseLayerout({
     var outThis = this;
     var id = e.currentTarget.id;
     var questionNums = this.data.questionNums;
+    var selectStageId = this.data.selectStageId;
+
+    var stages = this.data.stages;
+
+    var stage;
+    for(var i=0;i<stages.length;i++){
+      if(stages[i].id==selectStageId){
+        stage = stages[i];
+      }
+    }
     for (var i = 0; i < questionNums.length; i++) {
       var questionNum = questionNums[i];
       if (questionNum.id == id) {
         battleManagerRequest.requestUpdateStage(this.data.selectStageId, questionNum.num, {
           success: function () {
             outThis.hideLoading();
+            stage.questionNum = questionNum.num;
             outThis.setData({
-              selectQuestionNum: questionNum.num
+              selectQuestionNum: questionNum.num,
+              stages: stages
             });
           },
           fail: function () {
@@ -253,6 +266,31 @@ var layerout = new baseLayerout.BaseLayerout({
         });
         break;
       }
+    }
+  },
+
+  worldMinusClick:function(){
+    var worlds = this.data.worlds;
+    if(worlds.length>1){
+      worlds.splice(worlds.length - 1, 1);
+      this.setData({
+        worlds: worlds
+      });
+    }
+    
+  },
+
+  worldPlusClick: function () {
+    var worlds = this.data.worlds;
+    if(worlds.length<=5){
+      worlds.push({
+          id:"world"+worlds.length,
+          status:0,
+          index:worlds.length
+      });
+      this.setData({
+        worlds:worlds
+      });
     }
   },
 
@@ -659,8 +697,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
 
     if(!imgUrl){
-      this.showToast("请选择一张图片");
-      return;
+      imgUrl = "";
     }
 
     if(!question){
@@ -673,8 +710,8 @@ var layerout = new baseLayerout.BaseLayerout({
       return;
     }
 
-    if(question.length>20){
-      this.showToast("问题输入不能超过20个字符");
+    if(question.length>100){
+      this.showToast("问题输入不能超过100个字符");
       return;
     }
 

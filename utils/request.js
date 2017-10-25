@@ -1,4 +1,4 @@
-var domain = "http://192.168.1.100";
+var domain = "https://www.chengxihome.com/";
 //根据code登陆用户bbin
 var loginByJsCodeUrl = domain + "/api/common/login/loginByJsCode";
 var registerUserByJsCode = domain +"/api/common/login/registerUserByJsCode";
@@ -291,7 +291,7 @@ function requestLogin(callback) {
                 if(resp.success){
                   token = resp.data.token;
                   isLogin = true;
-                  callback.success(userInfo);
+                  callback.success(resp.data.userInfo);
                 }else{
                   if(resp.errorCode==401){
                     wx.login({
@@ -334,6 +334,7 @@ function requestLogin(callback) {
 
 module.exports = {
   request: request,
+  getUserInfo: getUserInfo,
   requestPayMent: requestPayMent,
   requestLogin: requestLogin,
   requestWxPayConfig: requestWxPayConfig,
@@ -342,5 +343,4 @@ module.exports = {
   testSetUserInfo: testSetUserInfo,
   requestWithLogin:requestWithLogin,
   requestUpload: requestUpload
-  
 }

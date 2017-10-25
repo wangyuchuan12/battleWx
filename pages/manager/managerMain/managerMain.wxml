@@ -1,0 +1,11 @@
+<scroll-view class="battleHomeContentList">
+  <block wx:for="{{battles}}" wx:for-item="battle">
+    <view class="battleHomeContentItem" id="{{battle.id}}" bindtap='itemClick'>
+      <image src="{{battle.imgUrl}}" class="battleHomeContentItemImage"></image>
+      <view class="battleHomeContentItemPersonal">
+        <view class="battleHomeContentItemPersonalName">{{battle.name}}</view>
+        <view class="battleHomeContentItemPersonalInstruction">{{battle.instruction}}</view>
+      </view>
+    </view>
+  </block>
+</scroll-view>

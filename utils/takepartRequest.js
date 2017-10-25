@@ -1,11 +1,31 @@
 var request = require("request.js");
 
 var domain = request.getDomain();
-var url = domain + "/api/battle/takepart";
+var takepartUrl = domain + "/api/battle/takepart";
+
+var roomSignoutUrl = domain + "/api/battle/roomSignout";
+
+
+function battleSignout(battleId,roomId,callback){
+  var params = new Object();
+  params.battleId = battleId;
+  params.roomId = roomId;
+  request.requestWithLogin(roomSignoutUrl, params, {
+    success: function (resp) {
+      if(resp.success){
+        callback.success();
+      }else{
+        callback.fail(resp.errorMsg);
+      }
+    },
+    fail: function (resp) {
+      callback.fail("网络繁忙");
+    }
+  });
+}
 
 
 function battleTakepart(battleId,roomId,callback) {
-  console.log("sssss");
   requestBattleTakepart(battleId,roomId, {
     success: function (member) {
       callback.success(member);
@@ -20,6 +40,12 @@ function battleTakepart(battleId,roomId,callback) {
     },
     battleEnd:function(){
       callback.battleEnd();
+    },
+    roomEnd:function(){
+      callback.roomEnd();
+    },
+    roomFull:function(){
+      callback.roomFull();
     }
   });
 }
@@ -28,9 +54,9 @@ function requestBattleTakepart(battleId, roomId,callback) {
   var params = new Object();
   params.battleId = battleId;
   params.roomId = roomId;
-  request.requestWithLogin(url, params, {
+  request.requestWithLogin(takepartUrl, params, {
     success: function (resp) {
-      console.log(JSON.stringify(resp));
+      console.log("success:"+JSON.stringify(resp));
       if (resp.success) {
         callback.success(resp.data);
       } else {
@@ -40,17 +66,21 @@ function requestBattleTakepart(battleId, roomId,callback) {
         //比赛已经结束
         }else if(resp.errorCode==1){
           callback.battleEnd();
-        }else{
-          callback.fail("没有比赛的阶段");
+        }else if(resp.errorCode==2){
+          callback.roomFull();
+        }else if(resp.errorCode==3){
+          callback.roomEnd();
         }
       }
     },
     fail: function (resp) {
+      console.log("fail:"+JSON.stringify(resp));
       callback.fail("网络繁忙");
     }
   });
 }
 
 module.exports = {
-  battleTakepart: battleTakepart
+  battleTakepart: battleTakepart,
+  battleSignout: battleSignout
 }

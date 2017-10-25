@@ -58,7 +58,7 @@
         <view class="battleInfoManagerPeriodHeader">
           <view class="battleInfoManagerPeriodHeaderName">第{{index+1}}期</view>
           <view class="battleInfoManagerPeriodHeaderNum">{{period.num}}/{{period.total}}</view>
-          <view class="battleInfoManagerPeriodHeaderStatus">启动</view>
+          <view class="startUpPeriodClick">启动</view>
         </view>
       </view>
     </block>

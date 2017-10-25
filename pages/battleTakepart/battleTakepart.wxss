@@ -102,3 +102,32 @@
   display:inline-block;
   width:100px;
 }
+
+.battleTakepartChat{
+  padding-top:50px;
+}
+
+.battleTakepartChatItem1{
+  color:RGBA(241,6,135,1);
+  font-size:15px;
+}
+
+.battleTakepartChatItem2{
+  color:RGBA(133,133,133,1);
+  font-size:10px;
+}
+
+.battleTakepartChatItem3{
+  color:RGBA(133,133,133,1);
+  font-size:10px;
+}
+
+.battleTakepartChatItem4{
+  background:RGBA(255,240,1,1);
+  width:80%;
+  padding-top:5px;
+  padding-bottom:5px;
+  margin: 0 auto;
+  margin-top:10px;
+}
+

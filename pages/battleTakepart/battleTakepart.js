@@ -12,6 +12,7 @@ var app = getApp();
 var headImg = "http://ovcnyik4l.bkt.clouddn.com/d89f42d36c18e16d9900a5cd43e8edf2.png";
 var battleId = null;
 var roomId = null;
+var requestTarget;
 var layerout = new baseLayerout.BaseLayerout({
   /**
    * 页面的初始数据
@@ -23,6 +24,10 @@ var layerout = new baseLayerout.BaseLayerout({
     battleInfoContent:"",
 
     battleInfoName:"",
+
+    isFull:0,
+    
+    chat:"wangyuchuan12",
 
     members:[{
       imgUrl:"http://otsnwem87.bkt.clouddn.com/user.png"
@@ -50,7 +55,9 @@ var layerout = new baseLayerout.BaseLayerout({
 
     maxinum:8,
 
-    mininum:1
+    mininum:1,
+
+    num:0
 
   },
 
@@ -64,6 +71,22 @@ var layerout = new baseLayerout.BaseLayerout({
   skipToRank:function(){
     wx.navigateTo({
       url: '../battleRank/battleRank?battleId='+battleId+"&roomId="+roomId
+    });
+  },
+
+  signOutClick:function(){
+    var outThis = this;
+    this.showLoading();
+    takepartRequest.battleSignout(battleId,roomId,{
+      success:function(){
+        outThis.hideLoading();        
+        wx.redirectTo({
+          url: 'battleTakepart?battleId=' + battleId + "&roomId=" + roomId
+        });
+      },
+      fail:function(errorMsg){
+        console.log("errorMsg:"+errorMsg);
+      }
     });
   },
   
@@ -121,6 +144,7 @@ var layerout = new baseLayerout.BaseLayerout({
           battleInfoName: battleInfo.name,
           battleInfoContent: battleInfo.instruction,
           maxinum:battleInfo.maxinum,
+          mininum:battleInfo.mininum,
           isOwner:battleInfo.isOwner
         });
       },
@@ -139,6 +163,16 @@ var layerout = new baseLayerout.BaseLayerout({
         callback.fail();
       }
     });
+  },
+
+  copyChat:function(){
+    var outThis = this;
+    wx.setClipboardData({
+      data: outThis.data.chat,
+      success:function(){
+        outThis.showToast("复制成功");
+      }
+    })
   },
 
   initMemberInfo:function(callback){
@@ -173,18 +207,19 @@ var layerout = new baseLayerout.BaseLayerout({
     var outThis = this;
     var roomId = this.data.roomId;
     var maxinum = this.data.maxinum;
-
-    console.log("maxinum:"+maxinum);
-    battleMembersRequest.getBattleMembers(battleId,roomId,{
+    var num = 0;
+    requestTarget = battleMembersRequest.getBattleMembers(battleId,roomId,{
       cache: function (battleMembers){
         var members = new Array();
         var length = 0;
         if (battleMembers != null && battleMembers.length>0){
           length = battleMembers.length;
+          num = length;
           for (var i = 0; i < battleMembers.length; i++) {
             members.push({
               imgUrl: battleMembers[i].headImg
             });
+            
           }
         }
         for (var i = 0; i < maxinum - length; i++) {
@@ -194,13 +229,16 @@ var layerout = new baseLayerout.BaseLayerout({
         }
 
         outThis.setData({
-          members: members
+          members: members,
+          num:num
         });
       },
       success: function (battleMembers) {
        battleTakepartCache.members = battleMembers;
-       callback.success(battleMembers)
+       callback.success(battleMembers);
+       
         var length = battleMembers.length;
+        var num =  length;
         var members = new Array();
         for (var i = 0; i < battleMembers.length;i++){
           members.push({
@@ -214,14 +252,21 @@ var layerout = new baseLayerout.BaseLayerout({
         }
 
         outThis.setData({
-          members: members
+          members: members,
+          num:num
         });
+
+        var mininum = outThis.data.mininum;
+
+        if (mininum <= num) {
+          requestTarget.stop();
+        }
 
       },
       fail: function () {
         callback.fail();
       }
-    });
+    },15000);
   },
 
   managerClick:function(){
@@ -240,27 +285,38 @@ var layerout = new baseLayerout.BaseLayerout({
   takepartClick:function(){
     var outThis = this;
     var members = outThis.data.members;
+    var num = this.data.num;
+    var mininum = this.data.mininum;
+    var maxinum = this.data.maxinum;
+    var status = this.data.status;
+    if(num>=maxinum&&status==0){
+      this.showToast("人数已满，不能参加");
+      return;
+    }
     this.showLoading();
     takepartRequest.battleTakepart(battleId,roomId,{
       success:function(member){
+        num++;
         outThis.hideLoading();
         outThis.showToast("报名成功");
-        members.splice(0,0,{
+        members.splice(num-1,1,{
           imgUrl: member.headImg
         });
         outThis.setData({
-          members: members
+          members: members,
+          num:num,
+          status:1
         });
+        if (mininum<=num){
+          requestTarget.stop();
+        }
         var battleMembers = battleTakepartCache.members;
 
-        if(!battleMembers){
-          battleMembers = new Array();
-        }
         battleMembers.push(member);
 
         battleTakepartCache.members = battleMembers;
 
-        outThis.skipToProgress();
+        //outThis.skipToProgress();
       },
       fail:function(errorMsg){
         outThis.hideLoading();
@@ -277,6 +333,14 @@ var layerout = new baseLayerout.BaseLayerout({
       battleEnd:function(){
         outThis.hideLoading();
         outThis.skipToProgress();
+      },
+      roomEnd:function(){
+        outThis.hideLoading();
+        outThis.showToast("比赛已经结束");
+      },
+      roomFull:function(){
+        outThis.hideLoading();
+        outThis.showToast("房间已满");
       }
     });
 
@@ -314,7 +378,7 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-   
+    requestTarget.stop();
   },
 
   /**

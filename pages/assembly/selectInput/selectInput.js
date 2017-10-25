@@ -12,7 +12,6 @@ var selectInputPlug = {
     this.setData({
       "selectInputData.status":1
     });
-    console.log("ss");
   },
 
   itemClick:function(e){

@@ -199,3 +199,17 @@
   display:inline-block;
   border: 1px solid RGBA(44,51,59,1);
 }
+
+.inputItemFillTermsWorldPlus{
+  display:inline-block;
+  font-size:50px;
+  margin-left:10px;
+  margin-right:10px;
+  vertical-align: top;
+  position:relative;
+  top:-10px;
+}
+
+.inputItemFillTermsWorlds{
+  height:100px;
+}

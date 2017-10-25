@@ -4,7 +4,8 @@
   <view class="questinSelectorCloseButton fa fa-times-circle" bindtap='questinResultClose'></view>
     <scroll-view scroll-y="true" style="height:100%;">
       <view class="questionResultItem" wx:for="{{items}}" wx:for-item="item">
-        <image src="{{item.imgUrl}}" class="questionResultItemImg"></image>
+        <image src="{{item.imgUrl}}" class="questionResultItemImg" wx:if="{{item.imgUrl}}"></image>
+        <image src="http://7xlw44.com1.z0.glb.clouddn.com/noimg.png" class="questionResultItemImg" wx:else></image>
         <scroll-view class="questionResultItemContent" scroll-y>
           <view class="questionResultItemContentItem">
             <span>{{item.question}}</span>

@@ -9,6 +9,7 @@ var membersRankUtil = require("../../utils/membersRankUtil.js");
 var progressScoreCache = require("../../utils/cache/progressScoreCache.js");
 var battleTakepartCache = require("../../utils/cache/battleTakepartCache.js");
 var outThis;
+var requestTarget;
 var layerout = new baseLayerout.BaseLayerout({
   data:{
     title:"火影忍者",
@@ -26,7 +27,9 @@ var layerout = new baseLayerout.BaseLayerout({
     totalDistance:120,
     battleMemberPaperAnswerId:null,
     isLast:0,
-    roomId:0
+    roomId:0,
+    //是否处在运行状态
+    isRun:0
   },
   eventListener:{
     questinResultClose:function(){
@@ -83,10 +86,13 @@ var layerout = new baseLayerout.BaseLayerout({
   },
   onShareAppMessage:function(){
     var outThis = this;
+    var battleId = this.data.battleId;
+    var roomId = this.data.roomId;
+    var path = "pages/battleTakepart/battleTakepart?battleId="+battleId+"&roomId="+roomId
     return {
       title: outThis.data.title,
       desc: outThis.data.desc,
-      path: outThis.data.path
+      path: path
     }
   },
 
@@ -99,12 +105,57 @@ var layerout = new baseLayerout.BaseLayerout({
 
   skipToTakepart:function(){
     wx.redirectTo({
-      url: '../battleTakepart/battleTakepart?battleId=' + this.data.battleId
+      url: '../battleTakepart/battleTakepart?battleId=' + this.data.battleId+"&roomId="+this.data.roomId
     });
+  },
+
+  processUpdate:function(){
+    var outThis = this;
+    var battleId = this.data.battleId;
+    var roomId = this.data.roomId;
+    requestTarget = battleMembersRequest.getBattleMembers(battleId, roomId, {
+      cache: function (battleMembers) {
+        
+      },
+      success: function (battleMembers) {
+        var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
+        var oldBattleMembers = outThis.getMembers();
+        console.log("oldBattleMembers:"+oldBattleMembers);
+        outThis.setMembers(battleMembers);
+        for(var i=0;i<battleMembers.length;i++){
+          for(var j=0;j<oldBattleMembers.length;j++){
+            var battleMember = battleMembers[i];
+            var oldBattleMember = oldBattleMembers[j];
+            if (battleMember.id == oldBattleMember.id&&battleMember.id!=memberInfo.id){
+             var isRun = outThis.data.isRun;
+             if(isRun==0){
+              outThis.trendBetween(battleMember.id, oldBattleMember.process, battleMember.process, {
+                success: function () {
+                  
+                },
+                fail: function () {
+
+                }
+              }, false);
+             }else if(isRun==1){
+               outThis.location(battleMember.id, battleMember.process);
+             }
+              break;
+            }
+          }
+        }
+      },
+      fail: function () {
+        
+      }
+    }, 15000);
   },
 
   startResult: function (rightCount, wrongCount, process, battleMemberPaperAnswerId){
     
+    outThis.setData({
+      isRun: 1
+    });
     var begin = this.getProcess();
     var end = begin + process;
     var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
@@ -131,10 +182,13 @@ var layerout = new baseLayerout.BaseLayerout({
     }
 
     outThis.setLove(loveLimit,loveCount);
-
     setTimeout(function(){
+      
       outThis.trendBetween(memberInfo.id, begin, end, {
         success: function () {
+          outThis.setData({
+            isRun: 0
+          });
           if (outThis.data.isLast == 1) {
             outThis.showQuestionResult();
             outThis.skipToRank();
@@ -145,8 +199,8 @@ var layerout = new baseLayerout.BaseLayerout({
         fail: function () {
 
         }
-      });
-    },1500);
+      },true);
+    },100);
   },
 
   showQuestionResult:function(){
@@ -172,10 +226,6 @@ var layerout = new baseLayerout.BaseLayerout({
         });
 
        var results = data.questionAnswers;
-
-       console.log("data:"+JSON.stringify(data));
-
-       console.log("id:" + battleMemberPaperAnswerId);
 
         var items = new Array();
         for (var i = 0; i < results.length; i++) {
@@ -204,7 +254,7 @@ var layerout = new baseLayerout.BaseLayerout({
   startSelector:function(){
     var loveCount = this.getLoveCount();
     if(!loveCount){
-      this.showToast("爱心不足，请充值");
+      this.showToast("爱心不足");
       return;
     }
     var roomId = this.data.roomId;
@@ -242,12 +292,17 @@ var layerout = new baseLayerout.BaseLayerout({
       var positions = new Array();
       for (var i = 0; i < members.length; i++) {
         var member = members[i];
+        var isMy = 0;
+        if(member.id==memberInfo.id){
+          isMy = 1;
+        }
         positions.push({
           id: member.id,
           imgUrl: member.headImg,
           animationData: {},
           begin: member.process,
-          end: 0
+          end: 0,
+          isMy:isMy
         });
       }
       progressScoreCache.process = process;
@@ -259,16 +314,37 @@ var layerout = new baseLayerout.BaseLayerout({
     
   },
 
+  onShow: function () {
+    var outThis = this;
+    setTimeout(function(){
+      outThis.processUpdate();
+    },2000);
+  },
+
+  onUnload: function () {
+    requestTarget.stop();
+  },
+
   onLoad: function (options) {
     outThis = this;
     var battleInfo = battleInfoRequest.battleInfo;
-    var members = battleTakepartCache.members;
     var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
     var roomId = options.roomId;
 
-    membersRankUtil.rankByProcess(members);
+    battleMembersRequest.getBattleMembers(battleId, roomId, {
+      cache: function (battleMembers) {
 
-    this.setMembers(members);
+      },
+      success: function (battleMembers) {
+
+        membersRankUtil.rankByProcess(battleMembers);
+        outThis.setMembers(battleMembers);
+
+      },
+      fail: function () {
+
+      }
+    });
     
     var model = options.model;
     var battleId = options.battleId;

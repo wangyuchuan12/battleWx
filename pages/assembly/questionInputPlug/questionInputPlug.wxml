@@ -17,9 +17,8 @@
 
   <view id="inputItemFillTerms" wx:if="{{type==2}}">
     <view class='inputItemFillTerms'>
-    
       <view class='inputItemFillTermsWorlds'>
-        <view class="inputItemFillTermsWorld" wx:for="{{worlds}}" wx:for-item="world" bindtap="worldClick" id="{{world.id}}">{{world.content}}</view>
+        <view class="inputItemFillTermsWorld" wx:for="{{worlds}}" wx:for-item="world" bindtap="worldClick" id="{{world.id}}">{{world.content}}1</view>
       </view>
 
 

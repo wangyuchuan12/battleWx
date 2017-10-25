@@ -865,16 +865,16 @@ startTravel:function(id){
   this.trendBetween(id,position.begin,position.end);
 },
 
-trendBetween: function(id,begin, end,callback) {
-
-  console.log("id:"+id+",begin:"+begin+",end:"+end);
+trendBetween: function(id,begin, end,callback,flag) {
   var outThis = this;
   if (begin <= end) {
     this.toPosition(id,begin, {
       success: function (index) {
         var index = index + 1;
         outThis.trendBetween(id,index, end,callback);
-        outThis.containerScrollToDom(index);
+        if(flag){
+          outThis.containerScrollToDom(index);
+        }
         if(begin>=end){
           callback.success();
         }

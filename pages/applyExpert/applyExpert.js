@@ -21,7 +21,9 @@ var layerout = new baseLayerout.BaseLayerout({
 
     vEnable:1,
 
-    remainingTime:0
+    remainingTime:0,
+
+    backModel:0
   },
   
 
@@ -33,6 +35,7 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   submitClick:function(){
+    var outThis = this;
     var phonenum = this.data.phonenum;
     var code = this.data.code;
     var wechat = this.data.wechat;
@@ -49,6 +52,9 @@ var layerout = new baseLayerout.BaseLayerout({
         /*wx.navigateTo({
           url: '../expertInfo/expertInfo'
         });*/
+        outThis.setData({
+          backModel:1
+        });
         wx.navigateBack({
           
         });
@@ -135,9 +141,12 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-    var pages = getCurrentPages();
-    var prevPage = pages[pages.length - 2];
-    prevPage.applyExpertSuccess();
+    var backModel = this.data.backModel;
+    if (backModel==1){
+      var pages = getCurrentPages();
+      var prevPage = pages[pages.length - 2];
+      prevPage.applyExpertSuccess();
+    }
   },
 
   /**

@@ -96,6 +96,7 @@ var layerout = new baseLayerout.BaseLayerout({
     var battleId = this.data.battleId;
     battleManagerRequest.requestBattleInfo(battleId,{
       success:function(battleInfo){
+        console.log("....battleInfo:"+JSON.stringify(battleInfo));
           if(battleInfo.headImg){
             outThis.setData({
               isImg:1,
@@ -106,7 +107,7 @@ var layerout = new baseLayerout.BaseLayerout({
           }
       },
       fail:function(){
-
+        console.log("...fail");
       }
     });
   },
@@ -162,7 +163,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
   addSubjectClick:function(){
     wx.navigateTo({
-      url: '../addSubject/addSubject',
+      url: '../addSubject/addSubject?battleId='+this.data.battleId
     });
   },
 
@@ -197,6 +198,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
   onLoad: function (options) {
     var battleId = options.battleId;
+    console.log("...battleId:"+battleId);
     this.setData({
       battleId:battleId
     });

@@ -72,3 +72,20 @@
   position: relative;
   width:100%;
 }
+
+.isPublic{
+  padding-left:20px;
+  padding-top:10px;
+  padding-bottom:10px;
+}
+
+.isPublicLable{
+  font-size:15px;
+  color: white;
+  display:inline-block;
+}
+
+.isPublicSwitch{
+  display: inline-block;
+  padding-left:10px;
+}

@@ -12,6 +12,7 @@ var layerout = new baseLayerout.BaseLayerout({
     }
   },
   data: {
+    isPublic:1,
     selectPeriodId:null,
     periods:[],
     rooms:[{
@@ -99,6 +100,18 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
+  isPublicSwitchNo:function(e){
+    this.setData({
+      isPublic:0
+    });
+  },
+
+  isPublicSwitchOff: function (e) {
+    this.setData({
+      isPublic: 1
+    });
+  },
+
   addRoomAction:function(room){
 
     console.log("..............room");
@@ -108,6 +121,7 @@ var layerout = new baseLayerout.BaseLayerout({
     var mininum = room.mininum;
     var battleId = this.data.selectInputData.id;
     var periodId = this.data.selectPeriodId;
+    var isPublic = this.data.isPublic;
 
     if(!battleId){
       this.showToast("请选中一场比赛");
@@ -125,7 +139,8 @@ var layerout = new baseLayerout.BaseLayerout({
       battleId: battleId,
       periodId: periodId,
       maxinum: maxinum,
-      mininum: mininum
+      mininum: mininum,
+      isPublic: isPublic
     }, {
         success: function (room) {
           wx.redirectTo({

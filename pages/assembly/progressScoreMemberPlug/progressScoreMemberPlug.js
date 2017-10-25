@@ -22,12 +22,18 @@ var progressScoreMembers={
       }
       members.push({
         imgUrl:ms[i].headImg,
-        percent: percent
+        percent: percent,
+        id:ms[i].id,
+        process:process
       });
     }
     this.setData({
       "progressScoreMemberData.members":members
     });
+  },
+  getMembers:function(){
+    var members = this.data.progressScoreMemberData.members;
+    return members;
   }
 }
 

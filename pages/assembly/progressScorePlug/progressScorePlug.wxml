@@ -41,7 +41,10 @@
 
                     <block wx:for="{{positions}}" wx:for-item="position">
                       <view  class="fromDom"  id="fromDom" 
-                        style="background: url('{{position.imgUrl}}');background-size:100% 100%;position:absolute;z-index: 1000;left:{{position.left}}px;top:{{position.top}}px;" animation="{{position.animationData}}"></view>
+                        style="background: url('{{position.imgUrl}}');background-size:100% 100%;position:absolute;z-index: 1001;left:{{position.left}}px;top:{{position.top}}px;" animation="{{position.animationData}}" wx:if="{{position.isMy==1}}"></view>
+
+                        <view  class="fromDom"  id="fromDom" 
+                        style="background: url('{{position.imgUrl}}');background-size:100% 100%;position:absolute;z-index: 1000;left:{{position.left}}px;top:{{position.top}}px;" animation="{{position.animationData}}" wx:else></view>
                     </block>
                 </view> 
             </view>

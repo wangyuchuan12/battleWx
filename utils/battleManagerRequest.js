@@ -301,7 +301,7 @@ function requestStartUpPeriod(periodId,callback){
       if (resp.success) {
         callback.success();
       } else {
-        callback.fail();
+        callback.fail(resp.errorMsg);
       }
     },
     fail: function () {

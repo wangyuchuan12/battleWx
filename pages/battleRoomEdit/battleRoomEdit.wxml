@@ -42,6 +42,11 @@
     </block>
    
   </scroll-view>
+  <view class="isPublic">
+    <view class="isPublicLable">允许陌生人通过快速加入进入</view>
+    <switch class="isPublicSwitch" checked bindtap='isPublicSwitchNo' wx:if="{{isPublic==1}}"></switch>
+    <switch class="isPublicSwitch"  bindtap='isPublicSwitchOFF' wx:if="{{isPublic==0}}"></switch>
+  </view>
    <view class="battlePeriodManagerQuestionCount">
     <block wx:for="{{rooms}}" wx:for-item="room">
         <view class="battlePeriodManagerQuestionNum" bindtap='roomItemClick' id="{{room.id}}" wx:if="{{room.status==0}}">开{{room.maxinum}}人房间</view>

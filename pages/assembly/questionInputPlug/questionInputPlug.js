@@ -112,6 +112,10 @@ var questionInputPlug = {
     });
   },
 
+  getQuestionId:function(){
+    return this.data.questionInputData.questionId;
+  },
+
   empty:function(){
     this.setData({
       type: 0,

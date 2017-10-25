@@ -1,1 +1,6 @@
-{}
+{
+  "backgroundTextStyle": "light",
+  "navigationBarBackgroundColor": "white",
+  "navigationBarTitleText": "比赛进行中",
+  "navigationBarTextStyle": "black"
+}

@@ -145,10 +145,15 @@
       <view class='inputItemFillTerms'>
       
         <view class='inputItemFillTermsWorlds'>
+            
             <block wx:for="{{worlds}}" wx:for-item="world">
               <view class="inputItemFillTermsWorld"  
               bindtap="worldClick" id="{{world.id}}">{{world.content}}</view>
             </block>
+            <view>
+              <view class="inputItemFillTermsWorldPlus" bindtap='worldMinusClick'><span class="fa fa-minus-square"></span></view>
+              <view class="inputItemFillTermsWorldPlus" bindtap='worldPlusClick'><span class="fa fa-plus-square"></span></view>
+            </view>
         </view>
 
         <view class='inputItemFillTermsWorldsCheck'>
@@ -220,7 +225,9 @@
 <block wx:if="{{model==0}}">
   <scroll-view scroll-y="true" class="battlePeriodManagerResults">
       <view class="questionResultItem" wx:for="{{items}}" wx:for-item="item" id="{{item.id}}" bindtap='itemInfo'>
-        <image src="{{item.imgUrl}}" class="questionResultItemImg"></image>
+        <image src="{{item.imgUrl}}" class="questionResultItemImg" wx:if="{{item.imgUrl}}"></image>
+        <image src="http://7xlw44.com1.z0.glb.clouddn.com/noimg.png" class="questionResultItemImg" wx:else></image>
+
         <scroll-view class="questionResultItemContent" scroll-y>
           <view class="questionResultItemContentItem">
             <span>{{item.question}}</span>

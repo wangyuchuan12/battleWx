@@ -9,14 +9,13 @@ function setBattleMembersCache(members){
   battleMembers = members;
 }
 
-function getBattleMembers(battleId,roomId, callback) {
+function getBattleMembers(battleId,roomId, callback,time) {
   if (battleMembers){
     if(callback.cache){
       callback.cache(battleMembers);
     }
    
   }
-  
   requestBattleMembers(battleId,roomId,{
       success:function(members){
           wx.setStorageSync("battleMembers", members);
@@ -26,6 +25,29 @@ function getBattleMembers(battleId,roomId, callback) {
         callback.fail();
       }
   });
+
+  if(time&&time>0){
+    var interval = setInterval(function () {
+      console.log("hahaha")
+      requestBattleMembers(battleId, roomId, {
+        success: function (members) {
+          wx.setStorageSync("battleMembers", members);
+          callback.success(members);
+        },
+        fail: function () {
+          callback.fail();
+        }
+      });
+    }, time);
+  }
+
+  var target = new Object();
+  target.stop = function(){
+    clearInterval(interval);
+  }
+  
+  return target;
+
 }
 
 function requestBattleMembers(battleId,roomId,callback){

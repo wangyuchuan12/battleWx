@@ -3,9 +3,13 @@
 
 <template is="baseLayerout" data="{{...baseData}}"/>
 <view class="subjectContainer">
-  <view class="subjectHeader">
+  <view class="subjectHeader" wx:if="{{imgUrl}}">
     <image class="subjectHeaderImg" src="{{imgUrl}}"></image>
     <view class="subjectHeaderImgQuestion">{{content}}</view>
+  </view>
+
+  <view class="subjectHeaderNoImg" wx:else>
+    <view class="subjectHeaderImgQuestionNoImg">{{content}}</view>
   </view>
 
   <progress percent="{{percent}}" show-info class="progress"/>
