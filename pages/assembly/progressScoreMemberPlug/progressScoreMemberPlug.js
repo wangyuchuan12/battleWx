@@ -27,6 +27,9 @@ var progressScoreMembers={
         process:process
       });
     }
+    members.sort(function(member1,member2){
+      return member2.process-member1.process;
+    });
     this.setData({
       "progressScoreMemberData.members":members
     });

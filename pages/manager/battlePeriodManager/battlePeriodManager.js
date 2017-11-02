@@ -1,6 +1,7 @@
 var baseLayerout = require("../../assembly/baseLayerout/baseLayerout.js");
 var battleManagerRequest = require("../../../utils/battleManagerRequest.js");
 var resourceRequest = require("../../../utils/resourceRequest.js");
+var battleMemberInfoRequest = require("../../../utils/battleMemberInfoRequest.js");
 var util = require("../../../utils/util.js");
 var layerout = new baseLayerout.BaseLayerout({
 
@@ -23,6 +24,8 @@ var layerout = new baseLayerout.BaseLayerout({
     //0表示添加 1表示修改
     saveModel:0,
     stages:[],
+    edit:0,
+    isManager:0,
     selectOptions:[{
       content:"1",
       isRight:1,
@@ -299,7 +302,10 @@ var layerout = new baseLayerout.BaseLayerout({
     var id = e.currentTarget.id;
     var items = this.data.items;
 
-    
+    this.setData({
+      edit:1
+    });
+
     for(var i=0;i<items.length;i++){
       var item = items[i];
       if(item.id==id){
@@ -312,6 +318,12 @@ var layerout = new baseLayerout.BaseLayerout({
               var fillWords = question.fillWords;
 
               var rightAnswer = question.answer;
+              if (rightAnswer){
+                worlds = new Array();
+                for (var i = 0; i < rightAnswer.length;i++){
+                  worlds.push({});
+                }
+              }
 
               for (var i = 0; i < rightAnswer.length; i++) {
                 if (rightAnswer[i] && worlds[i]) {
@@ -675,7 +687,8 @@ var layerout = new baseLayerout.BaseLayerout({
 
   saveQuetionCancelClick:function(){
     this.setData({
-      "model":0
+      "model":0,
+      edit:0
     });
 
     this.initQuestions();
@@ -859,7 +872,8 @@ var layerout = new baseLayerout.BaseLayerout({
           success: function () {
             outThis.hideLoading();
             outThis.setData({
-              model: 0
+              model: 0,
+              edit:0
             });
             outThis.initQuestions();
           },
@@ -1085,7 +1099,12 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    
+    var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
+    if(memberInfo){
+      this.setData({
+        isManager:memberInfo.isManager
+      });
+    }
   },
 
   /**

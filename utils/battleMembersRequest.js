@@ -3,13 +3,14 @@ var request = require("request.js");
 var domain = request.getDomain();
 var url = domain + "/api/battle/members";
 var battleMembers = wx.getStorageSync("battleMembers");
-
+var flag = false;
 
 function setBattleMembersCache(members){
   battleMembers = members;
 }
 
 function getBattleMembers(battleId,roomId, callback,time) {
+  flag = true;
   if (battleMembers){
     if(callback.cache){
       callback.cache(battleMembers);
@@ -26,23 +27,26 @@ function getBattleMembers(battleId,roomId, callback,time) {
       }
   });
 
+  var interval;
   if(time&&time>0){
-    var interval = setInterval(function () {
-      console.log("hahaha")
-      requestBattleMembers(battleId, roomId, {
-        success: function (members) {
-          wx.setStorageSync("battleMembers", members);
-          callback.success(members);
-        },
-        fail: function () {
-          callback.fail();
-        }
-      });
+    interval  = setInterval(function () {
+     if(flag){
+       requestBattleMembers(battleId, roomId, {
+         success: function (members) {
+           wx.setStorageSync("battleMembers", members);
+           callback.success(members);
+         },
+         fail: function () {
+           callback.fail();
+         }
+       });
+     }
     }, time);
   }
 
   var target = new Object();
   target.stop = function(){
+    flag = false;
     clearInterval(interval);
   }
   

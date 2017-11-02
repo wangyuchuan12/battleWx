@@ -4,6 +4,8 @@ var smsRequest = require("../../utils/smsRequest.js");
 
 var battleExpertRequest = require("../../utils/battleExpertRequest.js");
 
+var battleMemberInfoRequest = require("../../utils/battleMemberInfoRequest.js");
+
 var layerout = new baseLayerout.BaseLayerout({
   /**
    * 页面的初始数据
@@ -15,9 +17,9 @@ var layerout = new baseLayerout.BaseLayerout({
     
     wechat:null,
 		
-    battleId:"1",
+    battleId:0,
 		
-    introduce:"111",
+    introduce:"",
 
     vEnable:1,
 
@@ -31,7 +33,14 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    var battleId = options.battleId;
+    if(!battleId){
+      var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
+      battleId = memberInfo.battleId;
+    }
+    this.setData({
+      battleId: battleId
+    });
   },
 
   submitClick:function(){
@@ -41,6 +50,46 @@ var layerout = new baseLayerout.BaseLayerout({
     var wechat = this.data.wechat;
     var battleId = this.data.battleId;
     var introduce = this.data.introduce;
+    
+    if(!wechat){
+      this.showToast("微信账号不能为空");
+      return;
+    }
+    if(!phonenum){
+      this.showToast("手机号码不能为空");
+      return;
+    }
+
+    if (!code) {
+      this.showToast("验证码不能为空");
+      return;
+    }
+
+    if (!introduce) {
+      this.showToast("简介不能为空");
+      return;
+    }
+
+    if (wechat.length>20) {
+      this.showToast("微信账号不能超过20个字符");
+      return;
+    }
+    if (phonenum.length>20) {
+      this.showToast("手机号码不能超过20个字符");
+      return;
+    }
+
+    if (code.length>20) {
+      this.showToast("验证码不能超过20个字符");
+      return;
+    }
+
+    if (introduce.length>200) {
+      this.showToast("简介不能超过100个字符");
+      return;
+    }
+    var outThis = this;
+    this.showLoading();
     battleExpertRequest.apply({
       phonenum: phonenum,
       code: code,
@@ -49,17 +98,15 @@ var layerout = new baseLayerout.BaseLayerout({
       introduce: introduce
     },{
       success:function(data){
-        /*wx.navigateTo({
-          url: '../expertInfo/expertInfo'
-        });*/
-        outThis.setData({
-          backModel:1
-        });
-        wx.navigateBack({
-          
+        
+        outThis.hideLoading();
+        wx.navigateTo({
+          url: '../expertInfo/expertInfo?battleId=' + data.battleId +"&expertId="+data.id
         });
       },
       fail:function(){
+        outThis.showToast("验证码不通过或发生错误");
+        outThis.hideLoading();
         console.log("fail");
       }
     });
@@ -74,6 +121,12 @@ var layerout = new baseLayerout.BaseLayerout({
   wechatInputChange:function(e){
     this.setData({
       "wechat": e.detail.value
+    });
+  },
+
+  introduceInputChange:function(e){
+    this.setData({
+      "introduce": e.detail.value
     });
   },
 
@@ -97,7 +150,7 @@ var layerout = new baseLayerout.BaseLayerout({
     });
     this.setData({
       vEnable:0,
-      remainingTime: 30
+      remainingTime: 120
     });
 
     var interval = setInterval(function(){
@@ -120,7 +173,6 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-  
   },
 
   /**
@@ -141,12 +193,12 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-    var backModel = this.data.backModel;
+   /* var backModel = this.data.backModel;
     if (backModel==1){
       var pages = getCurrentPages();
       var prevPage = pages[pages.length - 2];
-      prevPage.applyExpertSuccess();
-    }
+      prevPage.customClick();
+    }*/
   },
 
   /**

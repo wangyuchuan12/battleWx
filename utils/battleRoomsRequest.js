@@ -5,6 +5,7 @@ var roomsUrl = domain + "/api/battle/rooms";
 var myRoomsUrl = domain + "/api/battle/myRooms";
 
 function roomsRequest(callback){
+  
   var params = new Object();
   request.requestWithLogin(roomsUrl, params, {
     success: function (resp) {

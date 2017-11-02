@@ -1,10 +1,12 @@
 var battlePeriodsRequest = require("../../utils/battlePeriodsRequest.js");
 var battlesRequest = require("../../utils/battlesRequest.js");
 var battleAddRoomRequest = require("../../utils/battleAddRoomRequest.js");
-
+var cacheUtil = require("../../utils/cacheUtil.js");
 var battleExpertRequest = require("../../utils/battleExpertRequest.js");
+var battleMemberInfoRequest = require("../../utils/battleMemberInfoRequest.js");
 var baseLayerout = require("../assembly/baseLayerout/baseLayerout.js");
 var outThis;
+var battleId;
 var layerout = new baseLayerout.BaseLayerout({
   eventListener:{
     selectItem:function(id){
@@ -12,6 +14,7 @@ var layerout = new baseLayerout.BaseLayerout({
     }
   },
   data: {
+    enablePublic:1,
     isPublic:1,
     selectPeriodId:null,
     periods:[],
@@ -33,6 +36,16 @@ var layerout = new baseLayerout.BaseLayerout({
     }, {
       id: "room3",
       maxinum: 16,
+      mininum: 2,
+      status: 0
+      }, {
+        id: "room50",
+        maxinum: 50,
+        mininum: 2,
+        status: 0
+    }, {
+      id: "room100",
+      maxinum: 100,
       mininum: 2,
       status: 0
     }],
@@ -62,6 +75,23 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   selectPeriod:function(id){
+    var periods = this.data.periods;
+    for(var i=0;i<periods.length;i++){
+      var period = periods[i];
+      if(period.id==id){
+        if (period.isPublic == 0) {
+          outThis.setData({
+            isPublic: 0,
+            enablePublic: 0
+          });
+        } else {
+          outThis.setData({
+            isPublic: 1,
+            enablePublic: 1
+          });
+        }
+      }  
+    }
     this.setData({
       "selectPeriodId":id
     });
@@ -77,15 +107,25 @@ var layerout = new baseLayerout.BaseLayerout({
     var battleId = this.data.selectInputData.id;
     battleExpertRequest.qualified(battleId, {
       success: function (data) {
+        console.log(JSON.stringify(data));
         if (data.qualified) {
           wx.navigateTo({
             url: '../confirmPeriodList/confirmPeriodList'
           });
         } else {
           if (data.status == 0) {
+            /*
             wx.navigateTo({
               url: '../applyExpert/applyExpert'
-            });
+            });*/
+            outThis.showConfirm("申请出题资格", "对不起，您目前还没有该题库的出题资格，请搜索公众号【疯狂题库】中申请", {
+              confirm: function () {
+
+              },
+              cancel: function () {
+
+              }
+            }, "确定", "取消");
           } else {
             var expertId = data.expertId;
             wx.navigateTo({
@@ -100,21 +140,23 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
-  isPublicSwitchNo:function(e){
-    this.setData({
-      isPublic:0
-    });
-  },
+  isPublicSwitch:function(e){
+    var value = e.detail.value;
+    if (value) {
+      this.setData({
+        isPublic: 1
+      });
+    } else {
+      this.setData({
+        isPublic: 0
+      });
+    }
 
-  isPublicSwitchOff: function (e) {
-    this.setData({
-      isPublic: 1
-    });
+    console.log(this.data.isPublic);
+    
   },
 
   addRoomAction:function(room){
-
-    console.log("..............room");
     var outThis = this;
     
     var maxinum = room.maxinum;
@@ -218,7 +260,8 @@ var layerout = new baseLayerout.BaseLayerout({
             percent:20,
             ownerImg:period.ownerImg,
             isDefault:period.isDefault,
-            status:0
+            status:0,
+            isPublic:period.isPublic
           });
         }
         outThis.setData({
@@ -275,6 +318,7 @@ var layerout = new baseLayerout.BaseLayerout({
   */
   onLoad: function (options) {
     outThis = this;
+    battleId = options.battleId;
     
   },
 
@@ -289,7 +333,22 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    this.initBattles();
+    if(!battleId){
+      battleId = cacheUtil.battleId;
+    }
+    if (battleId){
+      this.initBattles(battleId);
+    }else{
+      this.initBattles();
+    }
+
+    var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
+    if (memberInfo) {
+      this.setData({
+        isManager: memberInfo.isManager
+      });
+    }
+    
   },
 
   /**

@@ -14,6 +14,7 @@ var layerout = new baseLayerout.BaseLayerout({
     battles:[],
     selectStatus:0,
     isManager:0,
+    userImgUrl:"",
     rooms:[/*{
       imgUrl:"http://7xlw44.com1.z0.glb.clouddn.com/0042aeda-d8a5-4222-b79d-1416ab222898",
       name:"火影忍者",
@@ -92,6 +93,15 @@ var layerout = new baseLayerout.BaseLayerout({
   onLoad: function (options) {
     var outThis = this;
     this.initBattles(null,true);
+    request.getUserInfo({
+      success:function(userInfo){
+        if(userInfo){
+          outThis.setData({
+            userImgUrl: userInfo.avatarUrl
+          });
+        }
+      }
+    });
     battleRoomsRequest.roomsRequest({
       success:function(rs){
         var rooms = new Array();
@@ -155,7 +165,6 @@ var layerout = new baseLayerout.BaseLayerout({
     for(var i=0;i<rooms.length;i++){
       var room = rooms[i];
       if(room.id==id){
-        console.log("room.id:"+room.id+",battleId:"+room.battleId);
         outThis.skipToRoom(room.id,room.battleId);
         break;
       }
@@ -203,7 +212,7 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
+    this.initAccountInfo();
   },
 
   /**
@@ -241,5 +250,7 @@ var layerout = new baseLayerout.BaseLayerout({
   
   }
 });
+
+layerout.addAttrPlug();
 
 layerout.begin();

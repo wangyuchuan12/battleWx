@@ -30,7 +30,7 @@
 }
 
 .questionSelectorHeaderItem{
-  width:50px;
+  width:65px;
   height:10vh;
   display: inline-block;
   position:relative;
@@ -70,7 +70,7 @@
 
 .questionSelectorContentItem{
   width:31%;
-  height:100px;
+  height:80px;
   display: inline-block;
   position:relative;
 
@@ -85,14 +85,14 @@
   text-align:center;
   background:RGBA(33,39,47,0.5);
   position:absolute;
-  top:78px;
+  top:60px;
   color:white;
   overflow:hidden;
 }
 
 .questionSelectorContentItemImg{
   width:100%;
-  height:90px;
+  height:80px;
 }
 
 .questinSelectorCloseButton{

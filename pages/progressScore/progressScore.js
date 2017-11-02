@@ -4,6 +4,9 @@ var battleMembersRequest = require("../../utils/battleMembersRequest.js");
 var battleInfoRequest = require("../../utils/battleInfoRequest.js");
 var cacheUtil = require("../../utils/cacheUtil.js");
 var battleStageTakepartRequest = require("../../utils/battleStageTakepartRequest.js");
+
+var currentLoveCoolingRequest = require("../../utils/currentLoveCoolingRequest.js");
+
 var questionAnswerRequest = require("../../utils/questionAnswerRequest.js");
 var membersRankUtil = require("../../utils/membersRankUtil.js");
 var progressScoreCache = require("../../utils/cache/progressScoreCache.js");
@@ -57,7 +60,6 @@ var layerout = new baseLayerout.BaseLayerout({
       var roomId = outThis.data.roomId;
       battleStageTakepartRequest.stageTakepart(outThis.data.battleId,subjectIds,roomId,{
         success:function(data){
-          console.log("data:"+JSON.stringify(data));
           var ids = data.questionIds;
           var questionIds = "";
           var isLast = data.isLast;
@@ -104,12 +106,15 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   skipToTakepart:function(){
-    wx.redirectTo({
+    /*wx.redirectTo({
       url: '../battleTakepart/battleTakepart?battleId=' + this.data.battleId+"&roomId="+this.data.roomId
+    });*/
+    wx.navigateBack({
+      
     });
   },
 
-  processUpdate:function(){
+  processUpdate:function(callback){
     var outThis = this;
     var battleId = this.data.battleId;
     var roomId = this.data.roomId;
@@ -120,7 +125,6 @@ var layerout = new baseLayerout.BaseLayerout({
       success: function (battleMembers) {
         var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
         var oldBattleMembers = outThis.getMembers();
-        console.log("oldBattleMembers:"+oldBattleMembers);
         outThis.setMembers(battleMembers);
         for(var i=0;i<battleMembers.length;i++){
           for(var j=0;j<oldBattleMembers.length;j++){
@@ -131,7 +135,9 @@ var layerout = new baseLayerout.BaseLayerout({
              if(isRun==0){
               outThis.trendBetween(battleMember.id, oldBattleMember.process, battleMember.process, {
                 success: function () {
-                  
+                  if(callback){
+                    callback.success();
+                  }
                 },
                 fail: function () {
 
@@ -175,6 +181,9 @@ var layerout = new baseLayerout.BaseLayerout({
 
     var loveLimit = outThis.getLoveLimit();
     var loveCount = outThis.getLoveCount();
+    if(!loveLimit||loveLimit<0){
+      loveLimit = 0;
+    }
 
     loveCount = loveCount - wrongCount;
     if(loveCount<0){
@@ -278,50 +287,80 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   onReady:function(){
-    outThis = this;
-
+    var outThis = this;
     setTimeout(function(){
-      var battleInfo = battleInfoRequest.battleInfo;
-      var members = battleTakepartCache.members;
-      var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
-      var process = memberInfo.process;
-      if (!process) {
-        process = 0;
-      }
+      outThis.initPositions();
+    },500);
+    
+  },
 
-      var positions = new Array();
-      for (var i = 0; i < members.length; i++) {
-        var member = members[i];
-        var isMy = 0;
-        if(member.id==memberInfo.id){
-          isMy = 1;
-        }
-        positions.push({
-          id: member.id,
-          imgUrl: member.headImg,
-          animationData: {},
-          begin: member.process,
-          end: 0,
-          isMy:isMy
-        });
+  initPositions:function(){
+    var outThis = this;
+    var battleInfo = battleInfoRequest.battleInfo;
+    var members = battleTakepartCache.members;
+    var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
+    var process = memberInfo.process;
+    if (!process) {
+      process = 0;
+    }
+
+    var positions = new Array();
+    for (var i = 0; i < members.length; i++) {
+      var member = members[i];
+      var isMy = 0;
+      if (member.id == memberInfo.id) {
+        isMy = 1;
       }
-      progressScoreCache.process = process;
-      progressScoreCache.positions = positions;
+      positions.push({
+        id: member.id,
+        imgUrl: member.headImg,
+        animationData: {},
+        begin: member.process,
+        end: 0,
+        isMy: isMy
+      });
+    }
+    progressScoreCache.process = process;
+    progressScoreCache.positions = positions;
+    setTimeout(function(){
       outThis.setPositions(positions);
-      outThis.containerScrollToDom(process);
-      outThis.location(memberInfo.id, process);
     },1000);
     
+    outThis.containerScrollToDom(process);
+    outThis.location(memberInfo.id, process);
+  },
+
+  initLoveCooling:function(){
+    var outThis = this;
+    var battleId = this.data.battleId;
+    var roomId = this.data.roomId;
+    currentLoveCoolingRequest.currentLoveCooling(battleId,roomId,{
+      success:function(data){
+        outThis.showLoveCooling(data);
+      },
+      fail:function(){
+        console.log("initLoveCooling fail");
+      }
+    });
   },
 
   onShow: function () {
     var outThis = this;
     setTimeout(function(){
-      outThis.processUpdate();
+      outThis.processUpdate({
+        success:function(){
+          
+        }
+      });
+      
     },2000);
   },
 
   onUnload: function () {
+    requestTarget.stop();
+  },
+
+  onHide: function () {
     requestTarget.stop();
   },
 
@@ -371,6 +410,8 @@ var layerout = new baseLayerout.BaseLayerout({
       success:function(memberInfo){
         outThis.setLove(memberInfo.loveCount, memberInfo.loveResidule);
         outThis.setProgress(memberInfo.process);
+
+        outThis.initLoveCooling();
       },
       fail:function(){
         console.log("fail");

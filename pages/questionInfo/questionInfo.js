@@ -22,6 +22,9 @@ var layerout = new baseLayerout.BaseLayerout({
 
   eventListener:{
     inputSubmit: function (questionId,answer){
+      if (interval){
+        clearInterval(interval);
+      }
       outThis.showLoading();
       var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
       console.log("memberInfo:"+JSON.stringify(memberInfo));
@@ -59,7 +62,9 @@ var layerout = new baseLayerout.BaseLayerout({
         });
     },
     fillSubmit: function (questionId,answer){
-      console.log("questionId2:" + questionId);
+      if (interval) {
+        clearInterval(interval);
+      }
       outThis.showLoading();
       var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
       questionAnswerRequest.requestBattleQuestionAnswer({
@@ -96,6 +101,9 @@ var layerout = new baseLayerout.BaseLayerout({
         });
     },
     selectSubmit: function (questionId,optionId){
+      if (interval) {
+        clearInterval(interval);
+      }
       outThis.showLoading();
       var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
       console.log("memberInfo stageIndex:" + memberInfo.stageIndex);
@@ -161,13 +169,14 @@ var layerout = new baseLayerout.BaseLayerout({
 
   setFillData:function(data){
 
+    var answer = data.answer;
     this.hideLoading();
     this.setQuestionId(data.id);
     this.setData({
       imgUrl: data.imgUrl,
       content: data.question
     });
-    this.fillWorld();
+    this.fillWorld(null,answer.length);
     this.fillWorldCheck(data.fillWords);
     this.setType(2);
   },

@@ -1,12 +1,12 @@
 <view class="expertInfo">
   <view class="expertInfoHeader">
-    <image src="http://7xlw44.com1.z0.glb.clouddn.com/0042aeda-d8a5-4222-b79d-1416ab222898" class="battleTakepartImg"></image>
-    <view class="expertInfoHeaderName">动漫卡通</view>
+    <image src="{{battleImgUrl}}" class="battleTakepartImg"></image>
+    <view class="expertInfoHeaderName">{{battleName}}</view>
   </view>
   <view class="expertInfoItems">
     <view class="expertInfoItemUser">
-      <image src="http://7xlw44.com1.z0.glb.clouddn.com/0042aeda-d8a5-4222-b79d-1416ab222898" class="expertInfoItemUserImg"></image>
-      <view class="expertInfoItemUserNickname">川川</view>
+      <image src="{{userImgUrl}}" class="expertInfoItemUserImg"></image>
+      <view class="expertInfoItemUserNickname">{{userName}}</view>
     </view>
     <view class="expertInfoItem">
       微信号:{{wechat}}

@@ -3,7 +3,7 @@
 <view class="battlePeriodManager">
   
   <view class="battlePeriodManagerButtonns">
-  <block wx:if="{{model==0}}">
+  <block wx:if="{{model==0&&isManager==1}}">
     <view class="battlePeriodManagerButtonn" bindtap='stageManagerClick'>
       <view class="battlePeriodManagerButtonnIcon fa fa-leaf"></view>
       <view class="battlePeriodManagerButtonnText">关卡管理</view>
@@ -89,7 +89,10 @@
     <view class="fa fa-camera addSubjectImgCamera" wx:if="{{isImg==0}}"></view>
 
     <image src="{{imgUrl}}" 
-    class="addSubjectImgEl" wx:if="{{isImg==1}}"></image>
+    class="addSubjectImgEl" wx:if="{{imgUrl}}"></image>
+
+    <image src="http://7xlw44.com1.z0.glb.clouddn.com/noimg.png" 
+    class="addSubjectImgEl" wx:if="{{!imgUrl&&edit==1}}"></image>
   </view>
 
   <input class="battlePeriodManagerQuestion" placeholder='请输入问题' bindinput='questionInputChange' value="{{question}}"></input>

@@ -1,4 +1,4 @@
-var domain = "https://www.chengxihome.com/";
+var domain = "https://www.chengxihome.com";
 //根据code登陆用户bbin
 var loginByJsCodeUrl = domain + "/api/common/login/loginByJsCode";
 var registerUserByJsCode = domain +"/api/common/login/registerUserByJsCode";
@@ -63,8 +63,7 @@ function requestUpload(filePath,callback){
   });
 }
 
-function request(url, params, callback) {
-  console.log("url:"+url);
+function request(url, params, callback,data) {
   var sessionId = wx.getStorageSync("SESSIONID");
   var header;
   if (sessionId) {
@@ -278,7 +277,7 @@ function requestRegist(callback,code,userInfo){
 }
 
 //请求登陆
-function requestLogin(callback) {
+function requestLogin(callback,time) {
   wx.login({
     success: function (loginCode) {
       getUserInfo({
@@ -309,7 +308,17 @@ function requestLogin(callback) {
                         }, loginCode.code, userInfo);
                       }
                     })
-                    
+                  }else if(resp.errorCode==0||resp.errorCode==1){
+                    setTimeout(function(){
+                      //尝试5次，如果5次都失败就放弃尝试
+                      if(!time){
+                        time = 0;
+                      }
+                      time++;
+                      if(time<5){
+                        requestLogin(callback,time);
+                      }
+                    },100);
                   }
                 }
                

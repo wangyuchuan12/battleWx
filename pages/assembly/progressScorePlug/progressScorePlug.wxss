@@ -185,3 +185,35 @@
   left:50%;
   margin-left: -15px;
 }
+
+.progressScoreContainerHeaderCooling{
+  width:50%;
+  height:50px;
+  background:RGBA(114,80,113,0.5);
+  position:relative;
+  margin: 0 auto;
+  border-radius:5px;
+}
+
+.progressScoreContainerHeaderCoolingLabel{
+  height:50px;
+  border-radius:5px;
+  background: RGBA(225,0,40,0.4);
+  position: absolute;
+  z-index:1;
+}
+.progressScoreContainerHeaderCoolingContent{
+  width:100%;
+  height:100%;
+  position: absolute;
+  z-index: 2;
+}
+.progressScoreContainerHeaderCoolingContent1{
+  color: white;
+  font-size:10px;
+}
+
+.progressScoreContainerHeaderCoolingContent2{
+  color:white;
+  font-size:10px;
+}

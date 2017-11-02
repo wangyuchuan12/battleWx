@@ -4,7 +4,7 @@ var questionSelector = {
   data:{
     questionSelectorData: {
       display:"none",
-      questionSelectorHeaderCount:3,
+      questionSelectorHeaderCount:4,
       questionSelectorHeaderList: [],
       questionSelectorContentList: []
     }
@@ -214,7 +214,6 @@ var questionSelector = {
         }
       }
       selectItems = this.shuffle(selectItems);
-      console.log("selectItems:"+JSON.stringify(selectItems));
       var index = 0;
       var headerCount = this.data.questionSelectorData.questionSelectorHeaderList.length;
       for (var i = 0; i < headerCount;i++){

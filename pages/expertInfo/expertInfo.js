@@ -10,7 +10,11 @@ var layerout = new baseLayerout.BaseLayerout({
     identity:"",
     status:"",
     phonenum:"",
-    wechat:""
+    wechat:"",
+    userImgUrl:"",
+    userName:"",
+    battleImgUrl:"",
+    battleName:""
   },
 
   /**
@@ -23,11 +27,16 @@ var layerout = new baseLayerout.BaseLayerout({
 
     battleExpertRequest.info(battleId, expertId, {
       success: function (data) {
+        console.log("data:"+JSON.stringify(data));
         outThis.setData({
           status:data.status,
           phonenum:data.phonenum,
           wechat:data.wechat,
-          identity: data.identity
+          identity: data.identity,
+          userImgUrl: data.userImg,
+          userName: data.nickname,
+          battleImgUrl: data.headImg,
+          battleName: data.name
         });
       },
       fail: function () {

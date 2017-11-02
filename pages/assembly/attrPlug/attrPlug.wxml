@@ -5,7 +5,7 @@
           <view class="personalAttrDataHeader personalAttrDataHeaderLove" style="z-index:1000;position: absolute;top:-1px;"></view>
                 
           <view id="progressbarLove" style="width:100%;height:20px;border-radius:20px;display:inline-block;top: 0px;vertical-align: top;background-color:RGBA(139,76,32,1)">
-            <view class="progress-label2" id="progressLabel2" style="border-radius:20px;color:RGBA(255,237,109,1)">0</view>
+            <view class="progress-label2" id="progressLabel2" style="border-radius:20px;color:RGBA(255,237,109,1)">{{loveLife}}</view>
           </view>
                 
           <view class="personalAttrDataHeader personalAttrDataHeaderPlus" style="left:79%;top:0px;position: absolute;"></view>
@@ -14,7 +14,7 @@
           <view class="personalAttrDataHeader personalAttrDataHeaderBean" style="z-index:1000;position: absolute;top:-1px;"></view>
                 
           <view id="progressbarBean" style="width:100%;height:20px;border-radius:20px;display:inline-block;top: 0px;vertical-align: top;background-color:RGBA(139,76,32,1)">
-            <view class="progress-label2" id="progressLabel2" style="border-radius:20px;color:RGBA(255,237,109,1)">0</view>
+            <view class="progress-label2" id="progressLabel2" style="border-radius:20px;color:RGBA(255,237,109,1)">{{wisdomCount}}</view>
           </view>
                 
           <view class="personalAttrDataHeader personalAttrDataHeaderPlus" style="left:79%;top:0px;position: absolute;"></view>
@@ -24,7 +24,7 @@
           <view class="personalAttrDataHeader personalAttrDataHeaderMasonry" style="z-index:1000;position: absolute;"></view>
                 
           <view id="progressbarMasonry" style="width:100%;height:20px;border-radius:20px;display:inline-block;top: 0px;vertical-align: top;background-color:RGBA(139,76,32,1)">
-            <view class="progress-label2" id="progressLabel2" style="border-radius:20px;color:RGBA(255,237,109,1)">0</view>
+            <view class="progress-label2" id="progressLabel2" style="border-radius:20px;color:RGBA(255,237,109,1)">{{masonry}}</view>
           </view>
                 
           <view class="personalAttrDataHeader personalAttrDataHeaderPlus" style="left:79%;top:0px;position: absolute;"></view>
@@ -33,7 +33,7 @@
           <view class="personalAttrDataHeader personalAttrDataHeaderMoney" style="z-index:1000;position: absolute;top:-3px;left:-2px;"></view>
                 
           <view id="progressbarMoney" style="width:100%;height:20px;border-radius:20px;display:inline-block;top: 0px;vertical-align: top;background-color:RGBA(139,76,32,1)">
-            <view class="progress-label2" id="progressLabel2" style="border-radius:20px;color:RGBA(255,237,109,1)">0</view>
+            <view class="progress-label2" id="progressLabel2" style="border-radius:20px;color:RGBA(255,237,109,1)">{{amountBalance}}</view>
           </view>
                 
           <view class="personalAttrDataHeader personalAttrDataHeaderPlus" style="left:79%;top:0px;position: absolute;"></view>

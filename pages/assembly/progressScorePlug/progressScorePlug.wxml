@@ -30,6 +30,20 @@
             <view class="progressScoreContainerHeaderRank">当前名次第<span id="rank"></span>名</view>	
           </view>
           -->
+          <view wx:if="{{loveCooling.status==1}}">
+            <view class="progressScoreContainerHeaderCooling" style="display:inline-block">
+                <view class="progressScoreContainerHeaderCoolingLabel" style="width:{{loveCooling.schedule/loveCooling.upperLimit*100}}%;"></view>
+                <view class="progressScoreContainerHeaderCoolingContent">
+                  <view class="progressScoreContainerHeaderCoolingContent1">第<font style="color:red;font-weight:bolder;font-size:15px;">{{loveCooling.coolLoveSeq}}</font>颗 ❤️ 正在恢复中</view>
+                  <view class="progressScoreContainerHeaderCoolingContent2">
+                    剩余时间：{{loveCooling.hour}}时{{loveCooling.min}}分{{loveCooling.second}}秒
+                  </view>
+                </view>
+            </view>
+            <view style="width:50px;height:50px;background:RGBA(114,80,113,1);display:inline-block;color:white;vertical-align:top;border-radius:5px;line-height: 45px;display:none;">
+              加速
+            </view>
+          </view>
     </view>
 
     <scroll-view scroll-y scroll-top="{{containerScrollTop}}" scroll-with-animation="true" scroll-into-view="toDom{{currentDom}}" id = "progressScoreContainer" style="position: relative;height:100vh"> 

@@ -4,6 +4,7 @@
 
 @import '../assembly/questionResult/questionResult.wxss';
 
+
 .progressScoreButtons{
   position: fixed;
   bottom:10px;
@@ -70,7 +71,7 @@
 
 .displayPanel{
   width:200px;
-  top:30vh;
+  top:40vh;
   left:50%;
   margin-left:-100px;
   position: absolute;

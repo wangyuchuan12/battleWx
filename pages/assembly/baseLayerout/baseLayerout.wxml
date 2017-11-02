@@ -1,8 +1,6 @@
 <!--baseLayerout.wxml-->
 
-<import src="../assembly/attrPlug/attrPlug"/>
-<template is="attrPlug" hidden="true"/>
 <template name="baseLayerout" hidden="true">
   <loading hidden="{{hiddenLoading}}">请等待...</loading>
-  <toast duration="2000" bindchange="hideToast" hidden="{{hiddenToast}}">{{toastMsg}}</toast> 
+  <toast duration="1000" bindchange="hideToast" hidden="{{hiddenToast}}" style="width:100px;height:100px;">{{toastMsg}}</toast> 
 </template>

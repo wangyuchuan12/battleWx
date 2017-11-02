@@ -214,8 +214,21 @@ var questionInputPlug = {
     });
   },
 
-  fillWorld: function (worldContents){
+  fillWorld: function (worldContents,length){
+
     var worlds = this.data.questionInputData.worlds;
+
+    if(length){
+      worlds = new Array();
+      for(var i=0;i<length;i++){
+        worlds.push({
+          content:"",
+          status:0,
+          id:"world"+i,
+          index:i
+        });
+      }
+    }
 
     for (var i = 0; i < worlds.length;i++){
       var worldContent;

@@ -6,6 +6,7 @@ var battleMembersRequest = require("../../utils/battleMembersRequest.js");
 var takepartRequest = require("../../utils/takepartRequest.js");
 var test = require("../../utils/test.js");
 var util = require("../../utils/util.js");
+var cacheUtil = require("../../utils/cacheUtil.js");
 var battleTakepartCache = require("../../utils/cache/battleTakepartCache.js");
 var baseLayerout = require("../assembly/baseLayerout/baseLayerout.js");
 var app = getApp();
@@ -290,7 +291,15 @@ var layerout = new baseLayerout.BaseLayerout({
     var maxinum = this.data.maxinum;
     var status = this.data.status;
     if(num>=maxinum&&status==0){
-      this.showToast("人数已满，不能参加");
+      outThis.showConfirm("房间人数已满", "是否创建新房间", {
+        confirm: function () {
+          outThis.createClick();
+        },
+        cancel: function () {
+
+        }
+
+      }, "创建", "取消");
       return;
     }
     this.showLoading();
@@ -340,7 +349,15 @@ var layerout = new baseLayerout.BaseLayerout({
       },
       roomFull:function(){
         outThis.hideLoading();
-        outThis.showToast("房间已满");
+        outThis.showConfirm("房间人数已满", "是否创建新房间", {
+          confirm:function(){
+            outThis.createClick();
+          },
+          cancel:function(){
+
+          }
+
+        }, "创建", "取消");
       }
     });
 
@@ -350,7 +367,17 @@ var layerout = new baseLayerout.BaseLayerout({
    */
   onLoad: function (options) {
     roomId = options.roomId;
-    battleId = options.battleId
+    battleId = options.battleId;
+    cacheUtil.battleId = battleId;
+    var outThis = this;
+    request.requestLogin({
+      success: function () {
+        outThis.init();
+      },
+      fail: function () {
+        callback.fail();
+      }
+    })
   },
 
   /**
@@ -364,19 +391,17 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    this.init();
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-    
+    requestTarget.stop();
   },
 
-  /**
-   * 生命周期函数--监听页面卸载
-   */
+
+
   onUnload: function () {
     requestTarget.stop();
   },
@@ -402,7 +427,7 @@ var layerout = new baseLayerout.BaseLayerout({
     return {
       title: this.data.battleInfoName,
       desc: this.data.battleInfoContent,
-      path: this.data.path
+      url: 'battleTakepart?battleId=' + battleId + "&roomId=" + roomId
     }
   }
 });

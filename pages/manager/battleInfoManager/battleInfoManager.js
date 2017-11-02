@@ -120,9 +120,11 @@ var layerout = new baseLayerout.BaseLayerout({
         for(var i=0;i<periods.length;i++){
           var period = periods[i];
           periodDataArray.push({
-            num:19,
-            total:period.maxMembers,
-            id:period.id
+            takepartCount: period.takepartCount,
+            ownerNickname: period.ownerNickname,
+            id:period.id,
+            isDefault: period.isDefault,
+            ownerImg: period.ownerImg
           });
         }
 

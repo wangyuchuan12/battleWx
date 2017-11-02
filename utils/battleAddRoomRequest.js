@@ -6,6 +6,8 @@ var url = domain + "/api/battle/addRoom";
 function requestAddRoom(params, callback) {
   request.requestWithLogin(url, params, {
     success: function (resp) {
+      
+      console.log("resp:"+JSON.stringify(resp));
       if (resp.success) {
         callback.success(resp.data);
       } else {

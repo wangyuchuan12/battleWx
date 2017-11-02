@@ -4,6 +4,7 @@ var progressScorePlug = require("../progressScorePlug/progressScorePlug.js");
 var questionInputPlug = require("../questionInputPlug/questionInputPlug.js");
 var questionResultPlug = require("../questionResult/questionResult.js");
 var selectInputPlug = require("../selectInput/selectInput.js");
+var attrPlug = require("../attrPlug/attrPlug.js");
 function BaseLayerout(config){
     var baseConfig = config;
     var data = config.data;
@@ -118,6 +119,16 @@ function BaseLayerout(config){
     var data = Object.assign(configData, selectInputData);
     config = Object.assign(config, selectInputPlug.selectInputPlug);
     config.data = data;
+  }
+
+
+  this.addAttrPlug = function(){
+    var configData = config.data;
+    var attrPlugData = attrPlug.attrPlug.data;
+    var data = Object.assign(configData, attrPlugData);
+    config = Object.assign(config, attrPlug.attrPlug);
+    config.data = data;
+    
   }
 }
 

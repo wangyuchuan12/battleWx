@@ -1,5 +1,4 @@
 <import src="../assembly/baseLayerout/baseLayerout"/>
-<import src="../assembly/attrPlug/attrPlug"/>
 <template is="baseLayerout" data="{{...baseData}}"/>
 <scroll-view class="battleTakepart" scroll-y>
     <image src="{{imgUrl}}" class="battleTakepartImg"></image>
@@ -34,7 +33,7 @@
       <view class="battleTakepartSecondButton">返回主页</view>
     </view>
 
-    <view class="battleTakepartInfo" style="display:none;">
+    <view class="battleTakepartInfo">
       <view class="battleTakepartInfoTitle">{{battleInfoName}}</view>
 
       <scroll-view class="battleTakepartInfoContent" scroll-y >
@@ -42,10 +41,10 @@
       </scroll-view>
     </view>
 
-    <view class="battleTakepartChat">
+    <view class="battleTakepartChat" style="display:none;">
       <view class="battleTakepartChatItem1">- 川川邀您加入[{{battleInfoName}}]讨论群 -</view>
       <view class="battleTakepartChatItem2">添加川川微信号：{{chat}}</view>
-      <view class="battleTakepartChatItem3">你的专属川川就会要你入群啦</view>
+      <view class="battleTakepartChatItem3">你的专属川川就会邀你入群啦</view>
       <view class="battleTakepartChatItem4" bindtap='copyChat'>点击复制：{{chat}}</view>
     </view>
 </scroll-view >

@@ -1,3 +1,6 @@
+<import src="../assembly/baseLayerout/baseLayerout.wxml"/>
+
+<template is="baseLayerout" data="{{...baseData}}"/>
 <view class="addSubject">
   <view class="addSubjectInput" style='border-top:1px solid RGBA(201,201,201,1);'>
     <input placeholder='请输入微信账号，方便交流' class="addSubjectInputEl" bindinput="wechatInputChange"/>
@@ -14,7 +17,11 @@
     <button disabled='true' style="display:inline-block;width:45%;font-size:15px;vertical-align: top;top:-6px;height:100%;padding-top:5px;" wx:if="{{vEnable==0}}" >{{remainingTime}}s后重新获取</button>
   </view>
 
-  <radio-group style="margin-top:10px;padding-left:20px;border-bottom:1px solid RGBA(201,201,201,1);padding-bottom:10px;">
+  <view class="applyExpertArea">
+    <textarea style="border-bottom:1px solid RGBA(201,201,201,1);padding-left:20px;padding-top:10px;width:95%;" placeholder='简介，把你个人的情况详细说明，会根据你的情况判断审核结果'    bindinput='introduceInputChange'></textarea>
+  </view>
+
+  <radio-group style="margin-top:10px;padding-left:20px;border-bottom:1px solid RGBA(201,201,201,1);padding-bottom:10px;display:none;">
     <label class="radio">
       <radio value="0">男</radio>
     </label>

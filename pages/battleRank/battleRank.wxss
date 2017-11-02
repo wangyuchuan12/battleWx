@@ -1,3 +1,4 @@
+@import '../assembly/progressScorePlug/progressScorePlug.wxss';
 .battleRank{
   display: flex;
   flex-flow:wrap;
@@ -5,7 +6,7 @@
 }
 .battleRankHeader{
   width:100%;
-  height:25vh;
+  height:27vh;
 
   position: relative;
 
@@ -82,9 +83,10 @@
 
 .battleRankMember{
   width:100%;
-  height:70px;
 
   border-bottom:1px solid RGBA(228,239,249,1);
+
+  padding-bottom:20px;
 }
 
 .battleRankMembers{
@@ -100,8 +102,6 @@
   padding-left:20px;
 
   color: RGBA(103,65,27,1);
-
-  width:60px;
 }
 
 .battleRankMemberImg{
@@ -137,6 +137,28 @@
 .battleRankMemberContentResult{
   font-size: 15px;
   color: RGBA(103,65,27,1);
+}
 
- 
+.personalAttrDataHeaderSmall{
+	width:15px;
+	height:20px;
+	display: inline-block;
+	color: black;
+	font-size: 8px;
+	overflow: hidden;
+	vertical-align: middle;
+	padding-left: 8px;
+	padding-top: 2px;
+	font-weight: bolder;
+}
+.personalAttrDataHeaderLoveSmall{
+	background: url("http://7xugu1.com1.z0.glb.clouddn.com/lifeLoveSolid.png")no-repeat;
+	background-size:20px 20px;
+	background-position:0px 0px;
+}
+
+.personalAttrDataHeaderLoveHollowSmall{
+	background: url("http://7xugu1.com1.z0.glb.clouddn.com/lifeLoveHollow.png")no-repeat;
+	background-size:15px 13px;
+	background-position:2px 4px;
 }

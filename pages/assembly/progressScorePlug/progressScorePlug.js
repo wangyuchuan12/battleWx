@@ -8,6 +8,16 @@ data: {
     progress:0,
     currentDom: 0,
     loveList: [],
+    //冷却数据
+    loveCooling:{
+      schedule:200,
+      upperLimit:1000,
+      coolLoveSeq:0,
+      status:0,
+      hour:0,
+      min:0,
+      second:0
+    },
     positions:[/*{
       id:"myDom",
       begin:10,
@@ -653,6 +663,9 @@ addProcess:function(process){
 setLove: function(limit, residule) {
 
   var loveList = new Array();
+  if(!residule||residule<0){
+    residule = 0;
+  }
   for (var i = 0; i < residule; i++) {
     loveList.push({
       type: 1
@@ -804,6 +817,10 @@ toPosition: function(id,index, callback){
     }
   }
 
+  if(!position){
+    return;
+  }
+
   position.begin = index;
 
   var duration = 500;
@@ -838,6 +855,64 @@ toPosition: function(id,index, callback){
   })
 },
 
+showLoveCooling:function(loveCooling){
+
+  var outThis = this;
+  //每次执行的最小单位
+  var unit = loveCooling.unit;
+
+  //上限是多少
+  var upperLimit = loveCooling.upperLimit;
+
+  //执行周期 1000表示1秒钟执行一次
+  var millisec = loveCooling.millisec;
+
+  //已经积累的数量
+  var schedule = loveCooling.schedule;
+
+  var coolLoveSeq = loveCooling.coolLoveSeq;
+
+  var status = loveCooling.status;
+
+  this.setData({
+    "progressScoreData.loveCooling.upperLimit":upperLimit,
+    "progressScoreData.loveCooling.status": status
+  });
+
+  var interval = setInterval(function () {
+    var loveCount = outThis.getLoveCount();
+    var loveLimit = outThis.getLoveLimit();
+    if (loveLimit > loveCount) {
+      schedule = schedule + unit;
+      if (schedule >= upperLimit) {
+        schedule = 0;
+        loveCount++;
+        outThis.setLove(loveLimit, loveCount);
+        coolLoveSeq++;
+      }
+      var second = (upperLimit - schedule) / millisec*1000;
+      var hour = parseInt(second/3600);
+      var min = parseInt((second - hour*3600)/60);
+      second = parseInt(second-hour*3600-min*60);
+      outThis.setData({
+        "progressScoreData.loveCooling.schedule": schedule,
+        "progressScoreData.loveCooling.coolLoveSeq": loveCount+1,
+        "progressScoreData.loveCooling.status": 1,
+        "progressScoreData.loveCooling.hour": hour,
+        "progressScoreData.loveCooling.min": min,
+        "progressScoreData.loveCooling.second": second
+      });
+      
+    }else{
+      outThis.setData({
+        "progressScoreData.loveCooling.status": 2
+      });
+    }
+  }, millisec);
+
+  
+},
+
 setPositions:function(positions){
   this.setData({
     "progressScoreData.positions":positions
@@ -854,7 +929,6 @@ getPositions:function(){
 },
 
 startTravel:function(id){
-  console.log("id:"+id);
   var positions = this.data.progressScoreData.positions;
   var position;
   for(var i=0;i<positions.length;i++){

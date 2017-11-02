@@ -1,9 +1,11 @@
 <import src="../assembly/selectInput/selectInput.wxml"/>
 
 <import src="../assembly/baseLayerout/baseLayerout"/>
+<import src="../assembly/attrPlug/attrPlug"/>
 <template is="baseLayerout" data="{{...baseData}}"/>
+<template is="attrPlug" data="{{...attrPlugData}}"/>
 <view class="battleHome">
-  <view class="" style="text-align:right;padding-top:10px;padding-bottom:10px;padding-right:20px;color:green;height:40px;">
+  <view class="battleHomeTool" style="">
     <view style="text-align:center;width:100px;float:right;" bindtap='createRoomClick'>
       <span class="fa fa-plus" style="font-size:20px;"></span>
 
@@ -17,7 +19,7 @@
     </view>
   </view>
   <view class="battleHomeHeader">
-    <image src="http://7xlw44.com1.z0.glb.clouddn.com/0042aeda-d8a5-4222-b79d-1416ab222898" class="battleHomeHeaderImg"></image>
+    <image src="{{userImgUrl}}" class="battleHomeHeaderImg"></image>
 
     <block wx:for="{{battles}}" wx:for-item="battle">
       <view class="battleHomeHeaderSelect" bindtap='selectClick' wx:if="{{battle.id==battleId}}"><span class="battleHomeHeaderSelectSpan1">{{battle.content}}</span><span class="fa fa-chevron-down" style="float:right;right:20px;/"></span></view>
@@ -32,7 +34,7 @@
       <view class="battleHomeContentMyselfName">我参与的</view>
       <view class="battleHomeContentMyselfIcon2 fa fa-chevron-right"></view>
     </view>
-    <scroll-view class="battleHomeContentList">
+    <scroll-view class="battleHomeContentList" scroll-y style="position: fixed;bottom:0px;top:240px;">
       <block wx:for="{{rooms}}" wx:for-item="room">
         <view class="battleHomeContentItem" id="{{room.id}}" bindtap='itemClick'>
           <image src="{{room.imgUrl}}" class="battleHomeContentItemImage"></image>

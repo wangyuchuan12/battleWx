@@ -50,15 +50,25 @@
 
     <view class="battleInfoManagerPeriodAdd" bindtap='addSubjectClick'>添加主题</view>
     <view class="battleInfoManagerPeriodAdd" bindtap='updateBattleInfoClick'>修改基本信息</view>
-    <view class="battleInfoManagerPeriodAdd" bindtap="addPeriodClick">新增期</view>
+    <view class="battleInfoManagerPeriodAdd" bindtap="addPeriodClick">新建题库</view>
     
     
     <block wx:for="{{periods}}" wx:for-item="period">
-      <view class="battleInfoManagerPeriod" id="{{period.id}}" bindtap='periodInfoClick'>
-        <view class="battleInfoManagerPeriodHeader">
-          <view class="battleInfoManagerPeriodHeaderName">第{{index+1}}期</view>
-          <view class="battleInfoManagerPeriodHeaderNum">{{period.num}}/{{period.total}}</view>
-          <view class="startUpPeriodClick">启动</view>
+      <view class="battleRoomEditPeriod" id="{{period.id}}" bindtap='periodInfoClick'>
+        <view class="battleRoomEditPeriodHead">
+          <image src='{{period.ownerImg}}' class="battleRoomEditPeriodHeadImg"></image>
+           <!--<view class="battleRoomEditPeriodHeadLabel">出题人:</view>
+          <view class="battleRoomEditPeriodHeadNickname">{{period.ownerNickname}}</view>-->
+        </view>
+        <view class="battleRoomEditPeriodContent">
+          <view class="battleRoomEditPeriodContentItem">参与人数:{{period.takepartCount}}</view>
+          <view class="battleRoomEditPeriodContentItem">出题人:{{period.ownerNickname}}</view>
+          <view class="battleRoomEditPeriodContentItem" style="color:red;font-size:10px;" wx:if="{{period.isDefault==1}}">推荐</view>
+          <!--
+          <view class="battleRoomEditPeriodContentItem">正确率:{{period.percent}}%</view>
+          <view class="battleRoomEditPeriodContentItem">难度:低</view>
+          
+          -->
         </view>
       </view>
     </block>

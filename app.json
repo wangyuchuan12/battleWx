@@ -1,7 +1,8 @@
 {
   "pages": [
-   
     "pages/battleHome/battleHome",
+    "pages/mall/mall",
+    "pages/invitation/invitation",
     "pages/battleTakepart/battleTakepart",
     "pages/battleRoomEdit/battleRoomEdit",
     "pages/questionInfo/questionInfo",
@@ -12,7 +13,6 @@
     "pages/manager/battlePeriodManager/battlePeriodManager",
     "pages/battleRank/battleRank",
     "pages/manager/battleInfoSave/battleInfoSave",
-   
     "pages/manager/battleInfoManager/battleInfoManager",
     "pages/manager/addSubject/addSubject",
     "pages/battleInfo/battleInfo",

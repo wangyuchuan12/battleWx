@@ -1,0 +1,41 @@
+<view class="mall">
+  <view class="mallGoods">
+    <view class="mallGood">
+      <view class="mallGoodBackground"></view>
+      <view class="mallGoodContent">
+        <image class="mallGoodImg" src="http://onlttr82i.bkt.clouddn.com/wisdon3.png"></image>
+        <view class="mallGoodNum" src="">300</view>
+        <view class="mallGoodButton">
+          <view class="mallGoodIcon iconRMB"></view>
+          <view class="mallGoodPrice">20</view>
+        </view>
+      </view>
+    </view>
+
+
+    <view class="mallGood">
+      <view class="mallGoodBackground"></view>
+      <view class="mallGoodContent">
+        <image class="mallGoodImg" src="http://onlttr82i.bkt.clouddn.com/wisdon3.png"></image>
+        <view class="mallGoodNum" src="">300</view>
+        <view class="mallGoodButton">
+          <view class="mallGoodIcon iconMasonry"></view>
+          <view class="mallGoodPrice">20</view>
+        </view>
+      </view>
+    </view>
+
+
+    <view class="mallGood">
+      <view class="mallGoodBackground"></view>
+      <view class="mallGoodContent">
+        <image class="mallGoodImg" src="http://onlttr82i.bkt.clouddn.com/wisdon3.png"></image>
+        <view class="mallGoodNum" src="">300</view>
+        <view class="mallGoodButton">
+          <view class="mallGoodIcon"></view>
+          <view class="mallGoodPrice">20</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
