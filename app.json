@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/manager/redPackEdit/redPackEdit",
     "pages/battleHome/battleHome",
     "pages/manager/roomManager/roomManager",
     "pages/manager/roomEdit/roomEdit",

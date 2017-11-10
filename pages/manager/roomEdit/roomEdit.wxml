@@ -1,3 +1,5 @@
+<import src="../../assembly/baseLayerout/baseLayerout.wxml"/>
+<template is="baseLayerout" data="{{...baseData}}"/>
 <view class="roomEdit">
   <view class="addSubjectImg" bindtap='imgClick'>
     <image src="{{imgUrl}}" class="addSubjectImgEl"></image>
