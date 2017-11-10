@@ -1,1 +1,7 @@
 /* progressScoreMemberPlug.wxss */
+
+.progressScoreContainerHeaderMembers{
+  width:100%;
+  text-align: left;
+  padding-top:35px;
+}

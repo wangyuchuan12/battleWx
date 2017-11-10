@@ -11,10 +11,15 @@
 .battleHomeTool{
   text-align:right;
   padding-top:10px;
-  padding-bottom:50px;
+  padding-bottom:10px;
   padding-right:20px;
   color:green;
-  background:white;
+}
+
+.battleHomeToolItem{
+  display:inline-block;
+  width:25%;
+  text-align: center;
 }
 
 .battleHomeHeader{

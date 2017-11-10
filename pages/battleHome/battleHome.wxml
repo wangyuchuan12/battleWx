@@ -6,17 +6,23 @@
 <template is="attrPlug" data="{{...attrPlugData}}"/>
 <view class="battleHome">
   <view class="battleHomeTool" style="">
-    <view style="text-align:center;width:100px;float:right;" bindtap='createRoomClick'>
+    <view class="battleHomeToolItem" bindtap='battleManagerClick' wx:if="{{isManager==1}}">
+      <span class="fa fa-database" style="font-size:20px;"></span>
+      <span style="display:block;font-size:10px;">管理</span>
+    </view>
+
+    <view class="battleHomeToolItem" bindtap='mallClick'>
+      <span class="fa fa-shopping-cart" style="font-size:20px;"></span>
+
+      <span style="display:block;font-size:10px;">商城</span>
+    </view>
+
+    <view class="battleHomeToolItem" bindtap='createRoomClick'>
       <span class="fa fa-plus" style="font-size:20px;"></span>
 
       <span style="display:block;font-size:10px;">创建房间</span>
     </view>
-
-    <view style="text-align:center;width:100px;float:right;" bindtap='battleManagerClick' wx:if="{{isManager==1}}">
-      <span class="fa fa-database" style="font-size:20px;"></span>
-
-      <span style="display:block;font-size:10px;">管理</span>
-    </view>
+    
   </view>
   <view class="battleHomeHeader">
     <image src="{{userImgUrl}}" class="battleHomeHeaderImg"></image>

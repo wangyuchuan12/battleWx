@@ -1,3 +1,6 @@
+var currentLoveCoolingRequest = require("../../../utils/currentLoveCoolingRequest.js");
+var battleMemberInfoRequest = require("../../../utils/battleMemberInfoRequest.js");
+var interval;
 var progressScorePlug = {
 data: {
   logs: [],
@@ -16,7 +19,9 @@ data: {
       status:0,
       hour:0,
       min:0,
-      second:0
+      second:0,
+      speedCoolBean:0,
+      speedCoolSecond:0
     },
     positions:[/*{
       id:"myDom",
@@ -636,6 +641,47 @@ data: {
   },
 },
 
+speedCoolClick:function(){
+  var outThis = this;
+  var battleMemberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
+  var speedCoolBean = this.data.progressScoreData.loveCooling.speedCoolBean;
+  var beanCount = this.getBeanCount();
+  if (beanCount < speedCoolBean){
+    this.showConfirm("智慧豆不足，请充值", "是否充值", {
+      confirm:function(){
+        wx.navigateTo({
+          url: '../mall/mall'
+        });
+      },
+      cancel:function(){
+
+      }
+    }, "充值", "取消");
+    return;
+  }
+  currentLoveCoolingRequest.speedCoolRequest(battleMemberInfo.battleId, battleMemberInfo.roomId,{
+    success:function(data){
+      outThis.showLoveCooling(data);
+      var speedCoolBean = data.speedCoolBean;
+      outThis.subBean(speedCoolBean);
+      outThis.setLove(data.loveCount,data.loveResidule);
+    },
+    fail:function(){
+      console.log(".................fail");
+    }
+  });
+},
+
+getLoveCoolHour:function(){
+  var loveCoolHour = this.data.progressScoreData.loveCooling.hour;
+  return loveCoolHour;
+},
+
+getLoveCoolMin:function(){
+  var loveCoolMin = this.data.progressScoreData.loveCooling.min;
+  return loveCoolMin;
+},
+
 setDistance:function(distance){
   this.setData({
     "progressScoreData.distance": distance
@@ -857,6 +903,9 @@ toPosition: function(id,index, callback){
 
 showLoveCooling:function(loveCooling){
 
+  if (interval){
+    clearInterval(interval);
+  }
   var outThis = this;
   //每次执行的最小单位
   var unit = loveCooling.unit;
@@ -873,13 +922,17 @@ showLoveCooling:function(loveCooling){
   var coolLoveSeq = loveCooling.coolLoveSeq;
 
   var status = loveCooling.status;
+  var battleMemberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
 
+  console.log("battleMemberInfo:"+JSON.stringify(battleMemberInfo));
   this.setData({
     "progressScoreData.loveCooling.upperLimit":upperLimit,
-    "progressScoreData.loveCooling.status": status
+    "progressScoreData.loveCooling.status": status,
+    "progressScoreData.loveCooling.speedCoolBean": battleMemberInfo.speedCoolBean,
+    "progressScoreData.loveCooling.speedCoolSecond": battleMemberInfo.speedCoolSecond,
   });
 
-  var interval = setInterval(function () {
+  interval = setInterval(function () {
     var loveCount = outThis.getLoveCount();
     var loveLimit = outThis.getLoveLimit();
     if (loveLimit > loveCount) {

@@ -272,13 +272,13 @@ var layerout = new baseLayerout.BaseLayerout({
 
   managerClick:function(){
     wx.navigateTo({
-      url: '../manager/battleInfoManager/battleInfoManager?battleId='+battleId
+      url: '../manager/roomEdit/roomEdit?id='+roomId
     });
   },
 
   skipToProgress:function(){
     wx.navigateTo({
-      url: '../progressScore/progressScore?model=0&battleId='+battleId+"&roomId="+roomId
+      url: '../welfare/welfare?model=0&battleId='+battleId+"&roomId="+roomId
     });
   },
 
@@ -290,7 +290,7 @@ var layerout = new baseLayerout.BaseLayerout({
     var mininum = this.data.mininum;
     var maxinum = this.data.maxinum;
     var status = this.data.status;
-    if(num>=maxinum&&status==0){
+    /*if(num>=maxinum&&status==0){
       outThis.showConfirm("房间人数已满", "是否创建新房间", {
         confirm: function () {
           outThis.createClick();
@@ -301,7 +301,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
       }, "创建", "取消");
       return;
-    }
+    }*/
     this.showLoading();
     takepartRequest.battleTakepart(battleId,roomId,{
       success:function(member){
@@ -325,7 +325,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
         battleTakepartCache.members = battleMembers;
 
-        //outThis.skipToProgress();
+        outThis.skipToProgress();
       },
       fail:function(errorMsg){
         outThis.hideLoading();

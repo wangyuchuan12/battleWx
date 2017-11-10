@@ -5,6 +5,7 @@ var questionInputPlug = require("../questionInputPlug/questionInputPlug.js");
 var questionResultPlug = require("../questionResult/questionResult.js");
 var selectInputPlug = require("../selectInput/selectInput.js");
 var attrPlug = require("../attrPlug/attrPlug.js");
+var redPackAlertPlug = require("../redPackAlertPlug/redPackAlertPlug.js");
 function BaseLayerout(config){
     var baseConfig = config;
     var data = config.data;
@@ -128,8 +129,18 @@ function BaseLayerout(config){
     var data = Object.assign(configData, attrPlugData);
     config = Object.assign(config, attrPlug.attrPlug);
     config.data = data;
-    
   }
+
+  this.addRedPackAlertPlug = function(){
+    var configData = config.data;
+    var redPackAlertPlugData = redPackAlertPlug.redPackAlertPlug.data;
+    var data = Object.assign(configData, redPackAlertPlugData);
+    config = Object.assign(config, redPackAlertPlug.redPackAlertPlug);
+    console.log("config.redPacketAlertCloseClick:" + config.redPacketAlertCloseClick);
+    config.data = data;
+  }
+
+
 }
 
 

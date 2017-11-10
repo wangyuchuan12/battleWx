@@ -1,9 +1,13 @@
-var domain = "https://www.chengxihome.com";
+var domain = "http://192.168.1.100";
 //根据code登陆用户bbin
 var loginByJsCodeUrl = domain + "/api/common/login/loginByJsCode";
 var registerUserByJsCode = domain +"/api/common/login/registerUserByJsCode";
 var wxPayConfigUrl = domain + "/api/battle/wxPayConfig";
 var loadFileUrl = domain + "/api/common/resource/upload";
+
+var masonryPayUrl = domain + "/api/battle/masonryPay";
+
+var beanPayUrl = domain + "/api/battle/beanPay";
 var token;
 var isLogin;
 
@@ -128,10 +132,39 @@ function request(url, params, callback,data) {
 }
 
 //获取支付配置
-function requestWxPayConfig(callback) {
-  request(wxPayConfigUrl, {}, {
+function requestWxPayConfig(id,callback) {
+  request(wxPayConfigUrl, {goodId:id}, {
     success: function (resp) {
-      callback.success(resp);
+      if(resp.success){
+        callback.success(resp.data);
+      }
+    },
+    fail: function () {
+      callback.fail();
+    }
+  });
+}
+
+
+function requestPayMentWithMasonry(goodId,callback){
+  var params = new Object();
+  params.goodId = goodId;
+  requestWithLogin(masonryPayUrl, params, {
+      success:function(resp){
+        callback.success();
+      },
+      fail:function(){
+        callback.fail();
+      }
+  });
+}
+
+function requestPayMentWithBean(goodId,callback){
+  var params = new Object();
+  params.goodId = goodId;
+  requestWithLogin(beanPayUrl, params, {
+    success: function (resp) {
+      callback.success();
     },
     fail: function () {
       callback.fail();
@@ -140,7 +173,7 @@ function requestWxPayConfig(callback) {
 }
 
 //支付
-function requestPayMent(params) {
+function requestPayMent(params,callback) {
   var timestamp = params.timestamp;
   requestLogin({
     success: function () {
@@ -151,16 +184,21 @@ function requestPayMent(params) {
         signType: params.signType,
         paySign: params.paySign,
         total_fee: params.cost,
-        success: function () {
-          console.log("success");
+        success: function (resp) {
+          console.log("resp:"+JSON.stringify(resp));
+          console.log("errMsg:"+resp.errMsg);
+          console.log(resp.errMsg == "requestPayment:ok");
+          if (resp.errMsg =="requestPayment:ok"){
+            callback.success();
+          }
         },
         fail: function () {
-          console.log("fail");
+          callback.fail();
         }
       });
     },
     fail: function () {
-      console.log("login fail");
+      callback.fail();
     }
   });
 }
@@ -351,5 +389,7 @@ module.exports = {
   requestLogin: requestLogin,
   testSetUserInfo: testSetUserInfo,
   requestWithLogin:requestWithLogin,
-  requestUpload: requestUpload
+  requestUpload: requestUpload,
+  requestPayMentWithMasonry: requestPayMentWithMasonry,
+  requestPayMentWithBean: requestPayMentWithBean
 }

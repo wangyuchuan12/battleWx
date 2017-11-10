@@ -20,7 +20,49 @@ function accountInfo(callback){
   });
 }
 
+function payGood(good,callback){
+  var id = good.id;
+  if (good.costType == 2) {
+    request.requestPayMentWithMasonry(id, {
+      success: function () {
+        callback.success();
+      },
+      fail: function () {
+        console.log("requestMasonry fail");
+        callback.fail();
+      }
+    });
+  } else if (good.costType == 0) {
+    request.requestWxPayConfig(id, {
+      success: function (params) {
+        request.requestPayMent(params, {
+          success: function () {
+            callback.success();
+          },
+          fail: function () {
+            callback.fail();
+          }
+        });
+      },
+      fail: function () {
+        callback.fail();
+      }
+    })
+  }else if(good.costType==1){
+    request.requestPayMentWithBean(id,{
+      success: function () {
+        console.log("支付类型为智慧豆支付");
+        callback.success();
+      },
+      fail: function () {
+        callback.fail();
+      }
+    });
+  }
+}
+
 
 module.exports = {
-  accountInfo: accountInfo
+  accountInfo: accountInfo,
+  payGood: payGood
 }

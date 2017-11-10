@@ -1,4 +1,6 @@
 <scroll-view class="battleHomeContentList">
+  <view class="" bindtap='roomManagerClick'>房间管理</view>
+
   <block wx:for="{{battles}}" wx:for-item="battle">
     <view class="battleHomeContentItem" id="{{battle.id}}" bindtap='itemClick'>
       <image src="{{battle.imgUrl}}" class="battleHomeContentItemImage"></image>

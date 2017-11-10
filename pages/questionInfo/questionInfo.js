@@ -17,7 +17,8 @@ var layerout = new baseLayerout.BaseLayerout({
     questionId:0,
     rightCount:0,
     wrongCount:0,
-    process:0
+    process:0,
+    rewardBean:0
   },
 
   eventListener:{
@@ -50,7 +51,9 @@ var layerout = new baseLayerout.BaseLayerout({
             outThis.setData({
               rightCount:rightCount,
               wrongCount:wrongCount,
-              process:process
+              process:process,
+              rewardBean: data.rewardBean,
+              isPass:data.isPass
             });
             outThis.hideLoading();
             questionSelector.next();
@@ -89,7 +92,9 @@ var layerout = new baseLayerout.BaseLayerout({
             outThis.setData({
               rightCount: rightCount,
               wrongCount: wrongCount,
-              process: process
+              process: process,
+              rewardBean: data.rewardBean,
+              isPass: data.isPass
             })
             outThis.hideLoading();
             questionSelector.next();
@@ -129,7 +134,9 @@ var layerout = new baseLayerout.BaseLayerout({
           outThis.setData({
             rightCount: rightCount,
             wrongCount: wrongCount,
-            process: process
+            process: process,
+            rewardBean: data.rewardBean,
+            isPass: data.isPass
           })
           outThis.hideLoading();
           questionSelector.next();
@@ -276,7 +283,7 @@ var layerout = new baseLayerout.BaseLayerout({
   onUnload: function () {
     var pages = getCurrentPages();
     var prevPage = pages[pages.length - 2];
-    prevPage.startResult(outThis.data.rightCount, outThis.data.wrongCount, outThis.data.process, battleMemberPaperAnswerId);
+    prevPage.startResult(outThis.data.rightCount, outThis.data.wrongCount, outThis.data.process, battleMemberPaperAnswerId,outThis.data.rewardBean,outThis.data.isPass);
   },
 
   onLoad: function (options) {

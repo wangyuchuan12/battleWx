@@ -1,0 +1,141 @@
+<import src="../assembly/redPackAlertPlug/redPackAlertPlug.wxml"/>
+
+
+<template is="redPackAlertPlug" data="{{...redPackAlertPlugData}}"/>
+<view class="welfare">
+  
+    <view class="welfareHead">
+
+      
+      <view class="welfareHeadItem">
+        <view class="welfareHeadItemLabel">
+          <span class="fa fa-pie-chart"></span>
+          <span style="font-size:10px;">房间人数</span>
+        </view>
+        <view class="welfareHeadItemContent">5/10</view>
+      </view>
+
+
+
+      <view class="welfareHeadItem">
+        <view class="welfareHeadItemLabel">
+          <span class="fa fa-bar-chart"></span>
+          <span style="font-size:10px;">我的排名</span>
+        </view>
+        <view class="welfareHeadItemContent">第3名</view>
+      </view>
+
+
+      <view class="welfareHeadItem">
+        <view class="welfareHeadItemLabel">
+          <span class="fa fa-fighter-jet"></span>
+          <span style="font-size:10px;">关卡</span>
+        </view>
+        <view class="welfareHeadItemContent">第5关</view>
+      </view>
+
+      <view class="welfareHeadItem">
+        <view class="welfareHeadItemLabel">
+          <span class="fa fa-users"></span>
+          <span style="font-size:10px;">房间分数</span>
+        </view>
+        <view class="welfareHeadItemContent">300分</view>
+      </view>
+
+      <view class="welfareHeadItem">
+        <view class="welfareHeadItemLabel">
+          <span class="fa fa-user-circle"></span>
+          <span style="font-size:10px;">我的分数</span>
+        </view> 
+        <view class="welfareHeadItemContent">30分</view>
+      </view>
+
+      <view class="welfareHeadItem">
+        <view class="welfareHeadItemLabel">
+          <span class="fa fa-car"></span>
+          <span style="font-size:10px;">房间距离</span>
+        </view>
+        <view class="welfareHeadItemContent">30分</view>
+      </view>
+
+      <view class="welfareHeadItem">
+        <view class="welfareHeadItemLabel">
+          <span class="fa fa-bicycle"></span>
+          <span style="font-size:10px;">我的距离</span>
+        </view>
+        <view class="welfareHeadItemContent">30分</view>
+      </view>
+    </view>
+
+
+    
+  <scroll-view class="welfareContent" scroll-y>
+
+    <view class="welfareContentButton">开始战斗</view>
+
+    <view class="welfareRedPaperList">
+      <view class="welfareRedPaperItem" bindtap='redPackClick'>
+        
+        <view class="welfareRedPaperItemContent">
+        
+        </view>
+      </view>
+
+      <view class="welfareRedPaperItem">
+        <view class="welfareRedPaperItemContent">
+        
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <scroll-view class="welfareRecord" scroll-y>
+    <view>
+      <image src="http://on3s1z2us.bkt.clouddn.com/29687e12c5d54857b860453afa6a7c35.png" class="welfareRecordImage"></image>
+      <view class="welfareRecordTime">2014-7-12 22:21:22</view>
+      <view class="welfareRecordContent">川川参与获取经历14分</view>
+    </view>
+
+    <view>
+      <image src="http://on3s1z2us.bkt.clouddn.com/29687e12c5d54857b860453afa6a7c35.png" class="welfareRecordImage"></image>
+      <view class="welfareRecordTime">2014-7-12 22:21:22</view>
+      <view class="welfareRecordContent">川川参与获取经历14分</view>
+    </view>
+
+    <view>
+      <image src="http://on3s1z2us.bkt.clouddn.com/29687e12c5d54857b860453afa6a7c35.png" class="welfareRecordImage"></image>
+      <view class="welfareRecordTime">2014-7-12 22:21:22</view>
+      <view class="welfareRecordContent">川川参与获取经历14分</view>
+    </view>
+
+    <view>
+      <image src="http://on3s1z2us.bkt.clouddn.com/29687e12c5d54857b860453afa6a7c35.png" class="welfareRecordImage"></image>
+      <view class="welfareRecordTime">2014-7-12 22:21:22</view>
+      <view class="welfareRecordContent">川川参与获取经历14分</view>
+    </view>
+
+     <view>
+      <image src="http://on3s1z2us.bkt.clouddn.com/29687e12c5d54857b860453afa6a7c35.png" class="welfareRecordImage"></image>
+      <view class="welfareRecordTime">2014-7-12 22:21:22</view>
+      <view class="welfareRecordContent">川川参与获取经历14分</view>
+    </view>
+
+     <view>
+      <image src="http://on3s1z2us.bkt.clouddn.com/29687e12c5d54857b860453afa6a7c35.png" class="welfareRecordImage"></image>
+      <view class="welfareRecordTime">2014-7-12 22:21:22</view>
+      <view class="welfareRecordContent">川川参与获取经历14分</view>
+    </view>
+
+     <view>
+      <image src="http://on3s1z2us.bkt.clouddn.com/29687e12c5d54857b860453afa6a7c35.png" class="welfareRecordImage"></image>
+      <view class="welfareRecordTime">2014-7-12 22:21:22</view>
+      <view class="welfareRecordContent">川川参与获取经历14分</view>
+    </view>
+
+     <view>
+      <image src="http://on3s1z2us.bkt.clouddn.com/29687e12c5d54857b860453afa6a7c35.png" class="welfareRecordImage"></image>
+      <view class="welfareRecordTime">2014-7-12 22:21:22</view>
+      <view class="welfareRecordContent">川川参与获取经历333333分</view>
+    </view>
+  </scroll-view>
+</view>

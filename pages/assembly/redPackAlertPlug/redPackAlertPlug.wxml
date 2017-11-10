@@ -1,0 +1,18 @@
+<!--questionSelector.wxml-->
+<template name="redPackAlertPlug">
+  <view class="redPackAlertPlug" style="display:{{display}}">
+    <view class="fa fa-times redPackAlertPlugClose" bindtap="redPacketAlertCloseClick"></view>
+    <view class="redPackAlertPlugList">
+     <view class="redPackAlertPlugItem" style="font-size:10px;">领取条件：</view>
+      <view class="redPackAlertPlugItem">1.参与房间</view>
+      <view class="redPackAlertPlugItem">2.房间距离>200</view>
+      <view class="redPackAlertPlugItem">3.我的距离>200</view>
+    </view>
+
+    <image src="{{imgUrl}}" class="redPackAlertPlugImage"></image>
+
+    <view class="redPackAlertPlugNickname">川川</view>
+
+    <view class="redPackAlertPlugButton" bindtap='openRedPackClick'>领取</view>
+  </view>
+</template>

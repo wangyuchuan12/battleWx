@@ -4,13 +4,16 @@
 
 @import '../assembly/questionResult/questionResult.wxss';
 
+@import '../assembly/attrPlug/attrPlug.wxss';
+
+@import '../assembly/progressScoreMemberPlug/progressScoreMemberPlug.wxss';
 
 .progressScoreButtons{
   position: fixed;
   bottom:10px;
   right:10px;
-  width:200px;
-  height:200px;
+  width:100%;
+  height:100%;
 }
 
 .progressScoreStartButton{
@@ -33,6 +36,18 @@
   width:50px;
   height:50px;
   line-height:50px;
+  text-align: center;
+  border-radius:100px;
+  background:RGBA(76,76,76,0.5);
+  color:white;
+}
+
+.progressScoreMallButton{
+  position: absolute;
+  left:20px;
+  bottom:10px;
+  width:50px;
+  height:50px;
   text-align: center;
   border-radius:100px;
   background:RGBA(76,76,76,0.5);
@@ -71,7 +86,7 @@
 
 .displayPanel{
   width:200px;
-  top:40vh;
+  top:45vh;
   left:50%;
   margin-left:-100px;
   position: absolute;
@@ -83,4 +98,29 @@
   padding-top:30px;
   padding-bottom:10px;
   line-height: 30px;
+}
+
+.rewardBean{
+  position: fixed;
+  z-index:10000000000;
+  text-align: center;
+  width:100%;
+}
+
+.rewardBeanImg{
+  width:100px;
+  height:100px;
+}
+
+.rewardBeanPlus{
+  color: RGBA(255,252,20,1);
+  font-size:40px;
+  vertical-align: top;
+  line-height: 100px;
+}
+
+.rewardBeanHead{
+  color: RGBA(255,252,20,1);
+  font-size:50px;
+  font-weight: bolder;
 }

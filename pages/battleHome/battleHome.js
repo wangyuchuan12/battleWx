@@ -46,6 +46,12 @@ var layerout = new baseLayerout.BaseLayerout({
       });
   },
 
+  mallClick:function(){
+    wx.navigateTo({
+      url: '../mall/mall',
+    });
+  },
+
 
   initBattles: function (battleId,flag) {
     this.showLoading();

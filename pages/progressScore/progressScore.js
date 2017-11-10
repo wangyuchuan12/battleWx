@@ -32,7 +32,10 @@ var layerout = new baseLayerout.BaseLayerout({
     isLast:0,
     roomId:0,
     //是否处在运行状态
-    isRun:0
+    isRun:0,
+    rewardBeanTop:200,
+    rewardBeanDisplay:"none",
+    rewardBean:0
   },
   eventListener:{
     questinResultClose:function(){
@@ -157,11 +160,43 @@ var layerout = new baseLayerout.BaseLayerout({
     }, 15000);
   },
 
-  startResult: function (rightCount, wrongCount, process, battleMemberPaperAnswerId){
+  showRewardBean:function(rewardBean){
+    var outThis = this;
+    var top = 200;
+    this.setData({
+      rewardBean:rewardBean,
+      rewardBeanDisplay: "block",
+      rewardBeanTop:top
+    });
+    var interval = setInterval(function(){
+      top=top-10;
+      if(top>0){
+        console.log("top:"+top);
+        outThis.setData({
+          rewardBeanTop: top
+        });
+      }else{
+        setTimeout(function(){
+          outThis.setData({
+            rewardBeanDisplay: "none"
+          });
+        },4000);
+        clearInterval(interval);
+      }
+      
+    },50);
+  },
+
+  startResult: function (rightCount, wrongCount, process, battleMemberPaperAnswerId,rewardBean,isPass){
+    
     
     outThis.setData({
       isRun: 1
     });
+
+    if(isPass==1){
+      this.showRewardBean(rewardBean);
+    }
     var begin = this.getProcess();
     var end = begin + process;
     var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
@@ -263,7 +298,9 @@ var layerout = new baseLayerout.BaseLayerout({
   startSelector:function(){
     var loveCount = this.getLoveCount();
     if(!loveCount){
-      this.showToast("爱心不足");
+      var hour = this.getLoveCoolHour();
+      var min = this.getLoveCoolMin();
+      this.showToast("爱心恢复中,还剩"+hour+"时"+min+"分");
       return;
     }
     var roomId = this.data.roomId;
@@ -344,7 +381,14 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
+  mallClick:function(){
+    wx.navigateTo({
+      url: '../mall/mall'
+    });
+  },
+
   onShow: function () {
+    this.initAccountInfo();
     var outThis = this;
     setTimeout(function(){
       outThis.processUpdate({
@@ -420,6 +464,7 @@ var layerout = new baseLayerout.BaseLayerout({
   } 
 });
 
+layerout.addAttrPlug();
 layerout.addProgressScorePlug();
 layerout.addQuestionSelector();
 layerout.addProgressScoreMember();

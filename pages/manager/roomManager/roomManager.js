@@ -1,55 +1,51 @@
 var baseLayerout = require("../../assembly/baseLayerout/baseLayerout.js");
-var battlesRequest = require("../../../utils/battlesRequest.js");
+var battleManagerRequest = require("../../../utils/battleManagerRequest.js");
 var layerout = new baseLayerout.BaseLayerout({
 
   /**
    * 页面的初始数据
    */
   data: {
-    battles:[/*{
-      name:"wyc",
-      instruction:"haha",
-      id:"1",
-      imgUrl:"http://7xlw44.com1.z0.glb.clouddn.com/0042aeda-d8a5-4222-b79d-1416ab222898"
+    rooms:[/*{
+      id:0,
+      imgUrl:"http://7xlw44.com1.z0.glb.clouddn.com/fa16b518-4e1d-4e46-8f5c-4c35f51923ee",
+      name:"趣味"
     }*/]
-  },
-
-  roomManagerClick:function(){
-    wx.navigateTo({
-      url: '../roomManager/roomManager'
-    })
-  },
-
-  itemClick:function(e){
-    var id = e.currentTarget.id;
-    wx.navigateTo({
-      url: '../battleInfoManager/battleInfoManager?battleId='+id
-    });
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    this.initRooms();
+  },
+
+  roomItemClick:function(e){
+    var id = e.currentTarget.id;
+    wx.navigateTo({
+      url: '../roomEdit/roomEdit?id='+id
+    })
+  },
+
+  initRooms:function(){
     var outThis = this;
-    battlesRequest.requestBattles({
-      success:function(battles){
-        var array = new Array();
-        for(var i=0;i<battles.length;i++){
-          var battle = battles[i];
-          array.push({
-            id:battle.id,
-            name:battle.name,
-            instruction:battle.instruction,
-            imgUrl:battle.headImg
+    battleManagerRequest.requestRooms({
+      success:function(rooms){
+        var roomArray = new Array();
+        for(var i=0;i<rooms.length;i++){
+          console.log(rooms[i].imgUrl);
+          roomArray.push({
+            id:rooms[i].id,
+            imgUrl:rooms[i].imgUrl,
+            name:rooms[i].name
           });
         }
         outThis.setData({
-          battles:array
+          rooms: roomArray
         });
       },
       fail:function(){
-
+        console.log("fail");
       }
     });
   },

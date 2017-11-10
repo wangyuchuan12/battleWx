@@ -21,7 +21,9 @@ var memberInfo = {
   isStart:0,
   isTakepart:0,
   openId:null,
-  userId:null
+  userId:null,
+  speedCoolBean:null,
+  speedCoolSecond:null
 }
 
 

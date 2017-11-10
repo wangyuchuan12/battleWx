@@ -24,6 +24,17 @@ var addBattleInfoUrl = request.getDomain() + "/api/manager/addBattleInfo";
 
 var startUpPeriodUrl = request.getDomain() + "/api/manager/startUpPeriod";
 
+var roomsUrl = request.getDomain() + "/api/manager/rooms";
+var roomInfoUrl = request.getDomain() + "/api/manager/roomInfo";
+var editRoomNameUrl = request.getDomain() + "/api/manager/roomNameEdit";
+
+var editRoomInstructionUrl = request.getDomain() + "/api/manager/roomInstructionEdit";
+
+var editRoomImgUrl = request.getDomain() + "/api/manager/roomImgEdit";
+
+var editRoomSearchAble = request.getDomain() + "/api/manager/roomSearchAbleEdit";
+
+var editRoomIsDisplay = request.getDomain() + "/api/manager/roomIsDisplayEdit";
 function requestAddBattleInfo(params,callback){
   request.request(addBattleInfoUrl, {
     name: params.name,
@@ -310,6 +321,130 @@ function requestStartUpPeriod(periodId,callback){
   });
 }
 
+function requestRooms(callback){
+  var params = new Object();
+
+  request.requestWithLogin(roomsUrl, params, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
+      } else {
+        callback.fail(resp.errorMsg);
+      }
+    },
+    fail: function () {
+      callback.fail();
+    }
+  });
+}
+
+function requestRoomInfo(id,callback){
+  var params = new Object();
+  params.id = id;
+  request.requestWithLogin(roomInfoUrl, params, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
+      } else {
+        callback.fail(resp.errorMsg);
+      }
+    },
+    fail: function () {
+      callback.fail();
+    }
+  });
+}
+
+function requestEditRoomName(id,name,callback){
+  var params = new Object();
+  params.id = id;
+  params.name = name;
+  request.requestWithLogin(editRoomNameUrl, params, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
+      } else {
+        callback.fail(resp.errorMsg);
+      }
+    },
+    fail: function () {
+      callback.fail();
+    }
+  });
+}
+
+function requestEditRoomInstruction(id, instruction, callback) {
+  var params = new Object();
+  params.id = id;
+  params.instruction = instruction;
+  request.requestWithLogin(editRoomInstructionUrl, params, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
+      } else {
+        callback.fail(resp.errorMsg);
+      }
+    },
+    fail: function () {
+      callback.fail();
+    }
+  });
+}
+
+function requestEditRoomImgUrl(id, imgUrl, callback) {
+  var params = new Object();
+  params.id = id;
+  params.imgUrl = imgUrl;
+  request.requestWithLogin(editRoomImgUrl, params, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
+      } else {
+        callback.fail(resp.errorMsg);
+      }
+    },
+    fail: function () {
+      callback.fail();
+    }
+  });
+}
+
+function requestEditRoomSearchAble(id, isSearchAble, callback) {
+  var params = new Object();
+  params.id = id;
+  params.isSearchAble = isSearchAble;
+  request.requestWithLogin(editRoomSearchAble, params, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
+      } else {
+        callback.fail(resp.errorMsg);
+      }
+    },
+    fail: function () {
+      callback.fail();
+    }
+  });
+}
+
+function requestEditRoomIsDisplay(id, isDisplay, callback) {
+  var params = new Object();
+  params.id = id;
+  params.isDisplay = isDisplay;
+  request.requestWithLogin(editRoomIsDisplay, params, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
+      } else {
+        callback.fail(resp.errorMsg);
+      }
+    },
+    fail: function () {
+      callback.fail();
+    }
+  });
+}
+
 module.exports = {
   requestBattleSubjects: requestBattleSubjects,
   requestBattlePeriods: requestBattlePeriods,
@@ -328,5 +463,12 @@ module.exports = {
   requestBattleInfo: requestBattleInfo,
   requestUpdateBattleInfo: requestUpdateBattleInfo,
   requestAddBattleInfo: requestAddBattleInfo,
-  requestStartUpPeriod: requestStartUpPeriod
+  requestStartUpPeriod: requestStartUpPeriod,
+  requestRooms: requestRooms,
+  requestRoomInfo: requestRoomInfo,
+  requestEditRoomName: requestEditRoomName,
+  requestEditRoomInstruction: requestEditRoomInstruction,
+  requestEditRoomImgUrl: requestEditRoomImgUrl,
+  requestEditRoomIsDisplay: requestEditRoomIsDisplay,
+  requestEditRoomSearchAble: requestEditRoomSearchAble
 }

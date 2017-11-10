@@ -16,6 +16,11 @@
       <button class="battleTakepartButton" open-type="share" style="width:25%;background:RGBA(141,165,234,1);">邀请</button>
       <button class="battleTakepartButton" bindtap="takepartClick" style="width:45%;background:RGBA(255,164,4,1);" wx:if="{{status==0||status==3}}">               参加
       </button>
+
+       <button class="battleTakepartButton" bindtap="takepartClick" style="width:45%;background:RGBA(255,164,4,1);"  bindtap="takepartClick" wx:else >               开始
+      </button>
+
+      <!--
       <button class="battleTakepartButton" bindtap="takepartClick" style="width:45%;background:RGBA(255,164,4,1);" wx:if="{{status==1&&(mininum-num)<=0}}">              开始
       </button>
 
@@ -24,6 +29,7 @@
 
       <button class="battleTakepartButton" bindtap="skipToRank" style="width:45%;background:RGBA(255,164,4,1);" wx:if="{{status==2}}">               查看结果
       </button>
+      -->
     </view>
 
     <view class="battleTakepartSecondButtons" style="display:none;">
