@@ -19,7 +19,7 @@ function authCode(phonenumber,project,callback){
     fail: function () {
       callback.fail();
     }
-  })
+  });
 }
 
 module.exports = {

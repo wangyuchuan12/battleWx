@@ -4,7 +4,7 @@
 
       <view class="roomManagerItemInfoName">{{room.name}}</view>
       <image class="roomManagerItemImgBig" src="{{room.imgUrl}}"></image>
-      <image class="roomManagerItemImgSmall" src="http://7xlw44.com1.z0.glb.clouddn.com/021ebc62-e27e-4a17-8de8-5823ef05dba8"></image>
+      <image class="roomManagerItemImgSmall" src="{{room.smallImgUrl}}"></image>
     </view>
   </view>
 </view>

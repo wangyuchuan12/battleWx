@@ -1,6 +1,7 @@
 // battleTakepart.js
 var request = require("../../utils/request.js");
 var battleRequest = require("../../utils/battleInfoRequest.js");
+var battleRoomRequest = require("../../utils/battleRoomRequest.js");
 var battleMemberInfoRequest = require("../../utils/battleMemberInfoRequest.js");
 var battleMembersRequest = require("../../utils/battleMembersRequest.js");
 var takepartRequest = require("../../utils/takepartRequest.js");
@@ -20,11 +21,12 @@ var layerout = new baseLayerout.BaseLayerout({
    */
   data: {
    
+    owner:"",
     imgUrl:"",
 
-    battleInfoContent:"",
+    roomInfoContent:"",
 
-    battleInfoName:"",
+    roomInfoName:"",
 
     isFull:0,
     
@@ -108,6 +110,17 @@ var layerout = new baseLayerout.BaseLayerout({
       success:function(){
         outThis.initMemberInfo({
           success:function(){
+            var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
+            console.log("onwer:"+outThis.data.owner + ",battleUserId:" + memberInfo.battleUserId)
+            if(outThis.data.owner==memberInfo.battleUserId){
+              outThis.setData({
+                isOwner:1
+              });
+            }else{
+              outThis.setData({
+                isOwner: 0
+              });
+            }
             outThis.initBattleMembers({
               success:function(){
                 outThis.hideLoading();
@@ -133,20 +146,20 @@ var layerout = new baseLayerout.BaseLayerout({
   //吃石化比赛信息数据
   initBattleInfo:function(callback){
     var outThis = this;
-    battleRequest.getBattleInfo(battleId,roomId,{
-      success: function (battleInfo) {
+    battleRoomRequest.info(roomId,{
+      success: function (roomInfo) {
         callback.success();
        
         wx.setNavigationBarTitle({
-          title: battleInfo.name
+          title: roomInfo.name
         })
         outThis.setData({
-          imgUrl: battleInfo.headImg,
-          battleInfoName: battleInfo.name,
-          battleInfoContent: battleInfo.instruction,
-          maxinum:battleInfo.maxinum,
-          mininum:battleInfo.mininum,
-          isOwner:battleInfo.isOwner
+          imgUrl: roomInfo.imgUrl,
+          roomInfoName: roomInfo.name,
+          roomInfoContent: roomInfo.instruction,
+          maxinum: roomInfo.maxinum,
+          mininum: roomInfo.mininum,
+          owner:roomInfo.owner
         });
       },
       fail: function () {
@@ -272,7 +285,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
   managerClick:function(){
     wx.navigateTo({
-      url: '../manager/roomEdit/roomEdit?id='+roomId
+      url: '../manager/roomEdit/roomEdit?id='+roomId+"&battleId="+battleId
     });
   },
 

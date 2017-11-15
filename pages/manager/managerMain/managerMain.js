@@ -15,7 +15,7 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   roomManagerClick:function(){
-    wx.navigateTo({
+    wx.redirectTo({
       url: '../roomManager/roomManager'
     })
   },

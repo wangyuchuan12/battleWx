@@ -1,153 +1,48 @@
 <scroll-view class="redPacketInfo" scroll-y>
   <view class="redPacketInfoHeader">
   </view>
-  <image src="http://on3s1z2us.bkt.clouddn.com/32bca8cb1186bc674558babf86bbd226.png" class="redPacketInfoHeaderImg"></image>
-  <view class="redPacketInfoContent">
-    <view class="redPacketInfoContentNickname">川川的红包</view>
+  
+    <image src="{{senderImg}}" class="redPacketInfoHeaderImg"></image>
+    <view class="redPacketInfoContent">
+      <view class="redPacketInfoContentNickname">{{senderName}}的红包</view>
+        <block wx:for="{{distributions}}" wx:for-item="distribution" wx:if="{{distribution.isMy==1}}">
+          <view class="redPacketInfoContentMoney">
+            <span class="redPacketInfoContentMoneyAmount">{{distribution.amount}}</span>元
+            <view>
+              <block wx:if="{{distribution.beanNum>0}}">
+                <view class="personalAttrDataHeader personalAttrDataHeaderBean" style="background-position:0px 1px;"></view>+{{distribution.beanNum}}
+              </block>
+              <block wx:if="{{distribution.mastonryNum>0}}">
+                <view class="personalAttrDataHeader personalAttrDataHeaderMasonry"></view>+{{distribution.mastonryNum}}
+              </block>
+            </view>
+          </view>
+        </block>
+    </view>
+  
 
-    <view class="redPacketInfoContentMoney"><span class="redPacketInfoContentMoneyAmount">0.01</span>元</view>
-  </view>
-
-  <view class="redPacketInfoListInfo">已领取 3/10</view>
+  <view class="redPacketInfoListInfo">已领取 {{receiveNum}}/{{num}}</view>
   <view class="redPacketInfoList">
-    <view class="redPacketInfoItem">
-      <image src="http://on3s1z2us.bkt.clouddn.com/32bca8cb1186bc674558babf86bbd226.png" class="redPacketInfoItemImg"></image>
+    <view class="redPacketInfoItem" wx:for="{{distributions}}" wx:for-item="distribution">
+      <image src="{{distribution.imgUrl}}" class="redPacketInfoItemImg"></image>
       <view class="redPacketInfoItemUser">
-        <view class="redPacketInfoItemUserNickname">王煜川</view>
-        <view class="redPacketInfoItemUserTime">30:22</view>
+        <view class="redPacketInfoItemUserNickname">{{distribution.nickname}}</view>
+        <view class="redPacketInfoItemUserTime">{{distribution.receiveTime}}</view>
       </view>
 
-      <view class="redPacketInfoItemAmount">0.01元</view>
-    </view>
-
-    <view class="redPacketInfoItem">
-      <image src="http://on3s1z2us.bkt.clouddn.com/32bca8cb1186bc674558babf86bbd226.png" class="redPacketInfoItemImg"></image>
-      <view class="redPacketInfoItemUser">
-        <view class="redPacketInfoItemUserNickname">王煜川</view>
-        <view class="redPacketInfoItemUserTime">30:22</view>
+      <view class="redPacketInfoItemAmount">
+        <view>
+          {{distribution.amount}}元
+        </view>
+        <view>
+          <block wx:if="{{distribution.beanNum>0}}">
+            <view class="personalAttrDataHeader personalAttrDataHeaderBean" style="background-position:0px 1px;"></view>+{{distribution.beanNum}}
+          </block>
+          <block wx:if="{{distribution.mastonryNum>0}}">
+            <view class="personalAttrDataHeader personalAttrDataHeaderMasonry"></view>+{{distribution.mastonryNum}}
+          </block>
+        </view>
       </view>
-
-      <view class="redPacketInfoItemAmount">0.01元</view>
-    </view>
-
-    <view class="redPacketInfoItem">
-      <image src="http://on3s1z2us.bkt.clouddn.com/32bca8cb1186bc674558babf86bbd226.png" class="redPacketInfoItemImg"></image>
-      <view class="redPacketInfoItemUser">
-        <view class="redPacketInfoItemUserNickname">王煜川</view>
-        <view class="redPacketInfoItemUserTime">30:22</view>
-      </view>
-
-      <view class="redPacketInfoItemAmount">0.01元</view>
-    </view>
-
-    <view class="redPacketInfoItem">
-      <image src="http://on3s1z2us.bkt.clouddn.com/32bca8cb1186bc674558babf86bbd226.png" class="redPacketInfoItemImg"></image>
-      <view class="redPacketInfoItemUser">
-        <view class="redPacketInfoItemUserNickname">王煜川</view>
-        <view class="redPacketInfoItemUserTime">30:22</view>
-      </view>
-
-      <view class="redPacketInfoItemAmount">0.01元</view>
-    </view>
-
-    <view class="redPacketInfoItem">
-      <image src="http://on3s1z2us.bkt.clouddn.com/32bca8cb1186bc674558babf86bbd226.png" class="redPacketInfoItemImg"></image>
-      <view class="redPacketInfoItemUser">
-        <view class="redPacketInfoItemUserNickname">王煜川</view>
-        <view class="redPacketInfoItemUserTime">30:22</view>
-      </view>
-
-      <view class="redPacketInfoItemAmount">0.01元</view>
-    </view>
-
-    <view class="redPacketInfoItem">
-      <image src="http://on3s1z2us.bkt.clouddn.com/32bca8cb1186bc674558babf86bbd226.png" class="redPacketInfoItemImg"></image>
-      <view class="redPacketInfoItemUser">
-        <view class="redPacketInfoItemUserNickname">王煜川</view>
-        <view class="redPacketInfoItemUserTime">30:22</view>
-      </view>
-
-      <view class="redPacketInfoItemAmount">0.01元</view>
-    </view>
-
-    <view class="redPacketInfoItem">
-      <image src="http://on3s1z2us.bkt.clouddn.com/32bca8cb1186bc674558babf86bbd226.png" class="redPacketInfoItemImg"></image>
-      <view class="redPacketInfoItemUser">
-        <view class="redPacketInfoItemUserNickname">王煜川</view>
-        <view class="redPacketInfoItemUserTime">30:22</view>
-      </view>
-
-      <view class="redPacketInfoItemAmount">0.01元</view>
-    </view>
-
-    <view class="redPacketInfoItem">
-      <image src="http://on3s1z2us.bkt.clouddn.com/32bca8cb1186bc674558babf86bbd226.png" class="redPacketInfoItemImg"></image>
-      <view class="redPacketInfoItemUser">
-        <view class="redPacketInfoItemUserNickname">王煜川</view>
-        <view class="redPacketInfoItemUserTime">30:22</view>
-      </view>
-
-      <view class="redPacketInfoItemAmount">0.01元</view>
-    </view>
-
-    <view class="redPacketInfoItem">
-      <image src="http://on3s1z2us.bkt.clouddn.com/32bca8cb1186bc674558babf86bbd226.png" class="redPacketInfoItemImg"></image>
-      <view class="redPacketInfoItemUser">
-        <view class="redPacketInfoItemUserNickname">王煜川</view>
-        <view class="redPacketInfoItemUserTime">30:22</view>
-      </view>
-
-      <view class="redPacketInfoItemAmount">0.01元</view>
-    </view>
-
-    <view class="redPacketInfoItem">
-      <image src="http://on3s1z2us.bkt.clouddn.com/32bca8cb1186bc674558babf86bbd226.png" class="redPacketInfoItemImg"></image>
-      <view class="redPacketInfoItemUser">
-        <view class="redPacketInfoItemUserNickname">王煜川</view>
-        <view class="redPacketInfoItemUserTime">30:22</view>
-      </view>
-
-      <view class="redPacketInfoItemAmount">0.01元</view>
-    </view>
-
-    <view class="redPacketInfoItem">
-      <image src="http://on3s1z2us.bkt.clouddn.com/32bca8cb1186bc674558babf86bbd226.png" class="redPacketInfoItemImg"></image>
-      <view class="redPacketInfoItemUser">
-        <view class="redPacketInfoItemUserNickname">王煜川</view>
-        <view class="redPacketInfoItemUserTime">30:22</view>
-      </view>
-
-      <view class="redPacketInfoItemAmount">0.01元</view>
-    </view>
-
-    <view class="redPacketInfoItem">
-      <image src="http://on3s1z2us.bkt.clouddn.com/32bca8cb1186bc674558babf86bbd226.png" class="redPacketInfoItemImg"></image>
-      <view class="redPacketInfoItemUser">
-        <view class="redPacketInfoItemUserNickname">王煜川</view>
-        <view class="redPacketInfoItemUserTime">30:22</view>
-      </view>
-
-      <view class="redPacketInfoItemAmount">0.01元</view>
-    </view>
-
-    <view class="redPacketInfoItem">
-      <image src="http://on3s1z2us.bkt.clouddn.com/32bca8cb1186bc674558babf86bbd226.png" class="redPacketInfoItemImg"></image>
-      <view class="redPacketInfoItemUser">
-        <view class="redPacketInfoItemUserNickname">王煜川</view>
-        <view class="redPacketInfoItemUserTime">30:22</view>
-      </view>
-
-      <view class="redPacketInfoItemAmount">0.01元</view>
-    </view>
-
-    <view class="redPacketInfoItem">
-      <image src="http://on3s1z2us.bkt.clouddn.com/32bca8cb1186bc674558babf86bbd226.png" class="redPacketInfoItemImg"></image>
-      <view class="redPacketInfoItemUser">
-        <view class="redPacketInfoItemUserNickname">王煜川</view>
-        <view class="redPacketInfoItemUserTime">30:22</view>
-      </view>
-
-      <view class="redPacketInfoItemAmount">0.01元</view>
     </view>
   </view>
 </scroll-view>

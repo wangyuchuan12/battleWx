@@ -39,7 +39,7 @@
   <view class="redPackEditItem">
     <view class="redPackEditItemLabel">是否需要人数满足</view>
     <switch class="redPackEditItemSwitch" bindchange='roomMeetChange'></switch>
-    <view class="addSubjectInput">
+    <view class="addSubjectInput" wx:if="{{roomMeet.isRoomMeet==1}}">
       <input placeholder='数量' class="addSubjectInputEl" type='number' bindinput='roomMeetNumInputChange'/>
     </view>
   </view>
@@ -47,7 +47,7 @@
    <view class="redPackEditItem">
     <view class="redPackEditItemLabel">是否有房间进程要求</view>
     <switch class="redPackEditItemSwitch" bindchange='roomProcessMeetChange'></switch>
-    <view class="addSubjectInput">
+    <view class="addSubjectInput" wx:if="{{roomProcessMeet.isRoomProcessMeet==1}}">
       <input placeholder='房间进程' class="addSubjectInputEl" type='number' bindinput='roomProcessMeetInputChange'/>
     </view>
   </view>
@@ -55,7 +55,7 @@
   <view class="redPackEditItem">
     <view class="redPackEditItemLabel">是否有房间分数要求</view>
     <switch class="redPackEditItemSwitch" bindchange='roomScoreMeetChange'></switch>
-    <view class="addSubjectInput">
+    <view class="addSubjectInput" wx:if="{{roomScoreMeet.isRoomScoreMeet==1}}">
       <input placeholder='房间分数' class="addSubjectInputEl" type='number' bindinput='roomScoreMeetInputChange'/>
     </view>
   </view>
@@ -63,7 +63,7 @@
   <view class="redPackEditItem">
     <view class="redPackEditItemLabel">是否有个人分数要求</view>
     <switch class="redPackEditItemSwitch" bindchange='personalScoreMeetChange'></switch>
-    <view class="addSubjectInput">
+    <view class="addSubjectInput" wx:if="{{personalScoreMeet.isPersonalScoreMeet==1}}">
       <input placeholder='个人分数' class="addSubjectInputEl" type='number' bindinput='personalScoreMeetInputChange'/>
     </view>
   </view>
@@ -71,23 +71,23 @@
   <view class="redPackEditItem">
     <view class="redPackEditItemLabel">是否有个人进程要求</view>
     <switch class="redPackEditItemSwitch" bindchange='personalProcessMeetChange'></switch>
-    <view class="addSubjectInput">
+    <view class="addSubjectInput" wx:if="{{personalProcessMeet.isPersonalProcessMeet==1}}">
       <input placeholder='个人进程' class="addSubjectInputEl" type='number' bindinput='personalProcessMeetInputChange'/>
     </view>
   </view>
 
-  <view class="redPackEditItem">
+  <view class="redPackEditItem" style="display:none;">
     <view class="redPackEditItemLabel">参加支付智慧豆</view>
     <switch class="redPackEditItemSwitch" bindchange='takepartBeanChange'></switch>
-    <view class="addSubjectInput">
+    <view class="addSubjectInput" wx:if="{{isTakepartBean}}">
       <input placeholder='智慧豆数量' class="addSubjectInputEl" type='number' bindinput='takepartBeanInputChange'/>
     </view>
   </view>
 
-  <view class="redPackEditItem">
+  <view class="redPackEditItem" style="display:none;">
     <view class="redPackEditItemLabel">参加支付砖石</view>
     <switch class="redPackEditItemSwitch" bindchange='takepartMasonryChange'></switch>
-    <view class="addSubjectInput">
+    <view class="addSubjectInput" wx:if="{{isTakepartMasonry}}">
       <input placeholder='砖石数量' class="addSubjectInputEl" type='number' bindinput='takepartMasonryInputChange'/>
     </view>
   </view>

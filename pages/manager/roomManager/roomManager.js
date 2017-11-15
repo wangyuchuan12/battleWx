@@ -9,7 +9,8 @@ var layerout = new baseLayerout.BaseLayerout({
     rooms:[/*{
       id:0,
       imgUrl:"http://7xlw44.com1.z0.glb.clouddn.com/fa16b518-4e1d-4e46-8f5c-4c35f51923ee",
-      name:"趣味"
+      name:"趣味",
+      smallImgUrl:""
     }*/]
   },
 
@@ -22,22 +23,33 @@ var layerout = new baseLayerout.BaseLayerout({
 
   roomItemClick:function(e){
     var id = e.currentTarget.id;
-    wx.navigateTo({
-      url: '../roomEdit/roomEdit?id='+id
-    })
+    var rooms = this.data.rooms;
+    for(var i=0;i<rooms.length;i++){
+      var room = rooms[i];
+      if(room.id==id){
+        console.log("id:"+id+",battleId:"+room.battleId);
+        wx.navigateTo({
+          url: '../roomEdit/roomEdit?id=' + id+"&battleId="+room.battleId
+        })
+        return;
+      }
+    }
+   
   },
 
   initRooms:function(){
     var outThis = this;
     battleManagerRequest.requestRooms({
       success:function(rooms){
+        console.log(JSON.stringify(rooms));
         var roomArray = new Array();
         for(var i=0;i<rooms.length;i++){
-          console.log(rooms[i].imgUrl);
           roomArray.push({
             id:rooms[i].id,
             imgUrl:rooms[i].imgUrl,
-            name:rooms[i].name
+            name:rooms[i].name,
+            smallImgUrl: rooms[i].smallImgUrl,
+            battleId:rooms[i].battleId
           });
         }
         outThis.setData({

@@ -3,7 +3,7 @@
 
 
 .redPackEdit{
-  padding-bottom:100px;
+  padding-bottom:50px;
 }
 .redPackEditAmountList{
   width:100%;
@@ -53,6 +53,12 @@
   color:black;
 }
 
+.redPackEditItem{
+  border-top:2px solid RGBA(247,247,247,1);
+  padding-top:5px;
+  padding-bottom:5px;
+}
+
 .redPackEditItemLabel{
   padding-left:10px;
 }
@@ -64,4 +70,5 @@
 .redPackEditButton{
   background:green;
   color: white;
+  margin-top:20px;
 }

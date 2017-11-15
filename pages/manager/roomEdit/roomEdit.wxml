@@ -5,6 +5,8 @@
     <image src="{{imgUrl}}" class="addSubjectImgEl"></image>
   </view>
 
+  <button bindtap='skipToRoom'>进入房间</button>
+
   <view class="formItem" bindtap='nameClick'>
     <view class="formItemLabel">名称</view>
     <view class="formItemContent">{{name}}</view>
@@ -14,6 +16,18 @@
   <view class="formItem" bindtap='instructionClick'>
     <view class="formItemLabel">简介</view>
     <view class="formItemContent">{{instruction}}</view>
+    <view class="fa fa-angle-right formItemFooter"></view>
+  </view>
+
+  <view class="formItem" bindtap='redPackListClick'>
+    <view class="formItemLabel">红包</view>
+    <view class="formItemContent">数量:{{redPackNum}}</view>
+    <view class="fa fa-angle-right formItemFooter"></view>
+  </view>
+
+  <view class="formItem">
+    <view class="formItemLabel">成员</view>
+    <view class="formItemContent">{{num}}/{{maxinum}}</view>
     <view class="fa fa-angle-right formItemFooter"></view>
   </view>
 

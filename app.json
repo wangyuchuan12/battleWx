@@ -1,8 +1,9 @@
 {
   "pages": [
-    "pages/manager/redPackEdit/redPackEdit",
     "pages/battleHome/battleHome",
     "pages/manager/roomManager/roomManager",
+    "pages/manager/roomRedpacks/roomRedpacks",
+    "pages/manager/redPackEdit/redPackEdit",
     "pages/manager/roomEdit/roomEdit",
     "pages/welfare/welfare",
     "pages/redPackInfo/redPackInfo",
@@ -23,7 +24,8 @@
     "pages/battleInfo/battleInfo",
     "pages/logs/logs",
     "pages/progressScore/progressScore",
-    "pages/myBattleRooms/myBattleRooms"
+    "pages/myBattleRooms/myBattleRooms",
+    "pages/takeoutMoney"
   ],
   "window": {
     "backgroundTextStyle": "light",

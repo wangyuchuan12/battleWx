@@ -16,7 +16,8 @@ function BaseLayerout(config){
     data.baseData = {
       hiddenLoading: true,
       hiddenToast: true,
-      toastMsg:"ok"
+      toastMsg:"ok",
+      toastDuration:1000
     }
 
 
@@ -28,10 +29,14 @@ function BaseLayerout(config){
 
 
 
-    baseConfig.showToast = function (msg) {
+    baseConfig.showToast = function (msg,duration) {
+      if(!duration){
+        duration = 0;
+      }
       this.setData({
         "baseData.hiddenToast": false,
-        "baseData.toastMsg":msg
+        "baseData.toastMsg":msg,
+        toastDuration: duration
       });
     }
 

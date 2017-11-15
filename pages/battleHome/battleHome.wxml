@@ -11,6 +11,13 @@
       <span style="display:block;font-size:10px;">管理</span>
     </view>
 
+
+    <view class="battleHomeToolItem" bindtap=''>
+      <span class="fa fa-get-pocket" style="font-size:20px;"></span>
+
+      <span style="display:block;font-size:10px;">提现</span>
+    </view>
+
     <view class="battleHomeToolItem" bindtap='mallClick'>
       <span class="fa fa-shopping-cart" style="font-size:20px;"></span>
 
@@ -24,7 +31,7 @@
     </view>
     
   </view>
-  <view class="battleHomeHeader">
+  <view class="battleHomeHeader" style='display:none;'>
     <image src="{{userImgUrl}}" class="battleHomeHeaderImg"></image>
 
     <block wx:for="{{battles}}" wx:for-item="battle">
@@ -40,7 +47,7 @@
       <view class="battleHomeContentMyselfName">我参与的</view>
       <view class="battleHomeContentMyselfIcon2 fa fa-chevron-right"></view>
     </view>
-    <scroll-view class="battleHomeContentList" scroll-y style="position: fixed;bottom:0px;top:240px;">
+    <scroll-view class="battleHomeContentList" scroll-y style="position: fixed;bottom:0px;top:155px;">
       <block wx:for="{{rooms}}" wx:for-item="room">
         <view class="battleHomeContentItem" id="{{room.id}}" bindtap='itemClick'>
           <image src="{{room.imgUrl}}" class="battleHomeContentItemImage"></image>

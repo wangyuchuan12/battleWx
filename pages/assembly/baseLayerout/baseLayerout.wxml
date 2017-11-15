@@ -2,5 +2,5 @@
 
 <template name="baseLayerout" hidden="true">
   <loading hidden="{{hiddenLoading}}">请等待...</loading>
-  <toast duration="1000" bindchange="hideToast" hidden="{{hiddenToast}}" style="width:100px;height:100px;">{{toastMsg}}</toast> 
+  <toast duration="{{toastDuration}}" bindchange="hideToast" hidden="{{hiddenToast}}" style="width:100px;height:100px;">{{toastMsg}}</toast> 
 </template>

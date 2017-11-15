@@ -1,7 +1,10 @@
 <import src="../assembly/redPackAlertPlug/redPackAlertPlug.wxml"/>
 
+<import src="../assembly/baseLayerout/baseLayerout.wxml"/>
+<template is="baseLayerout" data="{{...baseData}}"/>
 
 <template is="redPackAlertPlug" data="{{...redPackAlertPlugData}}"/>
+
 <view class="welfare">
   
     <view class="welfareHead">
@@ -12,7 +15,7 @@
           <span class="fa fa-pie-chart"></span>
           <span style="font-size:10px;">房间人数</span>
         </view>
-        <view class="welfareHeadItemContent">5/10</view>
+        <view class="welfareHeadItemContent">{{num}}/{{maxinum}}</view>
       </view>
 
 
@@ -31,7 +34,7 @@
           <span class="fa fa-fighter-jet"></span>
           <span style="font-size:10px;">关卡</span>
         </view>
-        <view class="welfareHeadItemContent">第5关</view>
+        <view class="welfareHeadItemContent">第{{stageIndex}}/{{stageCount}}关</view>
       </view>
 
       <view class="welfareHeadItem">
@@ -39,7 +42,7 @@
           <span class="fa fa-users"></span>
           <span style="font-size:10px;">房间分数</span>
         </view>
-        <view class="welfareHeadItemContent">300分</view>
+        <view class="welfareHeadItemContent">{{roomScore}}分</view>
       </view>
 
       <view class="welfareHeadItem">
@@ -47,7 +50,7 @@
           <span class="fa fa-user-circle"></span>
           <span style="font-size:10px;">我的分数</span>
         </view> 
-        <view class="welfareHeadItemContent">30分</view>
+        <view class="welfareHeadItemContent">{{score}}分</view>
       </view>
 
       <view class="welfareHeadItem">
@@ -55,7 +58,7 @@
           <span class="fa fa-car"></span>
           <span style="font-size:10px;">房间距离</span>
         </view>
-        <view class="welfareHeadItemContent">30分</view>
+        <view class="welfareHeadItemContent">{{roomProcess*10}}米</view>
       </view>
 
       <view class="welfareHeadItem">
@@ -63,7 +66,7 @@
           <span class="fa fa-bicycle"></span>
           <span style="font-size:10px;">我的距离</span>
         </view>
-        <view class="welfareHeadItemContent">30分</view>
+        <view class="welfareHeadItemContent">{{process*10}}米</view>
       </view>
     </view>
 
@@ -71,71 +74,42 @@
     
   <scroll-view class="welfareContent" scroll-y>
 
-    <view class="welfareContentButton">开始战斗</view>
+    <view class="welfareContentButton" bindtap='startClick'>开始战斗</view>
 
     <view class="welfareRedPaperList">
-      <view class="welfareRedPaperItem" bindtap='redPackClick'>
-        
-        <view class="welfareRedPaperItemContent">
-        
-        </view>
-      </view>
+      <block wx:for="{{redPacks}}" wx:for-item="redPack">
+        <view class="welfareRedPaperItem gray" bindtap='redPackClick' id="{{redPack.id}}" wx:if="{{redPack.isReceived}}">
+          <image class="welfareRedPaperItemImg" src="{{redPack.senderImg}}"></image>
+          <view class="welfareRedPaperItemContent">
+          </view>
 
-      <view class="welfareRedPaperItem">
-        <view class="welfareRedPaperItemContent">
-        
+           <span style="font-size:10px;color:white;position:absolute;top:70px;left:50%;display:block;width:100px;margin-left:-50px;">已领取</span>
         </view>
-      </view>
+
+        <view class="welfareRedPaperItem" bindtap='redPackClick' id="{{redPack.id}}" wx:elif="{{redPack.receiveNum<redPack.num}}">
+          <image class="welfareRedPaperItemImg" src="{{redPack.senderImg}}"></image>
+          <view class="welfareRedPaperItemContent">
+          </view>
+
+          <span style="font-size:10px;color:white;position:absolute;top:70px;left:50%;display:block;width:100px;margin-left:-50px;">{{redPack.receiveNum}}/{{redPack.num}}</span>
+        </view>
+
+        <view class="welfareRedPaperItem gray" bindtap='redPackClick' id="{{redPack.id}}" wx:else>
+          <image class="welfareRedPaperItemImg" src="{{redPack.senderImg}}"></image>
+          <view class="welfareRedPaperItemContent">
+          </view>
+
+          <span style="font-size:10px;color:white;position:absolute;top:70px;left:50%;display:block;width:100px;margin-left:-50px;">红包已领完</span>
+        </view>
+      </block>
     </view>
   </scroll-view>
 
   <scroll-view class="welfareRecord" scroll-y>
-    <view>
-      <image src="http://on3s1z2us.bkt.clouddn.com/29687e12c5d54857b860453afa6a7c35.png" class="welfareRecordImage"></image>
-      <view class="welfareRecordTime">2014-7-12 22:21:22</view>
-      <view class="welfareRecordContent">川川参与获取经历14分</view>
-    </view>
-
-    <view>
-      <image src="http://on3s1z2us.bkt.clouddn.com/29687e12c5d54857b860453afa6a7c35.png" class="welfareRecordImage"></image>
-      <view class="welfareRecordTime">2014-7-12 22:21:22</view>
-      <view class="welfareRecordContent">川川参与获取经历14分</view>
-    </view>
-
-    <view>
-      <image src="http://on3s1z2us.bkt.clouddn.com/29687e12c5d54857b860453afa6a7c35.png" class="welfareRecordImage"></image>
-      <view class="welfareRecordTime">2014-7-12 22:21:22</view>
-      <view class="welfareRecordContent">川川参与获取经历14分</view>
-    </view>
-
-    <view>
-      <image src="http://on3s1z2us.bkt.clouddn.com/29687e12c5d54857b860453afa6a7c35.png" class="welfareRecordImage"></image>
-      <view class="welfareRecordTime">2014-7-12 22:21:22</view>
-      <view class="welfareRecordContent">川川参与获取经历14分</view>
-    </view>
-
-     <view>
-      <image src="http://on3s1z2us.bkt.clouddn.com/29687e12c5d54857b860453afa6a7c35.png" class="welfareRecordImage"></image>
-      <view class="welfareRecordTime">2014-7-12 22:21:22</view>
-      <view class="welfareRecordContent">川川参与获取经历14分</view>
-    </view>
-
-     <view>
-      <image src="http://on3s1z2us.bkt.clouddn.com/29687e12c5d54857b860453afa6a7c35.png" class="welfareRecordImage"></image>
-      <view class="welfareRecordTime">2014-7-12 22:21:22</view>
-      <view class="welfareRecordContent">川川参与获取经历14分</view>
-    </view>
-
-     <view>
-      <image src="http://on3s1z2us.bkt.clouddn.com/29687e12c5d54857b860453afa6a7c35.png" class="welfareRecordImage"></image>
-      <view class="welfareRecordTime">2014-7-12 22:21:22</view>
-      <view class="welfareRecordContent">川川参与获取经历14分</view>
-    </view>
-
-     <view>
-      <image src="http://on3s1z2us.bkt.clouddn.com/29687e12c5d54857b860453afa6a7c35.png" class="welfareRecordImage"></image>
-      <view class="welfareRecordTime">2014-7-12 22:21:22</view>
-      <view class="welfareRecordContent">川川参与获取经历333333分</view>
+    <view wx:for="{{roomRecords}}" wx:for-item="record">
+      <image src="{{record.imgUrl}}" class="welfareRecordImage"></image>
+      <view class="welfareRecordTime">{{record.happenTime}}</view>
+      <view class="welfareRecordContent">{{record.log}}</view>
     </view>
   </scroll-view>
 </view>

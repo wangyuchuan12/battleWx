@@ -1,5 +1,5 @@
 <scroll-view class="battleHomeContentList">
-  <view class="" bindtap='roomManagerClick'>房间管理</view>
+  <button class="" bindtap='roomManagerClick'>房间管理</button>
 
   <block wx:for="{{battles}}" wx:for-item="battle">
     <view class="battleHomeContentItem" id="{{battle.id}}" bindtap='itemClick'>

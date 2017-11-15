@@ -69,7 +69,7 @@
           <view class="personalAttrDataHeader personalAttrDataHeaderMoney" style="z-index:1000;position: absolute;top:-3px;left:-2px;"></view>
                 
           <view id="progressbarMoney" style="width:100%;height:20px;border-radius:20px;display:inline-block;top: 0px;vertical-align: top;background-color:RGBA(139,76,32,1)">
-            <view class="progress-label2" id="progressLabel2" style="border-radius:20px;color:RGBA(255,237,109,1)">{{amountBalance}}</view>
+            <view class="progress-label2" id="progressLabel2" style="border-radius:20px;color:RGBA(255,237,109,1)">{{amountBalance}}元</view>
           </view>
                 
           <view class="personalAttrDataHeader personalAttrDataHeaderPlus" style="left:79%;top:0px;position: absolute;display:none;"></view>

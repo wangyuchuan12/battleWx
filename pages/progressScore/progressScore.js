@@ -9,8 +9,10 @@ var currentLoveCoolingRequest = require("../../utils/currentLoveCoolingRequest.j
 
 var questionAnswerRequest = require("../../utils/questionAnswerRequest.js");
 var membersRankUtil = require("../../utils/membersRankUtil.js");
-var progressScoreCache = require("../../utils/cache/progressScoreCache.js");
+var progressScoreCache = require("../../utils/cache/progressScoreCache.js"); 
 var battleTakepartCache = require("../../utils/cache/battleTakepartCache.js");
+
+var syncPaperDateRequest = require("../../utils/syncPaperDateRequest.js");
 var outThis;
 var requestTarget;
 var layerout = new baseLayerout.BaseLayerout({
@@ -253,6 +255,7 @@ var layerout = new baseLayerout.BaseLayerout({
     this.initQuestionResultData(battleMemberPaperAnswerId,{
       success:function(){
         outThis.hideLoading();
+        outThis.syncPaperData();
       },
       fail:function(){
         outThis.hideLoading();
@@ -402,10 +405,28 @@ var layerout = new baseLayerout.BaseLayerout({
 
   onUnload: function () {
     requestTarget.stop();
+    var pages = getCurrentPages();
+    var prevPage = pages[pages.length - 2];
+    if (prevPage.initRoomInfoFromRequest){
+      prevPage.initRoomInfoFromRequest();
+    }
   },
 
   onHide: function () {
     requestTarget.stop();
+  },
+
+  syncPaperData:function(){
+    var battleId = this.data.battleId;
+    var roomId = this.data.roomId;
+    syncPaperDateRequest.syncPapersData(battleId,roomId,{
+      success:function(){
+        console.log("syncPaperDataSuccess");
+      },
+      fail:function(){
+        
+      }
+    })
   },
 
   onLoad: function (options) {

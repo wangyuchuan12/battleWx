@@ -10,7 +10,7 @@
     </scroll-view>
 
     <view class="battleTakepartButtons">
-      <button class="battleTakepartButton" bindtap="managerClick" style='width:23%;' wx:if="{{isManager}}">管理</button>
+      <button class="battleTakepartButton" bindtap="managerClick" style='width:23%;' wx:if="{{isManager==1||isOwner==1}}">管理</button>
       <!--<button class="battleTakepartButton" bindtap="signOutClick" style='width:23%;' wx:elif="{{isOwner&&status!=3}}">退出</button>-->
       <button class="battleTakepartButton" bindtap="createClick" style='width:23%;' wx:else>创建</button>
       <button class="battleTakepartButton" open-type="share" style="width:25%;background:RGBA(141,165,234,1);">邀请</button>
@@ -40,10 +40,10 @@
     </view>
 
     <view class="battleTakepartInfo">
-      <view class="battleTakepartInfoTitle">{{battleInfoName}}</view>
+      <view class="battleTakepartInfoTitle">{{roomInfoName}}</view>
 
       <scroll-view class="battleTakepartInfoContent" scroll-y >
-        {{battleInfoContent}}
+        {{roomInfoContent}}
       </scroll-view>
     </view>
 

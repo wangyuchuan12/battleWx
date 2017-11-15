@@ -7,8 +7,8 @@ var layerout = new baseLayerout.BaseLayerout({
    */
   data: {
     typeId:"",
-    roomId:"1",
-    battleId:"1",
+    roomId:"",
+    battleId:"",
     takepartType:0,
     isTakepartBean:0,
     isTakepartMasonry:0,
@@ -187,6 +187,13 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var roomId = options.roomId;
+    var battleId = options.battleId;
+    console.log("..........roomId:"+roomId+",battleId:"+battleId);
+    this.setData({
+      roomId:roomId,
+      battleId: battleId
+    });
     var outThis = this;
     redPackRequest.typesRequest({
       success:function(types){
@@ -216,7 +223,9 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   submit:function(){
-    console.log("submit");
+    
+    var outThis = this;
+    this.showLoading();
     var roomId = this.data.roomId;
     var takepartBean = this.data.takepartBean;
     var takepartMasonry = this.data.takepartMasonry;
@@ -323,7 +332,10 @@ var layerout = new baseLayerout.BaseLayerout({
 
     redPackRequest.addRequest(params,{
       success:function(){
-        console.log("success");
+        outThis.hideLoading();
+        wx.navigateBack({
+          
+        });
       },
       fail:function(){
         console.log("fail");

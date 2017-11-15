@@ -998,9 +998,14 @@ trendBetween: function(id,begin, end,callback,flag) {
     this.toPosition(id,begin, {
       success: function (index) {
         var index = index + 1;
-        outThis.trendBetween(id,index, end,callback);
+        
         if(flag){
           outThis.containerScrollToDom(index);
+          setTimeout(function(){
+            outThis.trendBetween(id, index, end, callback);
+          },1000);
+        }else{
+          outThis.trendBetween(id, index, end, callback);
         }
         if(begin>=end){
           callback.success();
