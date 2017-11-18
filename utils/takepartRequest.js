@@ -46,6 +46,12 @@ function battleTakepart(battleId,roomId,callback) {
     },
     roomFull:function(){
       callback.roomFull();
+    },
+    beanNotEnough:function(){
+      callback.beanNotEnough();
+    },
+    masonryNotEnough:function(){
+      callback.masonryNotEnough();
     }
   });
 }
@@ -70,6 +76,12 @@ function requestBattleTakepart(battleId, roomId,callback) {
           callback.roomFull();
         }else if(resp.errorCode==3){
           callback.roomEnd();
+        } else if (resp.errorCode==4){
+          callback.beanNotEnough();
+        } else if (resp.errorCode == 5){
+          callback.masonryNotEnough();
+        }else{
+          callback.fail();
         }
       }
     },

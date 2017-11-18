@@ -1,6 +1,8 @@
 @import '../assembly/selectInput/selectInput.wxss';
 
 @import '../assembly/attrPlug/attrPlug.wxss';
+
+@import '../manager/roomRedpacks/roomRedpacks.wxss';
 .battleHome{
   width:100%;
   height:90vh;
@@ -83,17 +85,32 @@
 
 .battleHomeContentItem{
   background:white;
-  padding-top:10px;
-  padding-bottom:10px;
-  padding-left:10px;
   width:100%;
   border-bottom:2px solid RGBA(247,247,247,1);
+  position: relative;
+  text-align: left;
+  padding-bottom:10px;
+
+  margin-top:20px;
 }
 
 .battleHomeContentItemImage{
-  width:70px;
-  height:50px;
+  width:40%;
+  height:90px;
+  position: relative;
+  margin: 0 auto;
   display:inline-block;
+  border-radius:10px;
+  left:20px;
+}
+
+.battleHomeContentItemSmallImage{
+  position: absolute;
+  top:40px;
+  left:30px;
+  width:30px;
+  height:30px;
+  z-index:100;
   border-radius:10px;
 }
 
@@ -103,10 +120,15 @@
   padding-left:10px;
   padding-top:5px;
   width:45%;
+  text-align: left;
 }
 
 .battleHomeContentItemPersonalName{
   color:red;
+  position: absolute;
+  border-radius:5px;
+  top:10px;
+  left:50%;
 }
 
 .battleHomeContentItemPersonalInstruction{
@@ -115,15 +137,16 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  
 }
 
 .battleHomeContentItemFooter{
   display:block;
   font-size:12px;
-  float: right;
-  right:20px;
-  top:10px;
-  position: relative;
+  left:50%;
+  top:40px;
+  position: absolute;
+  color: black;
 }
 
 .battleHomeContentMyself{
@@ -157,5 +180,4 @@
 }
 
 .battleHomeContentList{
-  
 }

@@ -4,6 +4,10 @@ var battleRoomRequest = require("../../utils/battleRoomRequest.js");
 
 var battleMemberInfoRequest = require("../../utils/battleMemberInfoRequest.js");
 
+var battleMembersRequest = require("../../utils/battleMembersRequest.js");
+
+var membersRankUtil = require("../../utils/membersRankUtil.js");
+
 var redPackListRequest = require("../../utils/redPackListRequest.js");
 
 var receiveRedPackRequest = require("../../utils/receiveRedpackRequest.js");
@@ -11,6 +15,8 @@ var receiveRedPackRequest = require("../../utils/receiveRedpackRequest.js");
 var battleRoomRecordsRequest = require("../../utils/battleRoomRecordsRequest.js");
 
 var redPackCache = require("../../utils/cache/redPackCache.js");
+
+var stageRankUtil = require("../../utils/stageRankUtil.js");
 
 var outThis = this;
 var layerout = new baseLayerout.BaseLayerout({
@@ -49,8 +55,12 @@ var layerout = new baseLayerout.BaseLayerout({
     maxinum:0,
 		
     mininum:0,
+    
+    stages:[{
+      stageIndex:0,
+      redPacks:[]
+    }],
 
-    redPacks:[],
     roomRecords:[]
   },
 
@@ -63,13 +73,25 @@ var layerout = new baseLayerout.BaseLayerout({
       });
     },
     redPackOpen:function(id){
-      var redPacks = outThis.data.redPacks;
-      for (var i = 0; i < redPacks.length;i++){
-        var redPack = redPacks[i];
-        if(redPack.id==id){
-          outThis.showRedPack(redPack);
+
+      var stages = outThis.data.stages;
+      for(var i=0;i<stages.length;i++){
+        var stage = stages[i];
+        var redpacks = stage.redpacks;
+        for (var j = 0; j < redpacks.length; j++) {
+          var redPack = redpacks[j];
+          if (redPack.id == id) {
+            if (redPack.receiveNum<redPack.num){
+              outThis.showRedPack(redPack);
+            }else{
+              outThis.eventListener.skipToRedpackInfo(id);
+            }
+           
+            return;
+          }
         }
       }
+      
     },
     receiveRedpackInfo:function(id){
       receiveRedPackRequest.receiveRedpack(id,outThis.data.battleId,outThis.data.roomId,{
@@ -124,6 +146,21 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
+  initRank:function(){
+    var rank = 1;
+    var battleMembers = battleMembersRequest.battleMembers;
+    battleMembers = membersRankUtil.rankByProcess(battleMembers);
+    var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
+    for(var i=0;i<battleMembers.length;i++){
+      if (battleMembers[i].id == memberInfo.id){
+          rank = i+1;
+      }
+    }
+    this.setData({
+      rank:rank
+    });
+  },
+
   initRoomInfoFromRequest:function(){
     var outThis = this;
     var battleId = this.data.battleId;
@@ -146,6 +183,11 @@ var layerout = new baseLayerout.BaseLayerout({
       score = 0;
     }
 
+    var roomScore = memberInfo.roomScore;
+    if(!roomScore){
+      roomScore = 0;
+    }
+
     this.setData({
       loveCount: memberInfo.loveCount,
       loveResidule: memberInfo.loveResidule,
@@ -166,7 +208,7 @@ var layerout = new baseLayerout.BaseLayerout({
       speedCoolSecond: memberInfo.speedCoolSecond,
 
       roomProcess: memberInfo.roomProcess,
-      roomScore: memberInfo.roomScore,
+      roomScore: roomScore,
 
       num: memberInfo.num,
 
@@ -175,23 +217,30 @@ var layerout = new baseLayerout.BaseLayerout({
       mininum: memberInfo.mininum,
       score:score
     });
+
+    this.initRank();
   },
 
   initRedPacks:function(){
     var outThis = this;
     var roomId = this.data.roomId;
     redPackListRequest.redPacks(roomId,{
-      success:function(redPacks){
-        for(var i=0;i<redPacks.length;i++){
-          var redPack = redPacks[i];
-          if (redPackCache.isReceived(redPack.id)){
-            redPack.isReceived = true;
-          }else{
-            redPack.isReceived = false;
+      success: function (stages){
+        stages = stageRankUtil.rankByIndex(stages);
+        for (var j = 0; j < stages.length;j++){
+          var redPacks = stages[j].redpacks;
+          for (var i = 0; i < redPacks.length; i++) {
+            var redPack = redPacks[i];
+            if (redPackCache.isReceived(redPack.id)) {
+              redPack.isReceived = true;
+            } else {
+              redPack.isReceived = false;
+            }
           }
         }
+        
         outThis.setData({
-          redPacks:redPacks
+          stages: stages
         });
       },
       fail:function(){
@@ -232,7 +281,7 @@ var layerout = new baseLayerout.BaseLayerout({
   onShow: function () {
     this.initRoomInfo();
     this.initRedPacks();
-    this.initRoomRecords();
+    //this.initRoomRecords();
   },
 
   /**

@@ -21,7 +21,8 @@ var layerout = new baseLayerout.BaseLayerout({
     isDisplayInit:0,
     maxinum:0,
     num:0,
-    redPackNum:0
+    redPackNum:0,
+    isManager:0
   },
 
   /**
@@ -204,7 +205,10 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-  
+    var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
+    this.setData({
+      isManager:memberInfo.isManager
+    });
   },
 
   /**

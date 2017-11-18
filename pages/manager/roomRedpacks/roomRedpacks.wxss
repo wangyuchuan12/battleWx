@@ -33,6 +33,12 @@
 
   left:20px;
 
+  text-align: left;
+
+}
+
+.roomRedPackReward{
+  text-align: left;
 }
 
 .roomRedPackRewardNum{

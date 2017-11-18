@@ -1,5 +1,7 @@
 @import '../assembly/selectInput/selectInput.wxss';
 
+@import '../manager/roomRedpacks/roomRedpacks.wxss';
+
 @import '../manager/battlePeriodManager/battlePeriodManager.wxss';
 
 .battleRoomEdit{

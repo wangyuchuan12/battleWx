@@ -1,4 +1,5 @@
 @import '../assembly/redPackAlertPlug/redPackAlertPlug.wxss';
+@import '../manager/roomRedpacks/roomRedpacks.wxss';
 .welfare{
   background:url("http://7xlw44.com1.z0.glb.clouddn.com/bg3.jpg");
   background-size:100% 100%;
@@ -7,23 +8,37 @@
   height:100vh;
   position: relative;
 }
+
+.welfareBody{
+  width:100%;
+  height:99vh;
+}
+
 .welfareContent{
   width:100%;
-  max-height:50vh;
+  padding-top:10px;
   text-align: center;
 }
 
 .welfareHead{
   text-align: left;
-  height:20vh;
+  max-height:27vh;
   margin: 0px auto;
   position: relative;
   padding-left:10px;
-
 }
 .welfareHeadItem{
   display:inline-block;
   text-align: center;
+  font-weight: bold;
+  color: #fff;
+  text-shadow:1px 1px 1px #333;
+  border-radius: 5px;
+  margin:0 20px 20px 0;
+  position: relative;
+  overflow: hidden;
+
+  background:RGBA(0,118,184,0.5);
 }
 
 .welfareHeadItemContent{
@@ -114,10 +129,14 @@
   text-align: center;
 }
 
+.welfareContentButtons{
+  max-height:18vh;
+  padding-top:20px;
+}
+
 .welfareContentButton{
   background:url('http://on3s1z2us.bkt.clouddn.com/2b9bf4e209d2ad2f341cb26f906775ec.png');
   background-size:100% 100%;
-  margin-top:20px;
   display: inline-block;
   width:70px;
   height:70px;
@@ -127,6 +146,11 @@
   font-weight: bolder;
   border:1px solid RGBA(39,38,54,1);
   border-radius:70px;
+  margin: 0 auto;
+  position: relative;
+  left:50%;
+  margin-left:-35px;
+  text-align: center;
 }
 
 .welfareRedPaperItemImg{
@@ -138,4 +162,32 @@
   left:50%;
   top:25px;
   margin-left:-15px;
+}
+
+.welfareRedPaperStage{
+  color:black;
+  font-weight: bolder;
+  font-size:10px;
+  position: relative;
+  text-align: center;
+  margin-top:0px;
+  margin-bottom:20px;
+}
+
+.welfareRedPaperStageItem{
+  position: relative;
+  height:110px;
+  width:104px;
+  display:inline-block;
+  margin: 0 auto;
+}
+
+.welfareRedPaperStageLabel{
+  border-radius:5px;
+  display:inline-block;
+  margin: 0 auto;
+  position:relative;
+  padding-top:20px;
+  padding-bottom:10px;
+  width:100%;
 }

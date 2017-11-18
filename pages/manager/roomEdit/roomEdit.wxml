@@ -22,16 +22,16 @@
   <view class="formItem" bindtap='redPackListClick'>
     <view class="formItemLabel">红包</view>
     <view class="formItemContent">数量:{{redPackNum}}</view>
-    <view class="fa fa-angle-right formItemFooter"></view>
+    <view class="fa fa-angle-right formItemFooter" wx:if="{{isManager==1}}"></view>
   </view>
 
   <view class="formItem">
     <view class="formItemLabel">成员</view>
     <view class="formItemContent">{{num}}/{{maxinum}}</view>
-    <view class="fa fa-angle-right formItemFooter"></view>
+    <!--<view class="fa fa-angle-right formItemFooter"></view>-->
   </view>
 
-  <view class="labelList">
+  <view class="labelList" wx:if="{{isManager==1}}">
     <view class="switchLabel">
       <view class="switchLabelTitle">是否可搜索</view>
       <switch class="switchLabelSwitch" bindchange='searchSwitch' checked wx:if="{{isSearchInit==1}}"></switch>

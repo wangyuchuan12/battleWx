@@ -43,8 +43,13 @@ var layerout = new baseLayerout.BaseLayerout({
             maxNum: r.maxinum,
             id: r.id,
             imgUrl: r.imgUrl,
-            id:r.id,
-            battleId:r.battleId
+            battleId: r.battleId,
+            smallImgUrl: r.smallImgUrl,
+            isRedpack: r.isRedpack,
+            redpackAmount: r.redpackAmount,
+            redpackMasonry: r.redpackMasonry,
+            redpackBean: r.redpackBean,
+            redPackNum: r.redPackNum
           });
         }
         outThis.setData({

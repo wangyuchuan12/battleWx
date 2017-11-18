@@ -15,6 +15,10 @@ var layerout = new baseLayerout.BaseLayerout({
     takepartBean:0,
     takepartMasonry:0,
     isRoom: 1,
+    stage:{
+      index:0,
+      data: ['无关卡要求', '1关', '2关', '3关', '4关', '5关', '6关', '7关', '8关', '9关', '10关', '11关', '12关', '13关', '14关', '15关', '16关', '17关', '18关', '19关', '20关', '21关', '22关', '23关', '24关', '25关', '26关', '27关', '28关', '29关', '30关']
+    },
     redPacks:[{
 
     }],
@@ -38,6 +42,13 @@ var layerout = new baseLayerout.BaseLayerout({
       isPersonalScoreMeet:0,
       personalScoreMeet:0
     }
+  },
+
+  bindPickerChange:function(e){
+    var index = e.detail.value;
+    this.setData({
+      "stage.index":index
+    });
   },
 
   takepartMasonryChange:function(e){
@@ -189,7 +200,6 @@ var layerout = new baseLayerout.BaseLayerout({
   onLoad: function (options) {
     var roomId = options.roomId;
     var battleId = options.battleId;
-    console.log("..........roomId:"+roomId+",battleId:"+battleId);
     this.setData({
       roomId:roomId,
       battleId: battleId
@@ -252,7 +262,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
     var battleId = this.data.battleId;
 
-    console.log("isRoomProcessMeet:" + isRoomProcessMeet);
+    var index = this.data.stage.index;
 
     if(!roomId){
       this.showToast("房间Id不能为空");
@@ -329,6 +339,7 @@ var layerout = new baseLayerout.BaseLayerout({
     params.roomScoreMeet = roomScoreMeet;
     params.roomMeetNum = roomMeetNum;
     params.battleId = battleId;
+    params.stageIndex = index;
 
     redPackRequest.addRequest(params,{
       success:function(){

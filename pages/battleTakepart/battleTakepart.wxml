@@ -17,19 +17,29 @@
       <button class="battleTakepartButton" bindtap="takepartClick" style="width:45%;background:RGBA(255,164,4,1);" wx:if="{{status==0||status==3}}">               参加
       </button>
 
-       <button class="battleTakepartButton" bindtap="takepartClick" style="width:45%;background:RGBA(255,164,4,1);"  bindtap="takepartClick" wx:else >               开始
-      </button>
-
-      <!--
       <button class="battleTakepartButton" bindtap="takepartClick" style="width:45%;background:RGBA(255,164,4,1);" wx:if="{{status==1&&(mininum-num)<=0}}">              开始
       </button>
 
        <button class="battleTakepartButton" style="width:45%;background:green;color:white;" wx:if="{{status==1&&(mininum-num)>0}}">              还差{{mininum-num}}人
       </button>
 
-      <button class="battleTakepartButton" bindtap="skipToRank" style="width:45%;background:RGBA(255,164,4,1);" wx:if="{{status==2}}">               查看结果
+      <button class="battleTakepartButton" bindtap="takepartClick" style="width:45%;background:RGBA(255,164,4,1);" wx:if="{{status==2}}">进入
       </button>
-      -->
+
+    </view>
+
+    <view class="battleTakepartCost">
+      <view class="battleTakepartCostItem" style="background:red;width:23%;"></view>
+      <view class="battleTakepartCostItem" style="background:green;width:25%"></view>
+      <view class="battleTakepartCostItem" style="background:white;width:45%;" wx:if="{{(status==0||status==3)&&(costMasonry>0||costBean>0)}}">
+        <span style="font-size:10px;">花费：</span>
+          <block wx:if="{{costBean>0}}">
+            <view class="personalAttrDataHeader personalAttrDataHeaderBean" style="top:7px;position:relative"></view>×{{costBean}}
+          </block>
+          <block wx:if="{{costMasonry>0}}">
+            <view class="personalAttrDataHeader personalAttrDataHeaderMasonry" style=""></view>×{{costMasonry}}
+          </block>
+      </view>
     </view>
 
     <view class="battleTakepartSecondButtons" style="display:none;">

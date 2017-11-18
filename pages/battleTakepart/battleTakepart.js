@@ -159,7 +159,9 @@ var layerout = new baseLayerout.BaseLayerout({
           roomInfoContent: roomInfo.instruction,
           maxinum: roomInfo.maxinum,
           mininum: roomInfo.mininum,
-          owner:roomInfo.owner
+          owner:roomInfo.owner,
+          costBean:roomInfo.costBean,
+          costMasonry: roomInfo.costMasonry
         });
       },
       fail: function () {
@@ -291,12 +293,11 @@ var layerout = new baseLayerout.BaseLayerout({
 
   skipToProgress:function(){
     wx.navigateTo({
-      url: '../welfare/welfare?model=0&battleId='+battleId+"&roomId="+roomId
+      url: '../progressScore/progressScore?battleId=' + battleId + "&roomId=" + roomId
     });
   },
 
-  //点击参赛请求
-  takepartClick:function(){
+  doTakepart:function(){
     var outThis = this;
     var members = outThis.data.members;
     var num = this.data.num;
@@ -315,21 +316,25 @@ var layerout = new baseLayerout.BaseLayerout({
       }, "创建", "取消");
       return;
     }*/
+    if(status==2){
+      outThis.skipToProgress();
+      return;
+    }
     this.showLoading();
-    takepartRequest.battleTakepart(battleId,roomId,{
-      success:function(member){
+    takepartRequest.battleTakepart(battleId, roomId, {
+      success: function (member) {
         num++;
         outThis.hideLoading();
         outThis.showToast("报名成功");
-        members.splice(num-1,1,{
+        members.splice(num - 1, 1, {
           imgUrl: member.headImg
         });
         outThis.setData({
           members: members,
-          num:num,
-          status:1
+          num: num,
+          status: 1
         });
-        if (mininum<=num){
+        if (mininum <= num) {
           requestTarget.stop();
         }
         var battleMembers = battleTakepartCache.members;
@@ -338,42 +343,102 @@ var layerout = new baseLayerout.BaseLayerout({
 
         battleTakepartCache.members = battleMembers;
 
-        outThis.skipToProgress();
-      },
-      fail:function(errorMsg){
-        outThis.hideLoading();
-        if (!errorMsg){
-          outThis.showToast("网络繁忙");
+
+        if (num >= mininum){
+          outThis.skipToProgress();
         }else{
+          outThis.showConfirm("还差"+(mininum-num)+"个人", "点击邀请，邀请人参与吧", {
+            confirm: function () {
+              
+            },
+            cancel: function () {
+
+            }
+
+          }, "确定", "取消");
+        }
+      },
+      beanNotEnough:function(){
+        outThis.hideLoading();
+        outThis.showConfirm("智慧豆不足", "智慧豆不足，是否充值智慧豆", {
+          confirm: function () {
+            wx.navigateTo({
+              url: '../mall/mall'
+            });
+          },
+          cancel: function () {
+
+          }
+
+        }, "充值", "取消");
+      },
+      masonryNotEnough:function(){
+        outThis.hideLoading();
+        outThis.showToast("砖石不足");
+      },
+      fail: function (errorMsg) {
+        outThis.hideLoading();
+        if (!errorMsg) {
+          outThis.showToast("网络繁忙");
+        } else {
           outThis.showToast(errorMsg);
         }
       },
-      battleIn:function(){
+      battleIn: function () {
         outThis.hideLoading();
         outThis.skipToProgress();
       },
-      battleEnd:function(){
+      battleEnd: function () {
         outThis.hideLoading();
         outThis.skipToProgress();
       },
-      roomEnd:function(){
+      roomEnd: function () {
         outThis.hideLoading();
         outThis.showToast("比赛已经结束");
       },
-      roomFull:function(){
+      roomFull: function () {
         outThis.hideLoading();
         outThis.showConfirm("房间人数已满", "是否创建新房间", {
-          confirm:function(){
+          confirm: function () {
             outThis.createClick();
           },
-          cancel:function(){
+          cancel: function () {
 
           }
 
         }, "创建", "取消");
       }
     });
+  },
 
+  //点击参赛请求
+  takepartClick:function(){
+    var outThis = this;
+    var status = this.data.status;
+    var costBean = this.data.costBean;
+    var costMasonry = this.data.costMasonry;
+    if ((status == 0 || status == 3) && (costBean > 0 || costMasonry>0)){
+      var str = "创建该房间需要花费"
+      if(costBean>0){
+        str=str+costBean+"颗智慧豆";
+        if (costMasonry>0){
+          str = str + ","+costMasonry + "颗砖石";
+        }
+      } else if (costMasonry>0){
+        str = str + costMasonry + "颗砖石";
+      }
+      console.log("str:"+str);
+      this.showConfirm("是否参与", str, {
+        confirm:function(){
+          outThis.doTakepart();
+        },
+        cancel:function(){
+
+        }
+      }, "参与", "取消")
+    }else{
+      outThis.doTakepart();
+    }
   },
   /**
    * 生命周期函数--监听页面加载

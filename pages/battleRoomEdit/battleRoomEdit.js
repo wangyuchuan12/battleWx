@@ -15,7 +15,7 @@ var layerout = new baseLayerout.BaseLayerout({
   },
   data: {
     enablePublic:1,
-    isPublic:1,
+    isPublic:0,
     selectPeriodId:null,
     periods:[],
     rooms:[{
@@ -40,7 +40,7 @@ var layerout = new baseLayerout.BaseLayerout({
       status: 0
       }, {
         id: "room50",
-        maxinum: 50,
+        maxinum: 48,
         mininum: 2,
         status: 0
     }, {
@@ -86,7 +86,7 @@ var layerout = new baseLayerout.BaseLayerout({
           });
         } else {
           outThis.setData({
-            isPublic: 1,
+            isPublic: 0,
             enablePublic: 1
           });
         }

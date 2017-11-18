@@ -36,6 +36,17 @@
     </view>
   </block>
 
+  
+
+  <view class="redPackEditItem">
+    <view class="redPackEditItemLabel">选择通关要求</view>
+    <picker bindchange="bindPickerChange"  range="{{stage.data}}" index="{{stage.index}}">
+        <view style="color:red;padding-left:10px;padding-top:10px;">
+            {{stage.data[stage.index]}}
+        </view>
+    </picker>
+  </view>
+
   <view class="redPackEditItem">
     <view class="redPackEditItemLabel">是否需要人数满足</view>
     <switch class="redPackEditItemSwitch" bindchange='roomMeetChange'></switch>

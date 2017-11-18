@@ -85,7 +85,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
         },
         fail:function(){
-
+          console.log("fail");
         }
       });
       
@@ -187,6 +187,14 @@ var layerout = new baseLayerout.BaseLayerout({
       }
       
     },50);
+  },
+
+  redPackButtonClick:function(){
+    var battleId = this.data.battleId;
+    var roomId = this.data.roomId;
+    wx.redirectTo({
+      url: '../welfare/welfare?model=0&battleId=' + battleId + "&roomId=" + roomId
+    });
   },
 
   startResult: function (rightCount, wrongCount, process, battleMemberPaperAnswerId,rewardBean,isPass){

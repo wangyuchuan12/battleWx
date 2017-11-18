@@ -28,7 +28,6 @@ var layerout = new baseLayerout.BaseLayerout({
       }
       outThis.showLoading();
       var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
-      console.log("memberInfo:"+JSON.stringify(memberInfo));
       questionAnswerRequest.requestBattleQuestionAnswer({
         id: questionId,
         type: 0,
@@ -111,7 +110,6 @@ var layerout = new baseLayerout.BaseLayerout({
       }
       outThis.showLoading();
       var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
-      console.log("memberInfo stageIndex:" + memberInfo.stageIndex);
       questionAnswerRequest.requestBattleQuestionAnswer({
         id: questionId,
         type:0,

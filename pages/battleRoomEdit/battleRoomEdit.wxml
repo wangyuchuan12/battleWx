@@ -55,7 +55,7 @@
     </block>
    
   </scroll-view>
-  <view class="isPublic">
+  <view class="isPublic" style='display:none;'>
     <view class="isPublicLable">允许陌生人通过快速加入进入</view>
      <switch class="isPublicSwitch" checked bindchange='isPublicSwitch' wx:if="{{isPublic==1&&enablePublic==1}}"></switch>
      <switch class="isPublicSwitch" bindchange='isPublicSwitch' wx:if="{{isPublic==0&&enablePublic==1}}"></switch>

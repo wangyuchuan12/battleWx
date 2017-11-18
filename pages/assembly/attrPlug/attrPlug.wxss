@@ -52,7 +52,7 @@
     position: absolute;
     text-align:left;
     padding-left:30px;
-    top:-1px;
+    top:0px;
     width:100%;
     font-weight: bold;
     color:RGBA(77,209,255,1);

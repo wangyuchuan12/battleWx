@@ -57,6 +57,9 @@
       <view class="fa fa-shopping-cart" style="font-size:30px;display:inline-block"></view>
       <view style="font-size:10px;font-weight: bold">商城</view>
     </view>
+    <view class="redPackImgButton" bindtap='redPackButtonClick'>
+      <image src="http://7xugu1.com1.z0.glb.clouddn.com/e7369bcec70f77bccd1b9a6ee16cf1b6.png" class="redPackImgButtonImg"></image>
+    </view>
     <view class="progressScoreBackButton" bindtap='skipToTakepart' style="background:RGBA(255,255,255,0.5);color:black;">返回</view>
   </view>
 </view>
