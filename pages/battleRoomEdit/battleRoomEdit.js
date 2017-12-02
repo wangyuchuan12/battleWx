@@ -21,22 +21,22 @@ var layerout = new baseLayerout.BaseLayerout({
     rooms:[{
       id:"room0",
       maxinum:4,
-      mininum:2,
+      mininum:4,
       status:0
     }, {
       id: "room1",
       maxinum: 8,
-      mininum: 2,
+      mininum: 8,
       status: 0
       }, {
         id: "room2",
         maxinum: 12,
-        mininum: 2,
+        mininum: 12,
         status: 0
     }, {
       id: "room3",
       maxinum: 16,
-      mininum: 2,
+      mininum: 16,
       status: 0
       }, {
         id: "room50",
@@ -110,17 +110,15 @@ var layerout = new baseLayerout.BaseLayerout({
         console.log(JSON.stringify(data));
         if (data.qualified) {
           wx.navigateTo({
-            url: '../confirmPeriodList/confirmPeriodList'
+            url: '../confirmPeriodList/confirmPeriodList?battleId='+battleId
           });
         } else {
           if (data.status == 0) {
-            /*
-            wx.navigateTo({
-              url: '../applyExpert/applyExpert'
-            });*/
-            outThis.showConfirm("申请出题资格", "对不起，您目前还没有该题库的出题资格，请搜索公众号【疯狂题库】中申请", {
+            outThis.showConfirm("申请出题资格", "对不起，您目前还没有该题库的出题资格，是否申请出题资格", {
               confirm: function () {
-
+                wx.navigateTo({
+                  url: '../applyExpert/applyExpert?battleId='+battleId
+                });
               },
               cancel: function () {
 
@@ -318,8 +316,11 @@ var layerout = new baseLayerout.BaseLayerout({
   */
   onLoad: function (options) {
     outThis = this;
-    battleId = options.battleId;
-    
+    var battleId = options.battleId;
+
+    this.setData({
+      "selectInputData.id":battleId
+    });
   },
 
   /**
@@ -333,9 +334,12 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    var battleId = this.data.selectInputData.id;
     if(!battleId){
       battleId = cacheUtil.battleId;
     }
+
+    console.log("battleId:"+battleId);
     if (battleId){
       this.initBattles(battleId);
     }else{

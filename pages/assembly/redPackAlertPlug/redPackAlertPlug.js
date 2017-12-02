@@ -113,6 +113,9 @@ var redPackAlertPlug = {
     var outThis = this;
     var id = this.data.redPackAlertPlugData.id;
     outThis.eventListener.receiveRedpackInfo(id);
+    this.setData({
+      "redPackAlertPlugData.display": "none"
+    });
   }
 }
 

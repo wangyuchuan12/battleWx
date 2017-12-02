@@ -1,4 +1,4 @@
-<scroll-view class="battleHomeContentList">
+<scroll-view class="battleHomeContentList" scroll-y>
       <block wx:for="{{rooms}}" wx:for-item="room">
         <view class="battleHomeContentItem" id="{{room.id}}" bindtap='itemClick'>
           <image src="{{room.imgUrl}}" class="battleHomeContentItemImage"></image>

@@ -723,8 +723,8 @@ var layerout = new baseLayerout.BaseLayerout({
       return;
     }
 
-    if(question.length>100){
-      this.showToast("问题输入不能超过100个字符");
+    if(question.length>200){
+      this.showToast("问题输入不能超过200个字符");
       return;
     }
 
@@ -736,8 +736,8 @@ var layerout = new baseLayerout.BaseLayerout({
           return;
         }
 
-        if(selectOption.content.length>10){
-          this.showToast("选项不能超过10个字节");
+        if(selectOption.content.length>20){
+          this.showToast("选项不能超过20个字节");
           return;
         }
 
@@ -1100,6 +1100,7 @@ var layerout = new baseLayerout.BaseLayerout({
    */
   onShow: function () {
     var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
+    console.log("memberInfo:"+JSON.stringify(memberInfo));
     if(memberInfo){
       this.setData({
         isManager:memberInfo.isManager

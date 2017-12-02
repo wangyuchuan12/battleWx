@@ -77,6 +77,7 @@ function requestUpdateBattleInfo(params,callback){
 function requestBattleInfo(battleId,callback){
   request.request(battleInfoUrl,{battleId: battleId}, {
     success: function (resp) {
+      console.log("requestBattleInfo:"+JSON.stringify(resp));
       if (resp.success) {
         callback.success(resp.data);
       } else {
@@ -108,6 +109,7 @@ function requestBattleImgUpdate(battleId, imgUrl, callback) {
 function requestAddPeriod(battleId,callback){
   request.request(addPeriodUrl, {battleId:battleId}, {
     success: function (resp) {
+      console.log("resp:"+JSON.stringify(resp));
       if (resp.success) {
         callback.success(resp.data);
       } else {

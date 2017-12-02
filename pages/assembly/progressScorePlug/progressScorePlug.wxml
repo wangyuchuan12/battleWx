@@ -41,7 +41,7 @@
                 </view>
             </view>
               <view style="width:100px;height:50px;background:RGBA(114,80,113,1); vertical-align: top;display:inline-block;color:white;vertical-align:top;border-radius:5px;" bindtap='speedCoolClick'>
-                加速{{loveCooling.speedCoolSecond/60|Int}}分钟
+                加速{{loveCooling.speedCoolSecond}}秒钟
                 <view>
                   <view class="personalAttrDataHeader personalAttrDataHeaderBean" style=""></view>
                   <span style="vertical-align: top">×{{loveCooling.speedCoolBean}}</span>
@@ -50,7 +50,7 @@
           </view>
     </view>
 
-    <scroll-view scroll-y scroll-top="{{containerScrollTop}}" scroll-with-animation="true" scroll-into-view="toDom{{currentDom}}" id = "progressScoreContainer" style="position: relative;height:100vh"> 
+    <scroll-view scroll-y scroll-top="{{containerScrollTop}}" scroll-with-animation="true" scroll-into-view="toDom{{currentDom}}" id = "progressScoreContainer" style="position: relative;height:100vh" bindscroll="scrollEvent"> 
       
       <view class="progressScore" id="progressScore">
             <view class="progressScoreBar">

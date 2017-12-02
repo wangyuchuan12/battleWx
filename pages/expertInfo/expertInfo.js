@@ -27,7 +27,6 @@ var layerout = new baseLayerout.BaseLayerout({
 
     battleExpertRequest.info(battleId, expertId, {
       success: function (data) {
-        console.log("data:"+JSON.stringify(data));
         outThis.setData({
           status:data.status,
           phonenum:data.phonenum,

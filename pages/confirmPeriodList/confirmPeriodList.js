@@ -104,7 +104,10 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    
+    var battleId = options.battleId;
+    this.setData({
+      battleId:battleId
+    });
   },
 
   /**
@@ -118,9 +121,14 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    var battleId = this.data.battleId;
     var outThis = this;
-    battleExpertRequest.confirmPeriods(1, {
+    battleExpertRequest.confirmPeriods(battleId, {
       success: function (periods) {
+        if(!periods||periods.length==0){
+          outThis.addPeriodClick();
+          return;
+        }
         var array = new Array();
         for (var i = 0; i < periods.length; i++) {
           var period = periods[i];

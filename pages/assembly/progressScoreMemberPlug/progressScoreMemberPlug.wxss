@@ -2,6 +2,31 @@
 
 .progressScoreContainerHeaderMembers{
   width:100%;
-  text-align: left;
+  text-align: center;
   padding-top:35px;
+  position: relative;
+
+}
+
+.progressScoreContainerHeaderMemberProgress{
+  position: absolute;
+  top:43px;
+  width:100%;
+}
+
+.progressScoreContainerHeaderRoom{
+  width:90%;
+  margin: 0 auto;
+  top:-10px;
+  position: relative;
+}
+
+.progressScoreContainerHeaderRoomProcess{
+  width:100%;
+}
+
+.progressScoreContainerHeaderMembersVsImg{
+  display:inline-block;
+  width:50px;
+  height:50px;
 }

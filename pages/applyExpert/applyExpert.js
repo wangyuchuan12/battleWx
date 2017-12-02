@@ -34,10 +34,6 @@ var layerout = new baseLayerout.BaseLayerout({
    */
   onLoad: function (options) {
     var battleId = options.battleId;
-    if(!battleId){
-      var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
-      battleId = memberInfo.battleId;
-    }
     this.setData({
       battleId: battleId
     });
@@ -100,9 +96,26 @@ var layerout = new baseLayerout.BaseLayerout({
       success:function(data){
         
         outThis.hideLoading();
-        wx.navigateTo({
-          url: '../expertInfo/expertInfo?battleId=' + data.battleId +"&expertId="+data.id
-        });
+        if(data.status==0){
+          wx.navigateTo({
+            url: '../expertInfo/expertInfo?battleId=' + data.battleId + "&expertId=" + data.id
+          });
+        }else if(data.status==1){
+
+          outThis.showConfirm("申请成功", "快去出题目吧", {
+            confirm:function(){
+              wx.navigateBack({
+                
+              });
+            },
+            cancel:function(){
+              wx.navigateBack({
+
+              });
+            }
+          }, "确定", "取消");
+        }
+        
       },
       fail:function(){
         outThis.showToast("验证码不通过或发生错误");

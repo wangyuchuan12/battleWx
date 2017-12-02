@@ -201,6 +201,14 @@ var layerout = new baseLayerout.BaseLayerout({
     }
   },
 
+  membersClick:function(){
+    var id = this.data.id;
+    var battleId = this.data.battleId;
+    wx.navigateTo({
+      url: '../../battleRank/battleRank?roomId='+id+"&battleId="+battleId
+    });
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

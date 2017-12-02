@@ -36,7 +36,7 @@
           <span class="fa fa-fighter-jet"></span>
           <span style="font-size:10px;">关卡</span>
         </view>
-        <view class="welfareHeadItemContent">第{{stageIndex-1}}/{{stageCount}}关</view>
+        <view class="welfareHeadItemContent">第{{stageIndex}}/{{stageCount}}关</view>
       </view>
       
       <view class="welfareHeadItem">
@@ -44,7 +44,7 @@
           <span class="fa fa-bullhorn"></span>
           <span style="font-size:10px;">消息</span>
         </view>
-        <view class="welfareHeadItemContent">100条</view>
+        <view class="welfareHeadItemContent">0条</view>
       </view>
      
 
@@ -72,12 +72,20 @@
         <view class="welfareHeadItemContent">{{process*10}}米</view>
       </view>
 
-       <view class="welfareHeadItem">
+      <view class="welfareHeadItem">
         <view class="welfareHeadItemLabel">
           <span class="fa fa-users"></span>
           <span style="font-size:10px;">房间分数</span>
         </view>
         <view class="welfareHeadItemContent">{{roomScore}}分</view>
+      </view>
+
+      <view class="welfareHeadItem" bindtap='welfareTakeoutClick' style="background:green;">
+        <view class="welfareHeadItemLabel">
+          <span class="fa fa-get-pocket"></span>
+          <span style="font-size:10px;">提现</span>
+        </view>
+        <view class="welfareHeadItemContent">{{amount}}元</view>
       </view>
 
     </view>

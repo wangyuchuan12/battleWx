@@ -25,7 +25,7 @@
     <view class="fa fa-angle-right formItemFooter" wx:if="{{isManager==1}}"></view>
   </view>
 
-  <view class="formItem">
+  <view class="formItem" bindtap='membersClick'>
     <view class="formItemLabel">成员</view>
     <view class="formItemContent">{{num}}/{{maxinum}}</view>
     <!--<view class="fa fa-angle-right formItemFooter"></view>-->

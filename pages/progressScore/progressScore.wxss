@@ -58,8 +58,9 @@
   width:50px;
   height:50px;
   position: absolute;
-  left:20px;
-  bottom:70px;
+  right:150px;
+  bottom:10px;
+  text-align: center;
 }
 
 .redPackImgButtonImg{
@@ -99,7 +100,7 @@
 
 .displayPanel{
   width:200px;
-  top:45vh;
+  top:30vh;
   left:50%;
   margin-left:-100px;
   position: absolute;
@@ -136,4 +137,76 @@
   color: RGBA(255,252,20,1);
   font-size:50px;
   font-weight: bolder;
+}
+
+.shareAlertPlug{
+  position: fixed;
+  z-index:10000000000;
+  width:250px;
+  height:250px;
+  border-radius: 10px;
+  left:50%;
+  margin-left:-125px;
+  background:RGBA(47,119,196,1);
+  top:30vh;
+  text-align: center;
+}
+
+.shareAlertPlugButton{
+  position: absolute;
+  bottom:10px;
+  width:100px;
+  background:RGBA(47,119,196,1);
+  border:2px solid white;
+  color:white;
+  left:50%;
+  margin-left:-50px;
+}
+
+.shareAlertPlugLove{
+  background: url("http://7xugu1.com1.z0.glb.clouddn.com/lifeLoveSolid.png");
+  width:100px;
+  height:100px;
+  background-size:100% 100%;
+  position: absolute;
+  left:50%;
+  margin-left: -50px;
+}
+
+.shareAlertPlugBean{
+  background: url("http://otsnwem87.bkt.clouddn.com/bean.png");
+  width:100px;
+  height:100px;
+  background-size:100% 100%;
+  position: absolute;
+  left:50%;
+  margin-left: -50px;
+}
+
+.shareAlertPlugContent{
+  top:100px;
+  position: absolute;
+  text-align: center;
+  width:90%;
+  left:50%;
+  margin-left:-45%;
+  color: white;
+}
+
+.shareAlertPlugContent2{
+  top:140px;
+  position: absolute;
+  text-align: center;
+  width:90%;
+  left:50%;
+  margin-left:-45%;
+  color: white;
+}
+
+.shareAlertPlugClose{
+  font-size:30px;
+  position: absolute;
+  right:10px;
+  top:10px;
+  color: white;
 }

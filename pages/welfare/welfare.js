@@ -55,6 +55,8 @@ var layerout = new baseLayerout.BaseLayerout({
     maxinum:0,
 		
     mininum:0,
+
+    amount:0,
     
     stages:[{
       stageIndex:0,
@@ -260,11 +262,26 @@ var layerout = new baseLayerout.BaseLayerout({
       battleId:battleId,
       roomId:roomId
     });
+
+    this.initAccountInfo({
+      success:function(){
+        outThis.setData({
+          amount: outThis.getMoney()
+        });
+      }
+    });
+    
   },
 
   startClick:function(){
     wx.navigateTo({
       url: '../progressScore/progressScore?battleId='+this.data.battleId+"&roomId="+this.data.roomId
+    });
+  },
+
+  welfareTakeoutClick:function(){
+    wx.navigateTo({
+      url: '../takeoutMoney/takeoutMoney'
     });
   },
 
@@ -339,4 +356,5 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 });
 layerout.addRedPackAlertPlug();
+layerout.addAttrPlug();
 layerout.begin();

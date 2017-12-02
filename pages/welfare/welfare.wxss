@@ -16,7 +16,7 @@
 
 .welfareContent{
   width:100%;
-  padding-top:10px;
+  padding-top:50px;
   text-align: center;
 }
 
@@ -190,4 +190,18 @@
   padding-top:20px;
   padding-bottom:10px;
   width:100%;
+}
+
+.welfareTakeout{
+  padding-left:10px;
+  padding-right:10px;
+  padding-top:5px;
+  padding-bottom:5px;
+  background:green;
+  border-radius:5px;
+  display: inline-block;
+  color:white;
+  position: relative;
+  left:20px;
+  top:10px;
 }

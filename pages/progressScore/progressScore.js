@@ -13,8 +13,12 @@ var progressScoreCache = require("../../utils/cache/progressScoreCache.js");
 var battleTakepartCache = require("../../utils/cache/battleTakepartCache.js");
 
 var syncPaperDateRequest = require("../../utils/syncPaperDateRequest.js");
+
+var shareRequest = require("../../utils/shareRequest.js");
 var outThis;
 var requestTarget;
+
+var redpackInterval;
 var layerout = new baseLayerout.BaseLayerout({
   data:{
     title:"火影忍者",
@@ -37,7 +41,13 @@ var layerout = new baseLayerout.BaseLayerout({
     isRun:0,
     rewardBeanTop:200,
     rewardBeanDisplay:"none",
-    rewardBean:0
+    rewardBean:0,
+    redPackWidth:50,
+    redPackHieght:50,
+    isShare:0,
+    shareAlert:0,
+    "rewardBean": 0,
+    "addExp": 0
   },
   eventListener:{
     questinResultClose:function(){
@@ -91,15 +101,20 @@ var layerout = new baseLayerout.BaseLayerout({
       
     }
   },
-  onShareAppMessage:function(){
+
+  scrollEvent:function(){
     var outThis = this;
-    var battleId = this.data.battleId;
-    var roomId = this.data.roomId;
-    var path = "pages/battleTakepart/battleTakepart?battleId="+battleId+"&roomId="+roomId
-    return {
-      title: outThis.data.title,
-      desc: outThis.data.desc,
-      path: path
+    var isRun = this.data.isRun;
+    if(isRun==1){
+      setTimeout(function(){
+        outThis.setData({
+          isRun:0
+        });
+      },200);
+    }else{
+      this.setData({
+        isRun:1
+      });
     }
   },
 
@@ -117,6 +132,28 @@ var layerout = new baseLayerout.BaseLayerout({
     wx.navigateBack({
       
     });
+  },
+
+  roomAlert:function(roomStatus,endType){
+    var outThis = this;
+    var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
+    this.setRoomPercent(memberInfo.roomScore, memberInfo.scrollGogal);
+    if (memberInfo.status == 2 || memberInfo.roomStatus == 3) {
+      var members = outThis.getMembers();
+      this.setData({
+        isLast: 1
+      });
+
+      this.showConfirm("比赛结束", "请点击查看排名情况", {
+        confirm: function () {
+          outThis.skipToRank();
+        },
+        cancel: function () {
+
+        }
+      }, "查看排名", "取消");
+    }
+    
   },
 
   processUpdate:function(callback){
@@ -162,6 +199,12 @@ var layerout = new baseLayerout.BaseLayerout({
     }, 15000);
   },
 
+  closeDisplayPanel:function(){
+    this.setData({
+      displayPanel:0
+    });
+  },
+
   showRewardBean:function(rewardBean){
     var outThis = this;
     var top = 200;
@@ -192,7 +235,7 @@ var layerout = new baseLayerout.BaseLayerout({
   redPackButtonClick:function(){
     var battleId = this.data.battleId;
     var roomId = this.data.roomId;
-    wx.redirectTo({
+    wx.navigateTo({
       url: '../welfare/welfare?model=0&battleId=' + battleId + "&roomId=" + roomId
     });
   },
@@ -263,7 +306,11 @@ var layerout = new baseLayerout.BaseLayerout({
     this.initQuestionResultData(battleMemberPaperAnswerId,{
       success:function(){
         outThis.hideLoading();
-        outThis.syncPaperData();
+        outThis.syncPaperData({
+          success:function(data){
+           
+          }
+        });
       },
       fail:function(){
         outThis.hideLoading();
@@ -277,7 +324,9 @@ var layerout = new baseLayerout.BaseLayerout({
       success: function (data) {
         outThis.setData({
           "questionResultDisplay": "block",
-          "displayPanel":0
+          "displayPanel":0,
+          "rewardBean":data.rewardBean,
+          "addExp":data.addExp
         });
 
        var results = data.questionAnswers;
@@ -312,6 +361,13 @@ var layerout = new baseLayerout.BaseLayerout({
       var hour = this.getLoveCoolHour();
       var min = this.getLoveCoolMin();
       this.showToast("爱心恢复中,还剩"+hour+"时"+min+"分");
+      var isShare = this.data.isShare;
+      if (!isShare){
+        this.setData({
+          shareAlert: 1,
+          isShare:1
+        });
+      }
       return;
     }
     var roomId = this.data.roomId;
@@ -334,12 +390,37 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
+  redPackAnn:function(){
+    var outThis = this;
+    var redPackHeight = 50;
+    var redPackWidth = 50;
+    redpackInterval = setInterval(function(){
+      if (redPackWidth>40){
+        redPackHeight = redPackHeight-1;
+        redPackWidth = redPackWidth-1;
+      }else{
+        redPackHeight = redPackHeight+5;
+        redPackWidth = redPackWidth+5;
+      }
+      outThis.setData({
+        redPackWidth: redPackWidth,
+        redPackHeight: redPackHeight
+      });
+    },1000);
+  },
+
   onReady:function(){
     var outThis = this;
     setTimeout(function(){
       outThis.initPositions();
     },500);
     
+  },
+
+  closeShareAlertPlug: function () {
+    this.setData({
+      shareAlert: 0
+    });
   },
 
   initPositions:function(){
@@ -372,7 +453,7 @@ var layerout = new baseLayerout.BaseLayerout({
     progressScoreCache.positions = positions;
     setTimeout(function(){
       outThis.setPositions(positions);
-    },1000);
+    },2000);
     
     outThis.containerScrollToDom(process);
     outThis.location(memberInfo.id, process);
@@ -413,6 +494,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
   onUnload: function () {
     requestTarget.stop();
+    clearInterval(redpackInterval);
     var pages = getCurrentPages();
     var prevPage = pages[pages.length - 2];
     if (prevPage.initRoomInfoFromRequest){
@@ -424,12 +506,19 @@ var layerout = new baseLayerout.BaseLayerout({
     requestTarget.stop();
   },
 
-  syncPaperData:function(){
+  syncPaperData:function(callback){
+    var outThis = this;
     var battleId = this.data.battleId;
     var roomId = this.data.roomId;
     syncPaperDateRequest.syncPapersData(battleId,roomId,{
-      success:function(){
-        console.log("syncPaperDataSuccess");
+      success:function(data){
+        callback.success(data);
+        var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
+        memberInfo.endType = data.endType;
+        memberInfo.roomStatus = data.status;
+        memberInfo.roomScore = data.roomScore;
+        battleMemberInfoRequest.setBattleMemberInfoFromCache(memberInfo);
+        outThis.roomAlert();
       },
       fail:function(){
         
@@ -437,10 +526,80 @@ var layerout = new baseLayerout.BaseLayerout({
     })
   },
 
+  onShareAppMessage: function () {
+    /*var outThis = this;
+    var battleId = this.data.battleId;
+    var roomId = this.data.roomId;
+    var path = "pages/battleTakepart/battleTakepart?battleId=" + battleId + "&roomId=" + roomId
+    this.setData({
+      displayPanel:0
+    })
+    return {
+      title: "答题比赛",
+      desc: "来跟我一起比赛吧",
+      url: path,
+      success:function(){
+        shareRequest.shareInProgress(battleId,roomId,{
+          success:function(data){
+            outThis.setData({
+              shareAlert: 0,
+              displayPanel: 1
+            });
+            var loveLimit = outThis.getLoveLimit();
+            outThis.setLove(loveLimit, data.loveResidule);
+            
+          },
+          fail:function(){
+
+          }
+        });
+      }
+    }*/
+    var outThis = this;
+    var battleId = this.data.battleId;
+    var roomId = this.data.roomId;
+    var path = "pages/battleTakepart/battleTakepart?battleId=" + battleId + "&roomId=" + roomId
+    return {
+      title: outThis.data.title,
+      desc: outThis.data.desc,
+      path: path,
+      success:function(){
+        shareRequest.shareInProgress(battleId, roomId, {
+          success: function (data) {
+            outThis.setData({
+              shareAlert: 0,
+              displayPanel: 1,
+              isShare:1
+            });
+            var loveLimit = outThis.getLoveLimit();
+            outThis.setLove(loveLimit, data.loveResidule);
+
+          },
+          fail: function () {
+
+          }
+        });
+      }
+    }
+  },
+
   onLoad: function (options) {
+
+    
+    
+ //   this.redPackAnn();
     outThis = this;
+
+    
+    outThis.roomAlert();
     var battleInfo = battleInfoRequest.battleInfo;
     var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
+   
+    if (memberInfo.shareTime>0){
+      this.setData({
+        isShare:1
+      });
+    }
     var roomId = options.roomId;
 
     battleMembersRequest.getBattleMembers(battleId, roomId, {
@@ -490,7 +649,8 @@ var layerout = new baseLayerout.BaseLayerout({
         console.log("fail");
       }
     });
-  } 
+  }
+  
 });
 
 layerout.addAttrPlug();

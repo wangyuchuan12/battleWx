@@ -1,9 +1,34 @@
 <template name="progressScoreMemberPlug">
-  <scroll-view class="progressScoreContainerHeaderMembers" scroll-x="true" style="white-space:nowrap;display:flex;">
+  <scroll-view class="progressScoreContainerHeaderMembers" scroll-x="true" style="white-space:nowrap;display:flex;" wx:if="{{members.length>2}}">
           <view class="progressScoreContainerHeaderMember" wx:for="{{members}}" wx:for-item="member">
-            <image src="{{member.imgUrl}}" class="progressScoreContainerHeaderMemberImg" style="border-radisu:10px;"></image>
+            <image src="{{member.imgUrl}}" class="progressScoreContainerHeaderMemberImg" style="border-radius:10px;"></image>
             <progress percent="{{member.percent}}" class="progressScoreContainerHeaderMemberProgress"/>
             <view class="progressScoreContainerHeaderMemberRank">第{{index+1}}名</view>
           </view>
   </scroll-view>
+
+  <scroll-view class="progressScoreContainerHeaderMembers" scroll-x="true" wx:if="{{members.length==2}}">
+          <view class="progressScoreContainerHeaderMember">
+            <image src="{{members[0].imgUrl}}" class="progressScoreContainerHeaderMemberImg" style="border-radius:10px;"></image>
+            <progress percent="{{members[0].percent}}" class="progressScoreContainerHeaderMemberProgress"/>
+          </view>
+
+          <image src='http://ovqk5bop3.bkt.clouddn.com/8575c56292491e63a168bdd5e4694cf3.png' class="progressScoreContainerHeaderMembersVsImg"></image>
+
+          <view class="progressScoreContainerHeaderMember">
+            <image src="{{members[1].imgUrl}}" class="progressScoreContainerHeaderMemberImg" style="border-radius:10px;"></image>
+            <progress percent="{{members[1].percent}}" class="progressScoreContainerHeaderMemberProgress"/>
+          </view>
+  </scroll-view>    
+
+
+  <scroll-view class="progressScoreContainerHeaderMembers" scroll-x="true" wx:if="{{members.length==1}}">
+      <view class="progressScoreContainerHeaderMember">
+        <image src="{{members[0].imgUrl}}" class="progressScoreContainerHeaderMemberImg" style="border-radius:10px;"></image>
+        <progress percent="{{members[0].percent}}" class="progressScoreContainerHeaderMemberProgress"/>
+      </view>
+  </scroll-view>    
+  <view class="progressScoreContainerHeaderRoom">
+      <progress percent="{{roomPercent}}" class="progressScoreContainerHeaderRoomProcess" color='red'  stroke-width='10' show-info='true'/>
+  </view>
 </template>

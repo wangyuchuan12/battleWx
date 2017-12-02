@@ -9,6 +9,7 @@ function randomRoom(battleId,callback) {
   params.battleId = battleId;
   request.requestWithLogin(randomRoomUrl, params, {
     success: function (resp) {
+      console.log(JSON.stringify(resp));
       if (resp.success) {
         callback.success(resp.data);
       } else {

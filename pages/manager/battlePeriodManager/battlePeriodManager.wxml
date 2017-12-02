@@ -3,8 +3,8 @@
 <view class="battlePeriodManager">
   
   <view class="battlePeriodManagerButtonns">
-  <block wx:if="{{model==0&&isManager==1}}">
-    <view class="battlePeriodManagerButtonn" bindtap='stageManagerClick'>
+  <block wx:if="{{model==0}}">
+    <view class="battlePeriodManagerButtonn" bindtap='stageManagerClick' wx:if="{{isManager==1}}">
       <view class="battlePeriodManagerButtonnIcon fa fa-leaf"></view>
       <view class="battlePeriodManagerButtonnText">关卡管理</view>
     </view>

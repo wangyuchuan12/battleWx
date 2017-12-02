@@ -1,6 +1,7 @@
 var progressScoreMembers={
   data:{
     progressScoreMemberData: {
+      roomPercent:0,
       members: [/*{
         imgUrl: "http://ovrd3aj83.bkt.clouddn.com/33fe4abb5e3ea5a87683b6b82e9a346c.png",
         percent: 10
@@ -11,6 +12,37 @@ var progressScoreMembers={
       }*/]
     }
   },
+
+  setRoomPercent: function (roomScore, scrollGogal){
+    var outThis = this;
+    var percent = parseInt(roomScore/scrollGogal*100);
+
+    var percent2 = this.data.progressScoreMemberData.roomPercent;
+
+    if(!percent2){
+      this.setData({
+        "progressScoreMemberData.roomPercent": percent
+      });
+    }else if (percent > percent2){
+      
+      var interval = setInterval(function(){
+        percent2++;
+        if (percent >= percent2){
+          outThis.setData({
+            "progressScoreMemberData.roomPercent": percent2
+          });
+          if(percent==percent2){
+            clearInterval(interval);
+          }
+        }else{
+          clearInterval(interval);
+        }
+        
+      },100);
+    }
+    
+  },
+
   setMembers:function(ms){
     var members = new Array();
     for(var i=0;i<ms.length;i++){

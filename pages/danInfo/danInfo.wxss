@@ -1,0 +1,7 @@
+@import '../danList/danList.wxss';
+@import '../battleHome/battleHome2.wxss';
+.danInfo{
+  background: rgba(49,64,93,1);
+  height: 100vh;
+  width:100%;
+}

@@ -4,6 +4,7 @@ var roomsUrl = domain + "/api/battle/rooms";
 
 var myRoomsUrl = domain + "/api/battle/myRooms";
 
+var myPersonalRoomUrl = domain + "/api/battle/myPersonalRoom";
 function roomsRequest(callback){
   
   var params = new Object();
@@ -37,7 +38,27 @@ function myRoomsRequest(callback){
   });
 }
 
+function myPersonalRoomRequest(battleId,callback) {
+  var params = new Object();
+  params.battleId = battleId;
+  request.requestWithLogin(myPersonalRoomUrl, params, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
+      } else {
+        callback.fail();
+      }
+    },
+    fail: function (resp) {
+      callback.fail("网络繁忙");
+    }
+  });
+}
+
+
+
 module.exports = {
   roomsRequest: roomsRequest,
-  myRoomsRequest: myRoomsRequest
+  myRoomsRequest: myRoomsRequest,
+  myPersonalRoomRequest: myPersonalRoomRequest
 }

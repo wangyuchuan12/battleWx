@@ -1,17 +1,25 @@
 {
   "pages": [
+    "pages/danList/danList",
+    "pages/danInfo/danInfo",
     "pages/battleHome/battleHome",
+    "pages/progressScore/progressScore",
+    "pages/questionFactory/questionFactoryMain/questionFactoryMain",
+    "pages/battleTakepart/battleTakepart",
+    "pages/questionFactory/editQuestion/editQuestion",
+    "pages/questionFactory/questionList/questionList",
+    "pages/battleList/battleList",
+    "pages/subjectList/subjectList",
+    "pages/battleHome/battleHome2",
     "pages/welfare/welfare",
     "pages/takeoutMoney/takeoutMoney",
     "pages/manager/roomManager/roomManager",
     "pages/manager/roomRedpacks/roomRedpacks",
     "pages/manager/redPackEdit/redPackEdit",
     "pages/manager/roomEdit/roomEdit",
-    
     "pages/redPackInfo/redPackInfo",
     "pages/mall/mall",
     "pages/invitation/invitation",
-    "pages/battleTakepart/battleTakepart",
     "pages/battleRoomEdit/battleRoomEdit",
     "pages/questionInfo/questionInfo",
     "pages/manager/managerMain/managerMain",
@@ -25,7 +33,6 @@
     "pages/manager/addSubject/addSubject",
     "pages/battleInfo/battleInfo",
     "pages/logs/logs",
-    "pages/progressScore/progressScore",
     "pages/myBattleRooms/myBattleRooms"
   ],
   "window": {

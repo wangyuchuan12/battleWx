@@ -11,6 +11,7 @@ function confirmPeriods(battleId,callback){
   params.battleId = battleId;
   request.requestWithLogin(confirmPeriodsUrl, params, {
     success: function (resp) {
+      console.log("resp:"+JSON.stringify(resp));
       if (resp.success) {
         callback.success(resp.data);
       } else {

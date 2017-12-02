@@ -1,0 +1,69 @@
+<import src="../assembly/baseLayerout/baseLayerout"/>
+<import src="../assembly/attrPlug/attrPlug"/>
+<template is="baseLayerout" data="{{...baseData}}"/>
+<template is="attrPlug" data="{{...attrPlugData}}"/>
+<view class="danList">
+  <view class="battleHomeHeader">
+    <image src="http://7xlw44.com1.z0.glb.clouddn.com/0042aeda-d8a5-4222-b79d-1416ab222898" class="battleHomeHeaderImg"></image>
+    <view class="battleHomeHeaderContent">
+      <view class="battleHomeHeaderContentItem1">川川 段位：原始人</view>
+      <view class="battleHomeHeaderContentItem2">
+        <span>LV.20</span>
+       <progress percent="{{member.percent}}" class="battleHomeProgress"/>
+      </view>
+    </view>
+  </view>
+  <view class="battleHomeTool" style="">
+
+    <view class="battleHomeToolItem" bindtap='battleManagerClick' wx:if="{{isManager==1}}">
+      <span class="fa fa-database" style="font-size:20px;"></span>
+      <span style="display:block;font-size:10px;">管理</span>
+    </view>
+
+    <view class="battleHomeToolItem" bindtap='pkClick' style="display:none;">
+      <span class="fa fa-space-shuttle" style="font-size:30px;color:yellow;"></span>
+      <span style="display:block;font-size:10px;color:yellow;">好友对战</span>
+    </view>
+
+    <view class="battleHomeToolItem" bindtap='followClick'>
+      <contact-button 
+        type="default-light" 
+        size="20"
+        session-from="weapp">
+      </contact-button>
+
+      <span style="display:block;font-size:10px;">客服</span>
+    </view>
+
+    <view class="battleHomeToolItem" bindtap='takeoutClick'>
+      <span class="fa fa-get-pocket" style="font-size:20px;color:rgba(16,174,255,1);"></span>
+
+      <span style="display:block;font-size:10px;">提现</span>
+    </view>
+
+    <view class="battleHomeToolItem" bindtap='mallClick'>
+      <span class="fa fa-shopping-cart" style="font-size:20px;color:rgba(247,98,96,1);"></span>
+
+      <span style="display:block;font-size:10px;">商城</span>
+    </view>
+
+    <view class="battleHomeToolItem" bindtap='factoryClick'>
+      <span class="fa fa-university" style="font-size:20px;color:rgba(255,190,0,1);"></span>
+
+      <span style="display:block;font-size:10px;">题目工厂</span>
+    </view>
+
+    <view class="battleHomeToolItem" bindtap='createRoomClick'>
+      <span class="fa fa-plus" style="font-size:20px;color:rgba(9,187,7,1);"></span>
+
+      <span style="display:block;font-size:10px;">创建房间</span>
+    </view>
+    
+  </view>
+  <scroll-view class="danListContent" scroll-y>
+    <view class="danItem" wx:for="{{dans}}" wx:for-item="dan">
+      <image src="{{dan.imgUrl}}" class="danItemImg"></image>
+      <view class="danItemName">{{dan.danName}}</view>
+    </view>
+  </scroll-view>
+</view>

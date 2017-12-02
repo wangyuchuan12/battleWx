@@ -23,7 +23,10 @@ var memberInfo = {
   openId:null,
   userId:null,
   speedCoolBean:null,
-  speedCoolSecond:null
+  speedCoolSecond:null,
+  loveResidule:0,
+  shareTime:0,
+  roomStatus:0
 }
 
 

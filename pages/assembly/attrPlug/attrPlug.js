@@ -288,7 +288,7 @@ var attrPlug = {
 
 
 
-  initAccountInfo:function(){
+  initAccountInfo:function(callback){
     var animationData = wx.createAnimation({
      
     });
@@ -302,6 +302,9 @@ var attrPlug = {
           "attrPlugData.masonry": account.masonry,
           "attrPlugData.amountBalance": account.amountBalance
         });
+        if(callback&&callback.success){
+          callback.success();
+        }
       },
       fail:function(){
 

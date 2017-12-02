@@ -96,7 +96,6 @@ var layerout = new baseLayerout.BaseLayerout({
     var battleId = this.data.battleId;
     battleManagerRequest.requestBattleInfo(battleId,{
       success:function(battleInfo){
-        console.log("....battleInfo:"+JSON.stringify(battleInfo));
           if(battleInfo.headImg){
             outThis.setData({
               isImg:1,
@@ -106,8 +105,8 @@ var layerout = new baseLayerout.BaseLayerout({
             });
           }
       },
-      fail:function(){
-        console.log("...fail");
+      fail:function(resp){
+        console.log(JSON.stringify(resp));
       }
     });
   },

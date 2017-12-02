@@ -1,26 +1,83 @@
 <import src="../assembly/baseLayerout/baseLayerout"/>
 <template is="baseLayerout" data="{{...baseData}}"/>
 <scroll-view class="battleTakepart" scroll-y>
+
+    <view class="shareAlertPlug" wx:if="{{shareAlert==1}}">
+      <view class="shareAlertPlugClose fa fa-times-circle" bindtap='closeShareAlertPlug'></view>
+      <view class="shareAlertPlugBean"></view>
+      <view class="shareAlertPlugContent">分享到微信群，将自动为你组建一个群房间</view>
+      <view class="shareAlertPlugContent2" style="display:none;">获得<span style="font-size:30px;color:rgba(255,238,75,1);">200智慧豆</span></view>
+      <button class="shareAlertPlugButton" open-type='share'>分享</button>
+    </view>
+
+
+
     <image src="{{imgUrl}}" class="battleTakepartImg"></image>
+
+    <image src="{{smallImgUrl}}" class="battleTakepartSamllImg"></image>
    
-    <scroll-view class="battleTakepartMembers" scroll-y>
+    <scroll-view class="battleTakepartMembers" scroll-y wx:if="{{maxinum>2}}">
       <view class="battleTakepartMember" wx:for="{{members}}" wx:for-item="member" wx:key="id">
         <image src="{{member.imgUrl}}" class="battleTakepartMemberImg"/>
       </view>
     </scroll-view>
 
+    
+
+    <view class="battleTakepartMembersPk" wx:if="{{maxinum==2}}">
+      <block wx:if="{{num==0}}">
+        <view class="battleTakepartMembersPkMember">
+          <image src="http://otsnwem87.bkt.clouddn.com/user.png" class="battleTakepartMembersPkMemberImg"/>
+        </view>
+
+        <image src="http://ovqk5bop3.bkt.clouddn.com/8575c56292491e63a168bdd5e4694cf3.png" class="battleTakepartMembersPkMemberVsImg"></image> 
+
+        <view class="battleTakepartMembersPkMember">
+          <image src="http://otsnwem87.bkt.clouddn.com/user.png" class="battleTakepartMembersPkMemberImg"/>
+        </view>
+      </block>
+
+      <block wx:if="{{num==1}}">
+        <view class="battleTakepartMembersPkMember">
+          <image src="{{members[0].imgUrl}}" class="battleTakepartMembersPkMemberImg"/>
+        </view>
+
+        <image src="http://ovqk5bop3.bkt.clouddn.com/8575c56292491e63a168bdd5e4694cf3.png" class="battleTakepartMembersPkMemberVsImg"></image> 
+
+        <view class="battleTakepartMembersPkMember">
+          <image src="http://otsnwem87.bkt.clouddn.com/user.png" class="battleTakepartMembersPkMemberImg"/>
+        </view>
+      </block>
+
+      <block wx:if="{{num==2}}">
+        <view class="battleTakepartMembersPkMember">
+          <image src="{{members[0].imgUrl}}" class="battleTakepartMembersPkMemberImg"/>
+        </view>
+
+        <image src="http://ovqk5bop3.bkt.clouddn.com/8575c56292491e63a168bdd5e4694cf3.png" class="battleTakepartMembersPkMemberVsImg"></image> 
+
+        <view class="battleTakepartMembersPkMember">
+          <image src="{{members[1].imgUrl}}" class="battleTakepartMembersPkMemberImg"/>
+        </view>
+      </block>
+    </view>
+
+
+
     <view class="battleTakepartButtons">
       <button class="battleTakepartButton" bindtap="managerClick" style='width:23%;' wx:if="{{isManager==1||isOwner==1}}">管理</button>
       <!--<button class="battleTakepartButton" bindtap="signOutClick" style='width:23%;' wx:elif="{{isOwner&&status!=3}}">退出</button>-->
       <button class="battleTakepartButton" bindtap="createClick" style='width:23%;' wx:else>创建</button>
-      <button class="battleTakepartButton" open-type="share" style="width:25%;background:RGBA(141,165,234,1);">邀请</button>
-      <button class="battleTakepartButton" bindtap="takepartClick" style="width:45%;background:RGBA(255,164,4,1);" wx:if="{{status==0||status==3}}">               参加
+      <!--<button class="battleTakepartButton" bindtap="myPersonalRoomClick" style='width:33%;' wx:else>我的房间</button>-->
+      <button class="battleTakepartButton" bindtap='shareRoomClick' style="width:25%;background:RGBA(141,165,234,1);">分享</button>
+      <button class="battleTakepartButton" bindtap="takepartClick" style="width:35%;background:RGBA(255,164,4,1);" wx:if="{{status==0||status==3}}">               参加
       </button>
 
-      <button class="battleTakepartButton" bindtap="takepartClick" style="width:45%;background:RGBA(255,164,4,1);" wx:if="{{status==1&&(mininum-num)<=0}}">              开始
+      <button class="battleTakepartButton" bindtap="takepartClick" style="width:35%;background:RGBA(255,164,4,1);" wx:if="{{status==1&&(mininum-num)<=0}}">              开始
       </button>
 
-       <button class="battleTakepartButton" style="width:45%;background:green;color:white;" wx:if="{{status==1&&(mininum-num)>0}}">              还差{{mininum-num}}人
+      <button class="battleTakepartButton" style="width:35%;background:green;color:white;" wx:if="{{status==1&&(mininum-num)>0}}">
+        还差{{mininum-num}}人
       </button>
 
       <button class="battleTakepartButton" bindtap="takepartClick" style="width:45%;background:RGBA(255,164,4,1);" wx:if="{{status==2}}">进入

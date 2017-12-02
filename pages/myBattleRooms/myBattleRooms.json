@@ -1,6 +1,6 @@
 {
   "backgroundTextStyle": "light",
-  "navigationBarBackgroundColor": "white",
-  "navigationBarTitleText": "我参与的",
-  "navigationBarTextStyle": "black"
+  "navigationBarBackgroundColor": "#2f405d",
+  "navigationBarTitleText": "答题闯关平台",
+  "navigationBarTextStyle": "white"
 }

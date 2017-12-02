@@ -4,6 +4,12 @@ var randomRoomRequest = require("../../utils/randomRoomRequest.js");
 var battlesRequest = require("../../utils/battlesRequest.js");
 
 var request = require("../../utils/request.js");
+
+var util = require("../../utils/util.js");
+
+var battleAddRoomRequest = require("../../utils/battleAddRoomRequest.js");
+
+var resourceRequest = require("../../utils/resourceRequest.js");
 var layerout = new baseLayerout.BaseLayerout({
 
   /**
@@ -15,6 +21,7 @@ var layerout = new baseLayerout.BaseLayerout({
     selectStatus:0,
     isManager:0,
     userImgUrl:"",
+    shareAlert:0,
     rooms:[/*{
       imgUrl:"http://7xlw44.com1.z0.glb.clouddn.com/0042aeda-d8a5-4222-b79d-1416ab222898",
       name:"火影忍者",
@@ -32,6 +39,31 @@ var layerout = new baseLayerout.BaseLayerout({
       id:1,
       battleId:1
     }*/]
+  },
+
+
+  followClick:function(){
+   // resourceRequest.previewImage("http://ovqk5bop3.bkt.clouddn.com/qrcode_for_gh_32c73b133282_1280.jpg");
+  },
+
+  closeShareAlertPlug: function () {
+    this.setData({
+      shareAlert: 0,
+      shareCreate: 0
+    });
+  },
+
+  pkClick:function(){
+    this.setData({
+      shareCreate: 1,
+      shareAlert: 1
+    });
+  },
+
+  factoryClick:function(){
+    wx.navigateTo({
+      url: '../questionFactory/questionFactoryMain/questionFactoryMain'
+    });
   },
 
   selectClick:function(e){
@@ -265,7 +297,54 @@ var layerout = new baseLayerout.BaseLayerout({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-  
+
+    var outThis = this;
+    var roomId = "2";
+
+    var shareCreate = this.data.shareCreate;
+    this.setData({
+      shareAlert: 0
+    });
+    if (shareCreate == 1) {
+      this.setData({
+        shareCreate: 0
+      });
+      var uuid = util.uuid();
+      return {
+        title: this.data.battleInfoName,
+        desc: this.data.battleInfoContent,
+        path: 'pages/battleTakepart/battleTakepart?key=' + uuid,
+        success: function () {
+          battleAddRoomRequest.requestAddRoomWithShare(roomId, uuid, 2,2,{
+            success: function (battleRoom) {
+              wx.redirectTo({
+                url: '../battleTakepart/battleTakepart?battleId=' + battleRoom.battleId + "&roomId=" + battleRoom.id+"&autoTakepart="+1
+              });
+            },
+            fail: function () {
+
+            },
+            createEntry: function (battleRoom) {
+              wx.redirectTo({
+                url: '../battleTakepart/battleTakepart?battleId=' + battleRoom.battleId + "&roomId=" + battleRoom.id + "&autoTakepart=" + 1
+              });
+            },
+            reCreate: function (battleRoom) {
+              outThis.showConfirm("您已经创建过该房间,不能重复创建", "是否跳转到该房间", {
+                confirm: function () {
+                  wx.redirectTo({
+                    url: '../battleTakepart/battleTakepart?battleId=' + battleRoom.battleId + "&roomId=" + battleRoom.id
+                  });
+                },
+                cancel: function () {
+
+                }
+              }, "跳转", "取消");
+            }
+          });
+        }
+      }
+    }
   }
 });
 
