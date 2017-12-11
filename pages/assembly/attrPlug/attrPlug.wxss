@@ -36,6 +36,13 @@
 	font-weight: bolder;
 }
 
+
+.personalAttrDataHeaderExp{
+	background: url("http://7xlw44.com1.z0.glb.clouddn.com/0aab5e187e98ef1070b67bd33dc9e3eb.png")no-repeat;
+	background-size:20px 20px;
+	background-position:3px 2px;
+}
+
 .personalAttrDataHeaderLove{
 	background: url("http://7xugu1.com1.z0.glb.clouddn.com/lifeLoveSolid.png")no-repeat;
 	background-size:37px 35px;

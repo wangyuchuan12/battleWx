@@ -66,6 +66,12 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
+  danClick:function(){
+    wx.navigateTo({
+      url: '../danList/danList'
+    });
+  },
+
   selectClick:function(e){
     this.initBattles();
   },

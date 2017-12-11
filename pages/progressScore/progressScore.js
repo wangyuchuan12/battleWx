@@ -137,6 +137,8 @@ var layerout = new baseLayerout.BaseLayerout({
   roomAlert:function(roomStatus,endType){
     var outThis = this;
     var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
+
+    console.log("memberInfo:"+JSON.stringify(memberInfo));
     this.setRoomPercent(memberInfo.roomScore, memberInfo.scrollGogal);
     if (memberInfo.status == 2 || memberInfo.roomStatus == 3) {
       var members = outThis.getMembers();

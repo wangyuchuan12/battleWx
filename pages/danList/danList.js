@@ -4,13 +4,25 @@ var baseLayerout = require("../assembly/baseLayerout/baseLayerout.js");
 
 var battleDanRequest = require("../../utils/battleDanRequest.js");
 
+var accountRequest = require("../../utils/accountRequest.js");
+
 var layerout = new baseLayerout.BaseLayerout({
 
   /**
    * 页面的初始数据
    */
   data: {
-    dans:[]
+    headimgurl:"",
+    nickname:"",
+    level:1,
+    exp:0,
+    dans:[/*{
+      id:0,
+      status:0,
+      danName:"原始人",
+      danId:"",
+      imgUrl:""
+    }*/]
   },
 
   /**
@@ -20,18 +32,35 @@ var layerout = new baseLayerout.BaseLayerout({
   
   },
 
+  initAccountResult: function () {
+    var outThis = this;
+    accountRequest.accountResultInfo({
+      success: function (accountResult) {
+          outThis.setData({
+            headimgurl: accountResult.headimgurl,
+            nickname: accountResult.nickname,
+            level: accountResult.level,
+            exp: accountResult.exp
+          })
+      },
+      fail: function () {
+
+      }
+    });
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
     this.initBattleDans();
+    this.initAccountResult();
   },
 
   initBattleDans:function(){
     var outThis = this;
     battleDanRequest.listRequest({
       success:function(dans){
-        console.log("dans:"+JSON.stringify(dans));
         outThis.setData({
           dans:dans
         });
@@ -40,6 +69,21 @@ var layerout = new baseLayerout.BaseLayerout({
 
       }
     });
+  },
+
+  danItemClick:function(e){
+    var id = e.currentTarget.id;
+    var dans = this.data.dans;
+    for(var i=0;i<dans.length;i++){
+      var dan = dans[i];
+      if(dan.id==id){
+        wx.navigateTo({
+          url: '../danInfo/daninfo2?danId='+dan.danId
+        });
+        return;
+      }
+    }
+    
   },
 
   /**

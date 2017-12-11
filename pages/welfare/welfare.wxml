@@ -92,7 +92,7 @@
 
   
 
-  <view class="welfareContentButtons" style="display:none;">
+  <view class="welfareContentButtons">
     <view class="welfareContentButton" bindtap='startClick'>开始战斗</view>
   </view>
     

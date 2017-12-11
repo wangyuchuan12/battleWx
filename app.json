@@ -1,8 +1,9 @@
 {
   "pages": [
-    "pages/danList/danList",
-    "pages/danInfo/danInfo",
     "pages/battleHome/battleHome",
+    "pages/danList/danList",
+    "pages/danInfo/daninfo2",
+    "pages/danInfo/danInfo",
     "pages/progressScore/progressScore",
     "pages/questionFactory/questionFactoryMain/questionFactoryMain",
     "pages/battleTakepart/battleTakepart",

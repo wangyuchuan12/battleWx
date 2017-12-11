@@ -76,7 +76,7 @@
     
     <view class="progressScoreBackButton" bindtap='skipToTakepart' style="background:RGBA(255,255,255,0.5);color:black;">返回</view>
 
-    <view class="redPackImgButton" bindtap='redPackButtonClick' style="width:{{redPackWidth}}px;height:{{redPackHeight}}px;">
+    <view class="redPackImgButton" bindtap='redPackButtonClick' style="width:{{redPackWidth}}px;height:{{redPackHeight}}px;display:none;">
       <image src="http://7xugu1.com1.z0.glb.clouddn.com/e7369bcec70f77bccd1b9a6ee16cf1b6.png" class="redPackImgButtonImg"></image>
       <view style="background:url('http://ovqk5bop3.bkt.clouddn.com/03bf965642aeb4a91f217597b4751207.png');width:50px;height:30px;background-size:100% 100%;position:relative;top:-30px;left:5px;"></view>
     </view>

@@ -62,7 +62,6 @@ function requestBattleTakepart(battleId, roomId,callback) {
   params.roomId = roomId;
   request.requestWithLogin(takepartUrl, params, {
     success: function (resp) {
-      console.log("success:"+JSON.stringify(resp));
       if (resp.success) {
         callback.success(resp.data);
       } else {

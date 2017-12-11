@@ -8,7 +8,8 @@
 
 <view class="shareAlertPlug" wx:if="{{shareAlert==1}}">
       <view class="shareAlertPlugClose fa fa-times-circle" bindtap='closeShareAlertPlug'></view>
-      <view class="shareAlertPlugBean" style="background:url('http://ovqk5bop3.bkt.clouddn.com/8575c56292491e63a168bdd5e4694cf3.png');background-size:100% 100%;"></view>
+      <view class="shareAlertPlugBean" 
+      style="background:url('http://ovqk5bop3.bkt.clouddn.com/8575c56292491e63a168bdd5e4694cf3.png');background-size:100% 100%;"></view>
       <view class="shareAlertPlugContent">开始一对一pk对战</view>
       <button class="shareAlertPlugButton" open-type='share'>确定</button>
 </view>
@@ -53,11 +54,11 @@
       <span style="display:block;font-size:10px;">题目工厂</span>
     </view>
 
-    <view class="battleHomeToolItem" bindtap='createRoomClick'>
+   <view class="battleHomeToolItem" bindtap='createRoomClick'>
       <span class="fa fa-plus" style="font-size:20px;color:rgba(9,187,7,1);"></span>
 
       <span style="display:block;font-size:10px;">创建房间</span>
-    </view>
+    </view> 
     
   </view>
   <view class="battleHomeFastEntry">
@@ -66,9 +67,13 @@
       <span style="display:block;font-size:10px;">好友对战</span>
     </button>
 
-    <button class="battleHomeFastEntryItem" bindtap='randomRoom'>
+    <!--<button class="battleHomeFastEntryItem" bindtap='randomRoom'>
       <span class="fa fa-futbol-o" style="font-size:40px;;"></span>
       <span style="display:block;font-size:10px;">快速开始</span>
+    </button>-->
+    <button class="battleHomeFastEntryItem" bindtap='danClick'>
+      <span class="fa fa-futbol-o" style="font-size:40px;;"></span>
+      <span style="display:block;font-size:10px;">闯关</span>
     </button>
   </view>
   <view class="battleHomeHeader" style='display:none;'>

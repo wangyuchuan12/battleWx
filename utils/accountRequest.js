@@ -4,6 +4,8 @@ var domain = request.getDomain();
 
 var accountInfoUrl = domain + "/api/common/login/accountInfo";
 
+var accountResultInfoUrl = domain + "/api/battle/dan/accountResultInfo";
+
 
 function accountInfo(callback){
   request.requestWithLogin(accountInfoUrl, {}, {
@@ -11,6 +13,21 @@ function accountInfo(callback){
       if(resp.success){
         callback.success(resp.data);
       }else{
+        callback.fail();
+      }
+    },
+    fail: function () {
+      callback.fail();
+    }
+  });
+}
+
+function accountResultInfo(callback) {
+  request.requestWithLogin(accountResultInfoUrl, {}, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
+      } else {
         callback.fail();
       }
     },
@@ -64,5 +81,6 @@ function payGood(good,callback){
 
 module.exports = {
   accountInfo: accountInfo,
+  accountResultInfo: accountResultInfo,
   payGood: payGood
 }

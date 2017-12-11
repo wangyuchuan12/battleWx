@@ -4,16 +4,17 @@
 <template is="attrPlug" data="{{...attrPlugData}}"/>
 <view class="danList">
   <view class="battleHomeHeader">
-    <image src="http://7xlw44.com1.z0.glb.clouddn.com/0042aeda-d8a5-4222-b79d-1416ab222898" class="battleHomeHeaderImg"></image>
+    <image src="{{headimgurl}}" class="battleHomeHeaderImg"></image>
     <view class="battleHomeHeaderContent">
-      <view class="battleHomeHeaderContentItem1">川川 段位：原始人</view>
+      <view class="battleHomeHeaderContentItem1">{{nickname}}</view>
+      <view class="battleHomeHeaderContentItem3">段位：原始人</view>
       <view class="battleHomeHeaderContentItem2">
-        <span>LV.20</span>
+        <span>LV.{{level}}</span>
        <progress percent="{{member.percent}}" class="battleHomeProgress"/>
       </view>
     </view>
   </view>
-  <view class="battleHomeTool" style="">
+  <view class="battleHomeTool" style="display:none;">
 
     <view class="battleHomeToolItem" bindtap='battleManagerClick' wx:if="{{isManager==1}}">
       <span class="fa fa-database" style="font-size:20px;"></span>
@@ -61,9 +62,14 @@
     
   </view>
   <scroll-view class="danListContent" scroll-y>
-    <view class="danItem" wx:for="{{dans}}" wx:for-item="dan">
-      <image src="{{dan.imgUrl}}" class="danItemImg"></image>
-      <view class="danItemName">{{dan.danName}}</view>
-    </view>
+    <block wx:for="{{dans}}" wx:for-item="dan">
+      <view class="danItem"  bindtap='danItemClick' id="{{dan.id}}">
+        <view class="danLock">
+          <view class="fa fa-lock danLockContent"></view>
+        </view>
+        <image src="{{dan.imgUrl}}" class="danItemImg"></image>
+        <view class="danItemName">{{dan.danName}}</view>
+      </view>
+    </block>
   </scroll-view>
 </view>

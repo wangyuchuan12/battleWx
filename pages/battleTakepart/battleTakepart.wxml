@@ -14,7 +14,7 @@
 
     <image src="{{imgUrl}}" class="battleTakepartImg"></image>
 
-    <image src="{{smallImgUrl}}" class="battleTakepartSamllImg"></image>
+    <image src="{{smallImgUrl}}" class="battleTakepartSamllImg" style="display:none;"></image>
    
     <scroll-view class="battleTakepartMembers" scroll-y wx:if="{{maxinum>2}}">
       <view class="battleTakepartMember" wx:for="{{members}}" wx:for-item="member" wx:key="id">
@@ -69,7 +69,7 @@
       <!--<button class="battleTakepartButton" bindtap="signOutClick" style='width:23%;' wx:elif="{{isOwner&&status!=3}}">退出</button>-->
       <button class="battleTakepartButton" bindtap="createClick" style='width:23%;' wx:else>创建</button>
       <!--<button class="battleTakepartButton" bindtap="myPersonalRoomClick" style='width:33%;' wx:else>我的房间</button>-->
-      <button class="battleTakepartButton" bindtap='shareRoomClick' style="width:25%;background:RGBA(141,165,234,1);">分享</button>
+      <button class="battleTakepartButton"  style="width:25%;background:RGBA(141,165,234,1);" open-type='share'>邀请</button>
       <button class="battleTakepartButton" bindtap="takepartClick" style="width:35%;background:RGBA(255,164,4,1);" wx:if="{{status==0||status==3}}">               参加
       </button>
 

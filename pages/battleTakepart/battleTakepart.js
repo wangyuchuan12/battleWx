@@ -286,7 +286,7 @@ var layerout = new baseLayerout.BaseLayerout({
        callback.success(battleMembers);
        
         var length = battleMembers.length;
-        var num =  length;
+        var num =  length; 
         var members = new Array();
         for (var i = 0; i < battleMembers.length;i++){
           members.push({
