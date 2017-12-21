@@ -15,6 +15,8 @@ var receiveTaskRewardUrl = domain + "/api/battle/dan/receiveTaskReward";
 var passThroughTakepartRoomUrl = domain + "/api/battle/dan/passThroughTakepartRoom";
 
 var danRoomInfoUrl = domain + "/api/battle/dan/danRoomInfo";
+
+var battleDanSignUrl = domain + "/api/battle/dan/battleDanSign";
 function tasksRequest(danId,callback){
   request.requestWithLogin(tasksUrl, { danId: danId }, {
     success: function (resp) {
@@ -38,6 +40,27 @@ function danRoomInfo(danId,callback){
         callback.success(resp.data);
       } else {
         callback.fail();
+      }
+    },
+    fail: function () {
+
+      callback.fail();
+    }
+  });
+}
+
+function danSign(danId,callback){
+  request.requestWithLogin(battleDanSignUrl, { danId: danId }, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
+      } else {
+        if(resp.errorCode==0){
+          callback.beanNotEnough();
+        }else{
+          callback.fail();
+        }
+        
       }
     },
     fail: function () {
@@ -167,5 +190,6 @@ module.exports = {
   startPassThroughRequest: startPassThroughRequest,
   passThroughTakepartRoomRequest: passThroughTakepartRoomRequest,
   receiveTaskReward: receiveTaskReward,
-  danRoomInfo: danRoomInfo
+  danRoomInfo: danRoomInfo,
+  danSign: danSign
 }

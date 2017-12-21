@@ -277,10 +277,9 @@ var layerout = new baseLayerout.BaseLayerout({
     params.answer = answer;
     params.fillWords = fillWords;
     params.battleId = battle.id;
-    params.subjectId = subject.subjectId;
+    params.subjectId = subject.id;
     params.type = questionType;
     params.options = options;
-
     battleFactoryRequest.applyRequest(params,{
       success:function(){
         outThis.hideLoading();

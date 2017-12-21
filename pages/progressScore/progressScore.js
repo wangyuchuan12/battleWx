@@ -47,7 +47,8 @@ var layerout = new baseLayerout.BaseLayerout({
     isShare:0,
     shareAlert:0,
     "rewardBean": 0,
-    "addExp": 0
+    "addExp": 0,
+    memberInfo:null,
   },
   eventListener:{
     questinResultClose:function(){
@@ -73,32 +74,42 @@ var layerout = new baseLayerout.BaseLayerout({
         stageIndex:stageIndex
       });
       var roomId = outThis.data.roomId;
-      battleStageTakepartRequest.stageTakepart(outThis.data.battleId,subjectIds,roomId,{
+      outThis.syncPaperData({
         success:function(data){
-          var ids = data.questionIds;
-          var questionIds = "";
-          var isLast = data.isLast;
-          outThis.setData({
-            isLast:isLast
-          });
-          for(var i = 0;i<ids.length;i++){
-            var questionId = ids[i];
-            if (!questionIds) {
-              questionIds = questionId;
-            } else {
-              questionIds = questionIds + "," + questionId;
-            }
-          }
-          wx.navigateTo({
-            url: '../questionInfo/questionInfo?questionIds=' + questionIds + "&stageIndex=" + stageIndex+"&roomId="+roomId,
-          });
 
+          var status = data.status;
+          if(status==1||status==2){
+            battleStageTakepartRequest.stageTakepart(outThis.data.battleId, subjectIds, roomId, {
+              success: function (data) {
+                var ids = data.questionIds;
+                var questionIds = "";
+                var isLast = data.isLast;
+                outThis.setData({
+                  isLast: isLast
+                });
+                for (var i = 0; i < ids.length; i++) {
+                  var questionId = ids[i];
+                  if (!questionIds) {
+                    questionIds = questionId;
+                  } else {
+                    questionIds = questionIds + "," + questionId;
+                  }
+                }
+                wx.navigateTo({
+                  url: '../questionInfo/questionInfo?questionIds=' + questionIds + "&stageIndex=" + stageIndex + "&roomId=" + roomId,
+                });
+
+              },
+              fail: function () {
+                console.log("fail");
+              }
+            });
+          }
         },
         fail:function(){
-          console.log("fail");
+
         }
       });
-      
     }
   },
 
@@ -134,26 +145,58 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
-  roomAlert:function(roomStatus,endType){
+  roomAlert:function(roomScore){
     var outThis = this;
-    var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
+    var memberInfo = this.data.memberInfo;
 
-    console.log("memberInfo:"+JSON.stringify(memberInfo));
-    this.setRoomPercent(memberInfo.roomScore, memberInfo.scrollGogal);
+    if(!roomScore){
+        roomScore = memberInfo.roomScore;
+    }
+
+    this.setRoomPercent(roomScore, memberInfo.scrollGogal);
     if (memberInfo.status == 2 || memberInfo.roomStatus == 3) {
       var members = outThis.getMembers();
       this.setData({
         isLast: 1
       });
 
-      this.showConfirm("比赛结束", "请点击查看排名情况", {
-        confirm: function () {
-          outThis.skipToRank();
+      var battleId = this.data.battleId;
+      var roomId = this.data.roomId;
+
+      battleMembersRequest.getBattleMembers(battleId, roomId, {
+        cache: function (battleMembers) {
+
         },
-        cancel: function () {
+        success: function (battleMembers) {
+
+          membersRankUtil.rankByProcess(battleMembers);
+
+          for(var i=0;i<battleMembers.length;i++){
+            var battleMember = battleMembers[i];
+            if(battleMember.id==memberInfo.id){
+              var rewardBean = battleMember.rewardBean;
+              if (!rewardBean){
+                rewardBean = 0;
+              }
+              if (battleMembers && battleMembers.length>2){
+                outThis.showFullAlert("比赛已经结束", "您获取第" + (i + 1) + "名", rewardBean, "确定");
+              }else{
+                if(i==0){
+                  outThis.showFullAlert("比赛已经结束", "胜利", rewardBean, "确定");
+                }else{
+                  outThis.showFullAlert("比赛已经结束", "失败", rewardBean, "确定");
+                }
+              }
+              
+            }
+          }
+        },
+        fail: function () {
 
         }
-      }, "查看排名", "取消");
+      });
+
+      
     }
     
   },
@@ -218,7 +261,6 @@ var layerout = new baseLayerout.BaseLayerout({
     var interval = setInterval(function(){
       top=top-10;
       if(top>0){
-        console.log("top:"+top);
         outThis.setData({
           rewardBeanTop: top
         });
@@ -242,7 +284,7 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
-  startResult: function (rightCount, wrongCount, process, battleMemberPaperAnswerId,rewardBean,isPass){
+  startResult: function (rightCount, wrongCount, process, battleMemberPaperAnswerId, rewardBean, isPass){
     
     
     outThis.setData({
@@ -412,11 +454,6 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   onReady:function(){
-    var outThis = this;
-    setTimeout(function(){
-      outThis.initPositions();
-    },500);
-    
   },
 
   closeShareAlertPlug: function () {
@@ -428,8 +465,8 @@ var layerout = new baseLayerout.BaseLayerout({
   initPositions:function(){
     var outThis = this;
     var battleInfo = battleInfoRequest.battleInfo;
-    var members = battleTakepartCache.members;
-    var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
+    var members = this.data.members;
+    var memberInfo = this.data.memberInfo;
     var process = memberInfo.process;
     if (!process) {
       process = 0;
@@ -484,14 +521,6 @@ var layerout = new baseLayerout.BaseLayerout({
   onShow: function () {
     this.initAccountInfo();
     var outThis = this;
-    setTimeout(function(){
-      outThis.processUpdate({
-        success:function(){
-          
-        }
-      });
-      
-    },2000);
   },
 
   onUnload: function () {
@@ -519,8 +548,38 @@ var layerout = new baseLayerout.BaseLayerout({
         memberInfo.endType = data.endType;
         memberInfo.roomStatus = data.status;
         memberInfo.roomScore = data.roomScore;
-        battleMemberInfoRequest.setBattleMemberInfoFromCache(memberInfo);
-        outThis.roomAlert();
+        outThis.setData({
+          memberInfo:memberInfo
+        });
+        outThis.roomAlert(memberInfo.roomScore);
+        outThis.setScore(data.score);
+        var battleMembers = data.members;
+        var oldBattleMembers = outThis.getMembers();
+        outThis.setMembers(battleMembers);
+        for (var i = 0; i < battleMembers.length; i++) {
+          for (var j = 0; j < oldBattleMembers.length; j++) {
+            var battleMember = battleMembers[i];
+            var oldBattleMember = oldBattleMembers[j];
+            if (battleMember.id == oldBattleMember.id && battleMember.id != memberInfo.id) {
+              var isRun = outThis.data.isRun;
+              if (isRun == 0) {
+                outThis.trendBetween(battleMember.id, oldBattleMember.process, battleMember.process, {
+                  success: function () {
+                    if (callback) {
+                      callback.success();
+                    }
+                  },
+                  fail: function () {
+
+                  }
+                }, false);
+              } else if (isRun == 1) {
+                outThis.location(battleMember.id, battleMember.process);
+              }
+              break;
+            }
+          }
+        }
       },
       fail:function(){
         
@@ -587,32 +646,44 @@ var layerout = new baseLayerout.BaseLayerout({
 
   onLoad: function (options) {
 
-    
-    
  //   this.redPackAnn();
+
+    setTimeout(function () {
+      outThis.processUpdate({
+        success: function () {
+
+        }
+      });
+
+    }, 2000);
     outThis = this;
 
-    
-    outThis.roomAlert();
-    var battleInfo = battleInfoRequest.battleInfo;
-    var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
-   
-    if (memberInfo.shareTime>0){
-      this.setData({
-        isShare:1
-      });
-    }
     var roomId = options.roomId;
+
+    var battleId = options.battleId;
 
     battleMembersRequest.getBattleMembers(battleId, roomId, {
       cache: function (battleMembers) {
 
       },
       success: function (battleMembers) {
-
+        console.log("battleMembers:"+JSON.stringify(battleMembers));
         membersRankUtil.rankByProcess(battleMembers);
         outThis.setMembers(battleMembers);
+        outThis.setData({
+          members:battleMembers
+        });
 
+        var memberInfo = outThis.data.memberInfo;
+
+        if(!memberInfo){
+          var interval = setInterval(function () {
+            outThis.initPositions();
+            clearInterval(interval);
+          }, 500);
+        }else{
+          outThis.initPositions();
+        }
       },
       fail: function () {
 
@@ -621,11 +692,6 @@ var layerout = new baseLayerout.BaseLayerout({
     
     var model = options.model;
     var battleId = options.battleId;
-    var stageIndex = memberInfo.stageIndex;
-
-    this.setData({
-      stageIndex:stageIndex
-    });
 
     if(battleId){
       wx.setStorageSync("battleId", battleId);
@@ -646,11 +712,33 @@ var layerout = new baseLayerout.BaseLayerout({
         outThis.setProgress(memberInfo.process);
 
         outThis.initLoveCooling();
+        outThis.setData({
+          memberInfo:memberInfo
+        });
+
+        outThis.setScore(memberInfo.score);
+
+        outThis.setScrollGogal(memberInfo.scrollGogal);
+
+        outThis.roomAlert();
+
+        outThis.setData({
+          memberInfo: memberInfo
+        });
+
+
+        if (memberInfo.shareTime > 0) {
+          outThis.setData({
+            isShare: 1
+          });
+        }
       },
       fail:function(){
         console.log("fail");
       }
     });
+
+    
   }
   
 });

@@ -2,5 +2,17 @@
 
 <template name="baseLayerout" hidden="true">
   <loading hidden="{{hiddenLoading}}">请等待...</loading>
-  <toast duration="{{toastDuration}}" bindchange="hideToast" hidden="{{hiddenToast}}" style="width:100px;height:100px;">{{toastMsg}}</toast> 
+  <toast duration="{{toastDuration}}" bindchange="hideToast" hidden="{{hiddenToast}}" style="width:100px;height:100px;">{{toastMsg}}</toast>
+  <view class="fullAlert" style="display:{{fullAlertDisplay}}">
+    <view class="fullAlertlight" animation="{{fullAlertAnimation}}">
+      
+    </view>
+    <view class="fullAlertReward"></view>
+    <view class="fullAlertNum">奖励 ×{{fullAlertRewardNum}}</view>
+    <view class="fullAlertTitle">{{fullAlertTitle}}</view>
+
+    <view class="fullAlertTitle2">{{fullAlertTitle2}}</view>
+
+    <view class="fullAlertButton" bindtap='fullAlertButtonClick'>{{fullAlertButton}}</view>
+  </view>
 </template>

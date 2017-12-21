@@ -7,6 +7,7 @@
 @import '../assembly/attrPlug/attrPlug.wxss';
 
 @import '../assembly/progressScoreMemberPlug/progressScoreMemberPlug.wxss';
+@import '../assembly/baseLayerout/baseLayerout.wxss';
 
 .progressScoreButtons{
   position: fixed;

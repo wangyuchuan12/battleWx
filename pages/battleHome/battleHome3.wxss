@@ -1,0 +1,132 @@
+@import 'battleHome.wxss';
+
+.battleHomeMenu{
+  width:95%;
+  background:red;
+  position: relative;
+  margin: 0 auto;
+}
+
+.battleHomeMenu1{
+  width:45%;
+  height:200px;
+  background:rgba(45,154,242,1);
+  border-radius: 5px;
+  position: absolute;
+  left:3%;
+}
+
+.battleHomeMenu2{
+  width:45%;
+  height:150px;
+  background:rgba(8,162,181,1);
+  position: absolute;
+  left:53%;
+  border-radius: 5px;
+}
+
+.battleHomeMenu3{
+  width:45%;
+  height:120px;
+  background:rgba(67,97,182,1);
+  position: absolute;
+  left:3%;
+  border-radius: 5px;
+  top:215px;
+}
+
+.battleHomeMenu4{
+  width:45%;
+  height:170px;
+  background:rgba(189,69,128,1);
+  position: absolute;
+  left:53%;
+  border-radius: 5px;
+  top:165px;
+}
+
+.battleHomeMenu5{
+  width:90%;
+  height:100px;
+  background:rgba(110,79,169,1);
+  position: absolute;
+  border-radius: 5px;
+  top:350px;
+  left:5%;
+}
+
+.battleHomeMenu1Name{
+  color: white;
+  padding-left:20px;
+  padding-top:20px;
+}
+
+.battleHomeMenu2Name{
+  color: white;
+  padding-left:20px;
+  padding-top:20px;
+}
+
+.battleHomeMenu3Name{
+  color: white;
+  padding-left:20px;
+  padding-top:10px;
+}
+
+.battleHomeMenu4Name{
+  color: white;
+  padding-left:20px;
+  padding-top:20px;
+}
+
+.battleHomeMenu5Name{
+  color: white;
+  padding-left:20px;
+  padding-top:20px;
+}
+
+.battleHomeMenu1Background{
+
+  width:100%;
+  height:100%;
+  background: url('http://ovqk5bop3.bkt.clouddn.com/7e5b9fe69a1c41be20a19c5e00dd6d4d.png') no-repeat;
+  background-size: 100% 60%;
+  background-position: 0px 90px;
+  position: absolute;
+}
+
+.battleHomeMenu2Background{
+  width:100%;
+  height:100%;
+  background: url('http://ovqk5bop3.bkt.clouddn.com/9918fbcd675c5b3a9f0dc8ebbf75c97f.png') no-repeat;
+  background-size: 90% 100%;
+  background-position: 0 20px;
+  position: absolute;
+}
+
+.battleHomeMenu3Background{
+  width:100%;
+  height:100%;
+  background: url('http://ovqk5bop3.bkt.clouddn.com/7d52e65a567a903d4d7c33db04557c74.png') no-repeat;
+  background-size: 90% 80%;
+  background-position: 10px 30px;
+  position: absolute;
+}
+
+.battleHomeMenu4Background{
+  width:100%;
+  height:100%;
+  background: url('http://ovqk5bop3.bkt.clouddn.com/7eadb4ade4e940bad6356848f5336f6b.png') no-repeat;
+  background-size: 90% 50%;
+  background-position: 10px 80px;
+  position: absolute;
+}
+
+.battleHomeMenu5Background{
+  width:100%;
+  height:100%;
+  background: url('http://ovqk5bop3.bkt.clouddn.com/437135d931492a141161c0ddd9f4df84.png') no-repeat;
+  background-size: 40% 100%;
+  background-position: 80% 0px;
+  position: absolute;
+}

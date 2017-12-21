@@ -3,16 +3,40 @@
 <template is="baseLayerout" data="{{...baseData}}"/>
 <template is="attrPlug" data="{{...attrPlugData}}"/>
 <view class="danList">
+  
   <view class="battleHomeHeader">
     <image src="{{headimgurl}}" class="battleHomeHeaderImg"></image>
     <view class="battleHomeHeaderContent">
       <view class="battleHomeHeaderContentItem1">{{nickname}}</view>
-      <view class="battleHomeHeaderContentItem3">段位：原始人</view>
-      <view class="battleHomeHeaderContentItem2">
+      <view class="battleHomeHeaderContentItem3">
+          段位：<block wx:if="{{danName}}">{{danName}}</block>
+               <block wx:else>原始人</block>
+      </view>
+      <view class="battleHomeHeaderContentItem2" style="display:none;">
         <span>LV.{{level}}</span>
        <progress percent="{{member.percent}}" class="battleHomeProgress"/>
       </view>
     </view>
+  </view>
+  <view class="danListAlert"  wx:if="{{isDanAlert}}">
+    <view class="danListInfo">
+      <view class="danListInfoHeader">{{alertDan.danName}}</view>
+      <view class="danListInfoContent">
+        <image src="{{alertDan.imgUrl}}" class="danListInfoContentImg"></image>
+        <view class="danListInfoContentRank" wx:if="{{alertDan.signCount==0}}">未参与</view>
+        <view class="danListInfoContentRank" wx:else>闯关失败，重新报名</view>
+      </view>
+      <view class="danListInfoButtons">
+        <view class="danListInfoButton" style="background:rgba(255,145,173,1)" bindtap='signClick'>
+          报名
+          <block wx:if="{{alertDan.costBean>0}}">
+            <view class="personalAttrDataHeader personalAttrDataHeaderBean" style=""></view>
+            ×{{alertDan.costBean}}
+          </block>
+        </view>
+      </view>
+    </view>
+    <view class="danListAlertMask" bindtap='danListAlertMaskClick'></view>
   </view>
   <view class="battleHomeTool" style="display:none;">
 
@@ -64,9 +88,14 @@
   <scroll-view class="danListContent" scroll-y>
     <block wx:for="{{dans}}" wx:for-item="dan">
       <view class="danItem"  bindtap='danItemClick' id="{{dan.id}}">
-        <view class="danLock">
+        <view class="danLock" wx:if="{{dan.status==0}}">
           <view class="fa fa-lock danLockContent"></view>
         </view>
+
+        <view class="danItemFree" wx:if="{{dan.status==0}}">未开启</view>
+        <view class="danItemIn" wx:if="{{dan.status==1}}">进行中</view>
+        <view class="danItemSuccess" wx:if="{{dan.status==2}}">成功</view>
+        <view class="danItemFail" wx:if="{{dan.status==3}}">失败</view>
         <image src="{{dan.imgUrl}}" class="danItemImg"></image>
         <view class="danItemName">{{dan.danName}}</view>
       </view>

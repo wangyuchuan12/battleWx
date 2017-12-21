@@ -81,7 +81,8 @@ var layerout = new baseLayerout.BaseLayerout({
               stageCount: data[i].stageCount,
               loveList: loveList,
               status:data[i].status,
-              loveResidule: loveResidule
+              loveResidule: loveResidule,
+              score:data[i].score
             });
           }
           membersRankUtil.rankByProcess(members);

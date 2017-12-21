@@ -16,13 +16,13 @@ var layerout = new baseLayerout.BaseLayerout({
    * 页面的初始数据
    */
   data: {
-    battleId:0,
-    battles:[],
-    selectStatus:0,
-    isManager:0,
-    userImgUrl:"",
-    shareAlert:0,
-    rooms:[/*{
+    battleId: 0,
+    battles: [],
+    selectStatus: 0,
+    isManager: 0,
+    userImgUrl: "",
+    shareAlert: 0,
+    rooms: [/*{
       imgUrl:"http://7xlw44.com1.z0.glb.clouddn.com/0042aeda-d8a5-4222-b79d-1416ab222898",
       name:"火影忍者",
       instruction:"这是一个忍者的故事",
@@ -42,8 +42,8 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
 
-  followClick:function(){
-   // resourceRequest.previewImage("http://ovqk5bop3.bkt.clouddn.com/qrcode_for_gh_32c73b133282_1280.jpg");
+  followClick: function () {
+    // resourceRequest.previewImage("http://ovqk5bop3.bkt.clouddn.com/qrcode_for_gh_32c73b133282_1280.jpg");
   },
 
   closeShareAlertPlug: function () {
@@ -53,45 +53,48 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
-  pkClick:function(){
-    this.setData({
+  pkClick: function () {
+    /*this.setData({
       shareCreate: 1,
       shareAlert: 1
+    });*/
+    wx.navigateTo({
+      url: '../pkRoom/pkRoom'
     });
   },
 
-  factoryClick:function(){
+  factoryClick: function () {
     wx.navigateTo({
       url: '../questionFactory/questionFactoryMain/questionFactoryMain'
     });
   },
 
-  danClick:function(){
+  danClick: function () {
     wx.navigateTo({
       url: '../danList/danList'
     });
   },
 
-  selectClick:function(e){
+  selectClick: function (e) {
     this.initBattles();
   },
 
-  selectItemClick:function(e){
-      var id = e.currentTarget.id;
-      this.setData({
-        battleId:id,
-        selectStatus:0
-      });
+  selectItemClick: function (e) {
+    var id = e.currentTarget.id;
+    this.setData({
+      battleId: id,
+      selectStatus: 0
+    });
   },
 
-  mallClick:function(){
+  mallClick: function () {
     wx.navigateTo({
       url: '../mall/mall',
     });
   },
 
 
-  initBattles: function (battleId,flag) {
+  initBattles: function (battleId, flag) {
     this.showLoading();
     var outThis = this;
     battlesRequest.requestBattles({
@@ -106,7 +109,7 @@ var layerout = new baseLayerout.BaseLayerout({
             status: 0
           });
         }
-        if (!battleId && items.length > 0&&flag) {
+        if (!battleId && items.length > 0 && flag) {
           outThis.setData({
             "battleId": items[0].id,
             "battles": items,
@@ -118,7 +121,7 @@ var layerout = new baseLayerout.BaseLayerout({
             "battles": items,
             selectStatus: 0
           });
-        }else{
+        } else {
           outThis.setData({
             "battles": items,
             selectStatus: 1
@@ -146,7 +149,7 @@ var layerout = new baseLayerout.BaseLayerout({
     })
   },
 
-  init:function(){
+  init: function () {
     var outThis = this;
     this.initBattles(null, true);
     request.getUserInfo({
@@ -189,67 +192,67 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
-  battleManagerClick:function(){
+  battleManagerClick: function () {
     var outThis = this;
     var isManager = this.data.isManager;
 
-    if(isManager==1){
+    if (isManager == 1) {
       wx.navigateTo({
         url: '../manager/managerMain/managerMain'
       });
-    }else{
+    } else {
       outThis.showToast("没有权限");
     }
   },
 
-  skipToRoom:function(roomId,battleId){
+  skipToRoom: function (roomId, battleId) {
     wx.navigateTo({
-      url: '../battleTakepart/battleTakepart?roomId='+roomId+"&battleId="+battleId
+      url: '../battleTakepart/battleTakepart?roomId=' + roomId + "&battleId=" + battleId
     });
   },
 
-  skipToMyRooms:function(){
+  skipToMyRooms: function () {
     wx.navigateTo({
       url: "../myBattleRooms/myBattleRooms"
     });
   },
 
-  createRoomClick:function(){
+  createRoomClick: function () {
     wx.navigateTo({
       url: '../battleRoomEdit/battleRoomEdit'
     });
   },
 
-  itemClick:function(e){
+  itemClick: function (e) {
     var outThis = this;
     var rooms = this.data.rooms;
     var id = e.currentTarget.id;
-    for(var i=0;i<rooms.length;i++){
+    for (var i = 0; i < rooms.length; i++) {
       var room = rooms[i];
-      if(room.id==id){
-        outThis.skipToRoom(room.id,room.battleId);
+      if (room.id == id) {
+        outThis.skipToRoom(room.id, room.battleId);
         break;
       }
     }
   },
 
-  takeoutClick:function(){
+  takeoutClick: function () {
     wx.navigateTo({
       url: '../takeoutMoney/takeoutMoney'
     });
   },
 
-  randomRoom:function(){
+  randomRoom: function () {
     var outThis = this;
     var battleId = this.data.battleId;
-    randomRoomRequest.randomRoom(battleId,{
-      success:function(room){
-        outThis.skipToRoom(room.id,room.battleId);
+    randomRoomRequest.randomRoom(battleId, {
+      success: function (room) {
+        outThis.skipToRoom(room.id, room.battleId);
       },
-      fail:function(){
+      fail: function () {
 
       },
-      empty:function(){
+      empty: function () {
         outThis.showToast("没有进行中比赛");
       }
     });
@@ -264,7 +267,7 @@ var layerout = new baseLayerout.BaseLayerout({
       success: function (userInfo) {
         if (userInfo.openid == "o6hwf0S9JT_Ff0LVBORFsBrhAtpM") {
           outThis.setData({
-            isManager:1
+            isManager: 1
           });
         } else {
 
@@ -287,28 +290,28 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-  
+
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-  
+
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-  
+
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-  
+
   },
 
   /**
@@ -333,10 +336,10 @@ var layerout = new baseLayerout.BaseLayerout({
         desc: this.data.battleInfoContent,
         path: 'pages/battleTakepart/battleTakepart?key=' + uuid,
         success: function () {
-          battleAddRoomRequest.requestAddRoomWithShare(roomId, uuid, 2,2,{
+          battleAddRoomRequest.requestAddRoomWithShare(roomId, uuid, 2, 2, {
             success: function (battleRoom) {
               wx.redirectTo({
-                url: '../battleTakepart/battleTakepart?battleId=' + battleRoom.battleId + "&roomId=" + battleRoom.id+"&autoTakepart="+1
+                url: '../battleTakepart/battleTakepart?battleId=' + battleRoom.battleId + "&roomId=" + battleRoom.id + "&autoTakepart=" + 1
               });
             },
             fail: function () {

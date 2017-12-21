@@ -48,9 +48,11 @@ var progressScoreMembers={
     for(var i=0;i<ms.length;i++){
       var member = ms[i];
       var process = member.process;
+      var score = member.score;
+      var scoreGogal = member.scrollGogal;
       var percent =0;
       if(process){
-        percent = process/12*10;
+        percent = score / scoreGogal*100;
       }
       members.push({
         imgUrl:ms[i].headImg,

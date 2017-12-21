@@ -27,7 +27,6 @@ var layerout = new baseLayerout.BaseLayerout({
     for(var i=0;i<rooms.length;i++){
       var room = rooms[i];
       if(room.id==id){
-        console.log("id:"+id+",battleId:"+room.battleId);
         wx.navigateTo({
           url: '../roomEdit/roomEdit?id=' + id+"&battleId="+room.battleId
         })
@@ -41,7 +40,6 @@ var layerout = new baseLayerout.BaseLayerout({
     var outThis = this;
     battleManagerRequest.requestRooms({
       success:function(rooms){
-        console.log(JSON.stringify(rooms));
         var roomArray = new Array();
         for(var i=0;i<rooms.length;i++){
           roomArray.push({

@@ -9,6 +9,8 @@ data: {
     distance:0,
     //进度
     progress:0,
+    score:0,
+    scrollGogal:0,
     currentDom: 0,
     loveList: [],
     //冷却数据
@@ -700,6 +702,18 @@ setProgress:function(progress){
   });
 },
 
+setScore:function(score){
+  this.setData({
+    "progressScoreData.score": score
+  });
+},
+
+setScrollGogal: function (score) {
+  this.setData({
+    "progressScoreData.scrollGogal": score
+  });
+},
+
 addProcess:function(process){
   var oldProcess = this.data.progressScoreData.progress;
   var newProcess = oldProcess + process;
@@ -923,8 +937,6 @@ showLoveCooling:function(loveCooling){
 
   var status = loveCooling.status;
   var battleMemberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
-
-  console.log("battleMemberInfo:"+JSON.stringify(battleMemberInfo));
   this.setData({
     "progressScoreData.loveCooling.upperLimit":upperLimit,
     "progressScoreData.loveCooling.status": status,

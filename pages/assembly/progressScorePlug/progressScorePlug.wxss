@@ -166,6 +166,19 @@
   margin: 3px;
 }
 
+.progressScoreContainerHeaderMemberBig{
+  width:100px;
+  height:120px;
+  position: relative;
+  display: inline-block;
+  margin: 3px;
+}
+
+.progressScoreContainerHeaderMemberBigImg{
+  width:100%;
+  height:80px;
+}
+
 .progressScoreContainerHeaderMemberImg{
   width:100%;
   height:50px;

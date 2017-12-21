@@ -1,10 +1,13 @@
 {
   "pages": [
+    "pages/battleHome/battleHome3",
+    "pages/pkRoom/pkRoom",
     "pages/battleHome/battleHome",
+    "pages/test/test",
+    "pages/progressScore/progressScore",
     "pages/danList/danList",
     "pages/danInfo/daninfo2",
     "pages/danInfo/danInfo",
-    "pages/progressScore/progressScore",
     "pages/questionFactory/questionFactoryMain/questionFactoryMain",
     "pages/battleTakepart/battleTakepart",
     "pages/questionFactory/editQuestion/editQuestion",
@@ -34,7 +37,9 @@
     "pages/manager/addSubject/addSubject",
     "pages/battleInfo/battleInfo",
     "pages/logs/logs",
-    "pages/myBattleRooms/myBattleRooms"
+    "pages/myBattleRooms/myBattleRooms",
+    "pages/stock/stock"
+
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -8,16 +8,16 @@
   </scroll-view>
 
   <scroll-view class="progressScoreContainerHeaderMembers" scroll-x="true" wx:if="{{members.length==2}}">
-          <view class="progressScoreContainerHeaderMember">
-            <image src="{{members[0].imgUrl}}" class="progressScoreContainerHeaderMemberImg" style="border-radius:10px;"></image>
-            <progress percent="{{members[0].percent}}" class="progressScoreContainerHeaderMemberProgress"/>
+          <view class="progressScoreContainerHeaderMemberBig">
+            <image src="{{members[0].imgUrl}}" class="progressScoreContainerHeaderMemberBigImg" style="border-radius:10px;"></image>
+            <progress percent="{{members[0].percent|Int}}" class="progressScoreContainerHeaderMemberProgress" color="red" style="top:70px;width:150%;" show-info='true'/>
           </view>
 
           <image src='http://ovqk5bop3.bkt.clouddn.com/8575c56292491e63a168bdd5e4694cf3.png' class="progressScoreContainerHeaderMembersVsImg"></image>
 
-          <view class="progressScoreContainerHeaderMember">
-            <image src="{{members[1].imgUrl}}" class="progressScoreContainerHeaderMemberImg" style="border-radius:10px;"></image>
-            <progress percent="{{members[1].percent}}" class="progressScoreContainerHeaderMemberProgress"/>
+          <view class="progressScoreContainerHeaderMemberBig">
+            <image src="{{members[1].imgUrl}}" class="progressScoreContainerHeaderMemberBigImg" style="border-radius:10px;"></image>
+            <progress percent="{{members[1].percent|Int}}" class="progressScoreContainerHeaderMemberProgress" color="red" style="top:70px;width:150%" show-info='true'/>
           </view>
   </scroll-view>    
 
@@ -28,7 +28,7 @@
         <progress percent="{{members[0].percent}}" class="progressScoreContainerHeaderMemberProgress"/>
       </view>
   </scroll-view>    
-  <view class="progressScoreContainerHeaderRoom">
+  <view class="progressScoreContainerHeaderRoom" style='display:none;'>
       <progress percent="{{roomPercent}}" class="progressScoreContainerHeaderRoomProcess" color='red'  stroke-width='10' show-info='true'/>
   </view>
 </template>

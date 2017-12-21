@@ -22,7 +22,10 @@ var layerout = new baseLayerout.BaseLayerout({
       danName:"原始人",
       danId:"",
       imgUrl:""
-    }*/]
+    }*/],
+    thisDan:null,
+    alertDan:null,
+    isDanAlert:0
   },
 
   /**
@@ -36,12 +39,14 @@ var layerout = new baseLayerout.BaseLayerout({
     var outThis = this;
     accountRequest.accountResultInfo({
       success: function (accountResult) {
-          outThis.setData({
-            headimgurl: accountResult.headimgurl,
-            nickname: accountResult.nickname,
-            level: accountResult.level,
-            exp: accountResult.exp
-          })
+        outThis.setData({
+          headimgurl: accountResult.headimgurl,
+          nickname: accountResult.nickname,
+          level: accountResult.level,
+          exp: accountResult.exp,
+          danName:accountResult.danName
+        });
+        outThis.initBattleDans();
       },
       fail: function () {
 
@@ -53,7 +58,7 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    this.initBattleDans();
+    
     this.initAccountResult();
   },
 
@@ -71,18 +76,86 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
+  danListAlertMaskClick:function(){
+    this.setData({
+      isDanAlert: 0
+    });
+  },
+
   danItemClick:function(e){
     var id = e.currentTarget.id;
     var dans = this.data.dans;
     for(var i=0;i<dans.length;i++){
       var dan = dans[i];
       if(dan.id==id){
-        wx.navigateTo({
-          url: '../danInfo/daninfo2?danId='+dan.danId
-        });
+        if (dan.status==0){
+          this.showConfirm("该段位未开启", "请先完成上一个段位", {
+            confirm:function(){
+
+            },
+            cancel:function(){
+
+            }
+          });
+          return;
+        }
+        var isSign = dan.isSign;
+        if(isSign==1){
+          wx.navigateTo({
+            url: '../danInfo/daninfo2?danId=' + dan.danId
+          });
+        }else{
+          this.setData({
+            isDanAlert: 1,
+            alertDan: dan
+          });
+        }
         return;
       }
     }
+    
+  },
+
+  signClick:function(){
+    var outThis = this;
+    var alertDan = this.data.alertDan;
+
+    this.showConfirm("报名该关卡","是否确定",{
+      confirm:function(){
+        outThis.showLoading();
+        outThis.setData({
+          isDanAlert: 0
+        });
+        battleDanRequest.danSign(alertDan.danId, {
+          success: function () {
+            outThis.hideLoading();
+            wx.navigateTo({
+              url: '../danInfo/daninfo2?danId=' + alertDan.danId
+            });
+          },
+          beanNotEnough: function () {
+            outThis.hideLoading();
+            outThis.showConfirm("智慧豆不足", "是否去充值", {
+              confirm:function(){
+                wx.navigateTo({
+                  url: '../mall/mall'
+                });
+              },
+              cancel:function(){
+
+              }
+            });
+          },
+          fail: function () {
+            outThis.hideLoading();
+            outThis.showToast("网络繁忙，请稍后再试");
+          }
+        });
+      },
+      cancel:function(){
+
+      }
+    });
     
   },
 

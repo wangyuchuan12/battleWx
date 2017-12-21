@@ -13,8 +13,14 @@
   width:100%;
   height:100%;
   border-radius:10px;
+  display: inline-block;
 }
 
+.danInfoMemberVsImg{
+  display: inline-block;
+  width:100px;
+  height:100px;
+}
 
 .danInfoReward{
   text-align: center;
@@ -61,6 +67,8 @@
   padding-top:70px;
   padding-left:20px;
   padding-right:20px;
+
+  text-align: center;
 }
 
 .danInfo{
@@ -68,7 +76,7 @@
 }
 
 .danInfoButton{
-  width:100px;
+  width:80%;
   text-align: center;
   padding-top:10px;
   padding-bottom:10px;
@@ -80,4 +88,12 @@
   color: white;
   background:green;
   top:30px;
+}
+
+.danInfoRewardWait{
+  color: red;
+  margin: 0 auto;
+  position: relative;
+  text-align: center;
+  padding-top:20px;
 }

@@ -17,7 +17,12 @@ function BaseLayerout(config){
       hiddenLoading: true,
       hiddenToast: true,
       toastMsg:"ok",
-      toastDuration:1000
+      toastDuration:1000,
+      "fullAlertTitle": "恭喜您",
+      "fullAlertRewardNum": 20,
+      "fullAlertButton": "确定",
+      fullAlertAnimation:null,
+      fullAlertDisplay:"none"
     }
 
 
@@ -27,6 +32,38 @@ function BaseLayerout(config){
       });
     }
 
+    baseConfig.showFullAlert = function(title,title2,rewardNum,button){
+
+      this.setData({
+        "baseData.fullAlertTitle":title,
+        "baseData.fullAlertTitle2": title2,
+        "baseData.fullAlertRewardNum":rewardNum,
+        "baseData.fullAlertButton":button,
+        "baseData.fullAlertDisplay":"block"
+      });
+      var outThis = this;
+      setTimeout(function(){
+        var animation = wx.createAnimation({
+          transformOrigin: "50% 50%",
+          duration: 100000000,
+          timingFunction: "ease",
+          delay: 0
+        });
+        animation.rotate(15000000).step();
+
+        outThis.setData({
+          "baseData.fullAlertAnimation": animation.export()
+        });
+      },500);
+      
+    }
+
+
+    baseConfig.fullAlertButtonClick = function(){
+      this.setData({
+        "baseData.fullAlertDisplay": "none"
+      });
+    }
 
 
     baseConfig.showToast = function (msg,duration) {

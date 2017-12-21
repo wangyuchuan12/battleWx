@@ -4,6 +4,8 @@ var accountRequest = require("../../utils/accountRequest.js");
 var randomRoomRequest = require("../../utils/randomRoomRequest.js");
 var battlesRequest = require("../../utils/battlesRequest.js");
 
+var battleMembersRequest = require("../../utils/battleMembersRequest.js");
+
 var battleTakepartCache = require("../../utils/cache/battleTakepartCache.js");
 
 var request = require("../../utils/request.js");
@@ -11,6 +13,7 @@ var request = require("../../utils/request.js");
 var battleDanRequest = require("../../utils/battleDanRequest.js");
 
 var takepartRequest = require("../../utils/takepartRequest.js");
+
 
 var requestTarget;
 
@@ -26,8 +29,9 @@ var layerout = new baseLayerout.BaseLayerout({
     imgUrl: "",
     roomId: "",
     battleId:"",
-    maxinum:"",
-    mininum:"",
+    maxinum:0,
+    mininum:0,
+    num:0,
     projects: [{
       isOpen: 1
     }],
@@ -39,15 +43,15 @@ var layerout = new baseLayerout.BaseLayerout({
         imgUrl: "http://otsnwem87.bkt.clouddn.com/user.png"
     }],
 
-   rewards:[]
+    rewards:[]
   },
 
   initDanRoomInfo:function(){
     var outThis = this;
     var danId = this.data.danId;
+    outThis.showLoading();
     battleDanRequest.danRoomInfo(danId,{
       success:function(room){
-        console.log("room:"+JSON.stringify(room));
         outThis.setData({
           name:room.name,
           places:room.places,
@@ -55,10 +59,30 @@ var layerout = new baseLayerout.BaseLayerout({
           battleId:room.battleId,
           maxinum:room.maxinum,
           mininum:room.mininum,
-          rewards:room.rewards
+          rewards:room.rewards,
+          status:room.status,
+          roomStatus:room.roomStatus,
+          num:room.num
         });
-
         outThis.showMembers(room.members);
+        outThis.initBattleMembers({
+          success:function(){
+            outThis.hideLoading();
+            if (room.roomStatus == 3) {
+              outThis.showConfirm("比赛已经结束", "确定查看比赛情况", {
+                  confirm:function(){
+                    wx.navigateTo({
+                      url: '../progressScore/progressScore?roomId=' + room.roomId + "&battleId=" + room.battleId
+                    });
+                  },
+                  cancel:function(){
+
+                  }
+              });
+            }
+          }
+        });
+        
       },
       fail:function(){
         console.log("fail");
@@ -71,13 +95,9 @@ var layerout = new baseLayerout.BaseLayerout({
    */
   onLoad: function (options) {
     var danId = options.danId;
-    danId = 1;
     this.setData({
       danId: danId
     });
-    console.log("danId:" + danId);
-    //  this.initBattles();
-    //this.initAccountResult();
 
     this.initDanRoomInfo();
   },
@@ -101,13 +121,11 @@ var layerout = new baseLayerout.BaseLayerout({
           });
         }
       }
-      
-
-      
 
       this.setData({
         members:members
       });
+      battleTakepartCache.members = ms;
   },
 
   takepartClick:function(){
@@ -120,10 +138,28 @@ var layerout = new baseLayerout.BaseLayerout({
     this.showLoading();
     var battleId = this.data.battleId;
     var roomId = this.data.roomId;
+    var status = this.data.status;
+    if(status==1&&mininum>num){
+      this.showToast("人数不足，请等待...");
+      this.hideLoading();
+      return;
+    }
+
+    if(status==1){
+      this.hideLoading();
+      wx.navigateTo({
+        url: '../progressScore/progressScore?roomId='+roomId+"&battleId="+battleId
+      });
+      return;
+    }
     takepartRequest.battleTakepart(battleId,roomId,{
       success: function (member) {
+        outThis.setData({
+          status:1
+        });
         outThis.hideLoading();
         outThis.initBattleMembers();
+        console.log("fail");
       },
       beanNotEnough: function () {
         outThis.hideLoading();
@@ -153,11 +189,9 @@ var layerout = new baseLayerout.BaseLayerout({
       },
       battleIn: function () {
         outThis.hideLoading();
-        outThis.skipToProgress();
       },
       battleEnd: function () {
         outThis.hideLoading();
-        outThis.skipToProgress();
       },
       roomEnd: function () {
         outThis.hideLoading();
@@ -191,6 +225,7 @@ var layerout = new baseLayerout.BaseLayerout({
     var outThis = this;
     var roomId = this.data.roomId;
     var maxinum = this.data.maxinum;
+    var battleId = this.data.battleId;
     var num = 0;
     requestTarget = battleMembersRequest.getBattleMembers(battleId, roomId, {
       cache: function (battleMembers) {
@@ -219,8 +254,6 @@ var layerout = new baseLayerout.BaseLayerout({
       },
       success: function (battleMembers) {
         battleTakepartCache.members = battleMembers;
-        callback.success(battleMembers);
-
         var length = battleMembers.length;
         var num = length;
         var members = new Array();
@@ -236,16 +269,19 @@ var layerout = new baseLayerout.BaseLayerout({
         }
 
         outThis.setData({
-          members: members,
           num: num
         });
+
+        outThis.showMembers(battleMembers);
 
         var mininum = outThis.data.mininum;
 
         if (mininum <= num) {
           requestTarget.stop();
         }
-
+        if(callback&&callback.success){
+          callback.success();
+        }
       },
       fail: function () {
         callback.fail();
@@ -257,7 +293,6 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
   },
 
   /**
@@ -277,7 +312,7 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
+    requestTarget.stop();
   },
 
   /**

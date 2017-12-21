@@ -1,0 +1,42 @@
+<import src="../assembly/selectInput/selectInput.wxml"/>
+
+<import src="../assembly/baseLayerout/baseLayerout"/>
+<import src="../assembly/attrPlug/attrPlug"/>
+<template is="baseLayerout" data="{{...baseData}}"/>
+<template is="attrPlug" data="{{...attrPlugData}}"/>
+
+
+<view class="shareAlertPlug" wx:if="{{shareAlert==1}}">
+      <view class="shareAlertPlugClose fa fa-times-circle" bindtap='closeShareAlertPlug'></view>
+      <view class="shareAlertPlugBean" 
+      style="background:url('http://ovqk5bop3.bkt.clouddn.com/8575c56292491e63a168bdd5e4694cf3.png');background-size:100% 100%;"></view>
+      <view class="shareAlertPlugContent">开始一对一pk对战</view>
+      <button class="shareAlertPlugButton" open-type='share'>确定</button>
+</view>
+<view class="battleHome">
+  <view class="battleHomeMenu">
+    <view class="battleHomeMenu1" bindtap='danClick'>
+      <view class="battleHomeMenu1Background"></view>
+      <view class="battleHomeMenu1Name">闯关</view>
+    </view>
+    <view class="battleHomeMenu2"  bindtap='pkClick'>
+      <view class="battleHomeMenu2Background"></view>
+      <view class="battleHomeMenu2Name">好友对战</view>
+    </view>
+    <view class="battleHomeMenu3" bindtap='mallClick'>
+      <view class="battleHomeMenu3Background"></view>
+      <view class="battleHomeMenu3Name">商城</view>
+    </view>
+    <view class="battleHomeMenu4" bindtap='factoryClick'>
+      <view class="battleHomeMenu4Background"></view>
+      <view class="battleHomeMenu4Name">题目工厂</view>
+    </view>
+    <view class="battleHomeMenu5"  bindtap='takeoutClick'>
+       <view class="battleHomeMenu5Background"></view>
+       <view class="battleHomeMenu5Name">提现</view>
+    </view>
+  </view>
+</view>
+
+
+    

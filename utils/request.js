@@ -80,6 +80,7 @@ function request(url, params, callback,data) {
       'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
     }
   }
+ // token = 'b9ca6b0d-06bb-4a25-8e0f-aa6fefc40908';
   params.token = token;
   wx.request({
     url: url,

@@ -5,13 +5,13 @@
         
           <view class="progressScoreContainerHeaderScore">
             <view class="progressScoreContainerHeaderAllScore">
-                <view class="progressScoreContainerHeaderAllScoreTag">总距离</view>
-                <view class="progressScoreContainerHeaderAllScoreContent" id="allScoreDiv"><span id="allScore">{{distance*10}}</span>米</view>
+                <view class="progressScoreContainerHeaderAllScoreTag">目标</view>
+                <view class="progressScoreContainerHeaderAllScoreContent" id="allScoreDiv"><span id="allScore">{{scrollGogal}}</span>分</view>
             </view>
             
             <view class="progressScoreContainerHeaderAllScore" style="margin-left: 10px;">
                 <view class="progressScoreContainerHeaderAllScoreTag">进度</view>
-                <view class="progressScoreContainerHeaderAllScoreContent" id="thisScoreDiv"><span id="thisScore">{{progress*10}}</span>米</view>
+                <view class="progressScoreContainerHeaderAllScoreContent" id="thisScoreDiv"><span id="thisScore">{{score}}</span>分</view>
             </view>
           </view>
           
