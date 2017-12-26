@@ -15,4 +15,6 @@
 
     <view class="fullAlertButton" bindtap='fullAlertButtonClick'>{{fullAlertButton}}</view>
   </view>
+
+  <view class="againButton" style="display:{{againButtonDisplay}}" bindtap='againButtonClick'>{{againButton}}</view>
 </template>

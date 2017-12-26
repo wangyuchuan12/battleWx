@@ -1,10 +1,10 @@
 {
   "pages": [
     "pages/battleHome/battleHome3",
-    "pages/pkRoom/pkRoom",
     "pages/battleHome/battleHome",
-    "pages/test/test",
     "pages/progressScore/progressScore",
+    "pages/pkRoom/pkRoom",
+    "pages/test/test",
     "pages/danList/danList",
     "pages/danInfo/daninfo2",
     "pages/danInfo/danInfo",

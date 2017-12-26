@@ -11,15 +11,11 @@
     </view>
   </view>
 
-  <view class="danInfoRewardWait" wx:if="{{status==1&&maxinum>num}}">还差{{maxinum-num}}人，等待中...</view>
+  <view class="danInfoRewardWait" wx:if="{{status==1&&timeDiffer>0}}">开始剩余时间：{{remainderHour}}:{{remainderMin}}:{{remainderSecond}}</view>
+  <view class="danInfoRewardWait" wx:if="{{timeDiffer<=0}}">比赛进行中</view>
+  
 
   <view class="danInfoRewardWait" wx:if="{{status==3}}">比赛已经结束</view>
-
-  <view class="danInfoButton" bindtap='takepartClick' wx:if="{{status==0||status==2||status==1}}">
-    <span wx:if="{{status==0}}">参加</span>
-    <span wx:elif="{{status==1}}">开始</span>
-    <span wx:elif="{{status==2}}">开始</span>
-  </view>
 
   <view class="danInfoMembers">
     <block wx:if="{{members.length!=2}}">
@@ -38,6 +34,12 @@
         <image src="{{members[1].imgUrl}}" class="danInfoMemberImg"></image>
       </view>
     </block>
+  </view>
+
+  <view class="danInfoButton" bindtap='takepartClick' wx:if="{{status==0||status==2||status==1}}">
+    <span wx:if="{{status==0}}">参加</span>
+    <span wx:elif="{{status==1}}">开始</span>
+    <span wx:elif="{{status==2}}">开始</span>
   </view>
  
 </scroll-view>

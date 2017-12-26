@@ -6,6 +6,8 @@ var battleDanRequest = require("../../utils/battleDanRequest.js");
 
 var accountRequest = require("../../utils/accountRequest.js");
 
+var takepartRequest = require("../../utils/takepartRequest.js");
+
 var layerout = new baseLayerout.BaseLayerout({
 
   /**
@@ -59,7 +61,6 @@ var layerout = new baseLayerout.BaseLayerout({
    */
   onReady: function () {
     
-    this.initAccountResult();
   },
 
   initBattleDans:function(){
@@ -127,11 +128,50 @@ var layerout = new baseLayerout.BaseLayerout({
           isDanAlert: 0
         });
         battleDanRequest.danSign(alertDan.danId, {
-          success: function () {
-            outThis.hideLoading();
-            wx.navigateTo({
-              url: '../danInfo/daninfo2?danId=' + alertDan.danId
+          success: function (data) {
+           
+            console.log(".....data:"+JSON.stringify(data));
+            takepartRequest.battleTakepart(data.battleId, data.roomId, {
+              success: function (member) {
+                outThis.hideLoading();
+                wx.navigateTo({
+                  url: '../danInfo/daninfo2?danId=' + alertDan.danId
+                });
+              },
+              beanNotEnough: function () {
+                
+              },
+              masonryNotEnough: function () {
+               
+              },
+              fail: function (errorMsg) {
+                outThis.hideLoading();
+                if (!errorMsg) {
+                  outThis.showToast("网络繁忙");
+                } else {
+                  outThis.showToast(errorMsg);
+                }
+              },
+              battleIn: function () {
+                
+              },
+              battleEnd: function () {
+                
+              },
+              roomEnd: function () {
+                
+              },
+              roomFull: function () {
+                
+              }
             });
+
+
+
+
+
+
+
           },
           beanNotEnough: function () {
             outThis.hideLoading();
@@ -164,6 +204,7 @@ var layerout = new baseLayerout.BaseLayerout({
    */
   onShow: function () {
     this.initAccountInfo();
+    this.initAccountResult();
   },
 
   /**

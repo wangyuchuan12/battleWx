@@ -6,6 +6,46 @@ var beatIntoUrl = domain + "/api/battlePk/beatInto";
 var immediateDataUrl = domain + "/api/battlePk/immediateData";
 var readyUrl = domain + "/api/battlePk/ready";
 
+var restartUrl = domain + "/api/battlePk/restart";
+
+var immediateDataUrl = domain + "/api/battlePk/immediateData";
+
+
+function immediateRequest(id,callback) {
+  var params = new Object();
+  params.id = id;
+  request.requestWithLogin(immediateDataUrl, params, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
+      } else {
+        callback.fail();
+      }
+    },
+    fail: function (resp) {
+      console.log("fail");
+      callback.fail("网络繁忙");
+    }
+  });
+}
+
+function restartRequest(callback) {
+  var params = new Object();
+  request.requestWithLogin(restartUrl, params, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
+      } else {
+        callback.fail();
+      }
+    },
+    fail: function (resp) {
+      console.log("fail");
+      callback.fail("网络繁忙");
+    }
+  });
+}
+
 function homeIntoRequest(callback){
   console.log("homeIntoRequest");
   var params = new Object();
@@ -84,5 +124,7 @@ module.exports = {
   homeIntoRequest: homeIntoRequest,
   beatIntoRequest: beatIntoRequest,
   immediateDataRequest: immediateDataRequest,
-  readyRequest: readyRequest
+  readyRequest: readyRequest,
+  restartRequest: restartRequest,
+  immediateRequest: immediateRequest
 }

@@ -48,15 +48,26 @@ var layerout = new baseLayerout.BaseLayerout({
     shareAlert:0,
     "rewardBean": 0,
     "addExp": 0,
-    memberInfo:null,
+    memberInfo:null
   },
   eventListener:{
+
+    againClick:function(){
+      var pages = getCurrentPages();
+      var prevPage = pages[pages.length - 2];
+      prevPage.restart();
+      wx.navigateBack({
+        
+      });
+    },
+
     questinResultClose:function(){
       outThis.setData({
         "questionResultDisplay": "none",
         "displayPanel": 1
       });
     },
+    
 
     questinSelectorClose:function(){
       outThis.setData({
@@ -76,6 +87,9 @@ var layerout = new baseLayerout.BaseLayerout({
       var roomId = outThis.data.roomId;
       outThis.syncPaperData({
         success:function(data){
+          if(!data){
+            return;
+          }
 
           var status = data.status;
           if(status==1||status==2){
@@ -178,6 +192,10 @@ var layerout = new baseLayerout.BaseLayerout({
               if (!rewardBean){
                 rewardBean = 0;
               }
+              outThis.setData({
+                questionSelectorDisplay: "none",
+                questionResultDisplay: "none"
+              });
               if (battleMembers && battleMembers.length>2){
                 outThis.showFullAlert("比赛已经结束", "您获取第" + (i + 1) + "名", rewardBean, "确定");
               }else{
@@ -324,6 +342,9 @@ var layerout = new baseLayerout.BaseLayerout({
 
     outThis.setLove(loveLimit,loveCount);
     setTimeout(function(){
+      outThis.syncPaperData();
+    },1000);
+    setTimeout(function(){
       
       outThis.trendBetween(memberInfo.id, begin, end, {
         success: function () {
@@ -331,10 +352,12 @@ var layerout = new baseLayerout.BaseLayerout({
             isRun: 0
           });
           if (outThis.data.isLast == 1) {
-            outThis.showQuestionResult();
-            outThis.skipToRank();
+        //    outThis.showQuestionResult();
+          // outThis.skipToRank();
+           // outThis.showAlert();  
           }else{
-            outThis.showQuestionResult();
+          //  outThis.showQuestionResult();
+            
           }
         },
         fail: function () {
@@ -543,7 +566,9 @@ var layerout = new baseLayerout.BaseLayerout({
     var roomId = this.data.roomId;
     syncPaperDateRequest.syncPapersData(battleId,roomId,{
       success:function(data){
-        callback.success(data);
+        if(callback){
+          callback.success(data);
+        }
         var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
         memberInfo.endType = data.endType;
         memberInfo.roomStatus = data.status;
@@ -648,6 +673,13 @@ var layerout = new baseLayerout.BaseLayerout({
 
  //   this.redPackAnn();
 
+    var againButton = options.againButton;
+    if (againButton){
+      this.setData({
+        "baseData.againButton": againButton
+      });
+    }
+
     setTimeout(function () {
       outThis.processUpdate({
         success: function () {
@@ -662,33 +694,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
     var battleId = options.battleId;
 
-    battleMembersRequest.getBattleMembers(battleId, roomId, {
-      cache: function (battleMembers) {
-
-      },
-      success: function (battleMembers) {
-        console.log("battleMembers:"+JSON.stringify(battleMembers));
-        membersRankUtil.rankByProcess(battleMembers);
-        outThis.setMembers(battleMembers);
-        outThis.setData({
-          members:battleMembers
-        });
-
-        var memberInfo = outThis.data.memberInfo;
-
-        if(!memberInfo){
-          var interval = setInterval(function () {
-            outThis.initPositions();
-            clearInterval(interval);
-          }, 500);
-        }else{
-          outThis.initPositions();
-        }
-      },
-      fail: function () {
-
-      }
-    });
+    
     
     var model = options.model;
     var battleId = options.battleId;
@@ -708,6 +714,30 @@ var layerout = new baseLayerout.BaseLayerout({
 
     battleMemberInfoRequest.getBattleMemberInfo(battleId,roomId,{
       success:function(memberInfo){
+
+        battleMembersRequest.getBattleMembers(battleId, roomId, {
+          cache: function (battleMembers) {
+
+          },
+          success: function (battleMembers) {
+            membersRankUtil.rankByProcess(battleMembers);
+            outThis.setMembers(battleMembers);
+            outThis.setData({
+              members: battleMembers
+            });
+
+            var memberInfo = outThis.data.memberInfo;
+
+            outThis.initPositions();
+          },
+          fail: function () {
+
+          }
+        });
+
+
+
+
         outThis.setLove(memberInfo.loveCount, memberInfo.loveResidule);
         outThis.setProgress(memberInfo.process);
 

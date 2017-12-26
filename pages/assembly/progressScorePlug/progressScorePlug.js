@@ -645,6 +645,7 @@ data: {
 
 speedCoolClick:function(){
   var outThis = this;
+  this.showLoading();
   var battleMemberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
   var speedCoolBean = this.data.progressScoreData.loveCooling.speedCoolBean;
   var beanCount = this.getBeanCount();
@@ -667,9 +668,12 @@ speedCoolClick:function(){
       var speedCoolBean = data.speedCoolBean;
       outThis.subBean(speedCoolBean);
       outThis.setLove(data.loveCount,data.loveResidule);
+
+      outThis.hideLoading();
     },
     fail:function(){
       console.log(".................fail");
+      outThis.hideLoading();
     }
   });
 },

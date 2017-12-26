@@ -22,7 +22,9 @@ function BaseLayerout(config){
       "fullAlertRewardNum": 20,
       "fullAlertButton": "确定",
       fullAlertAnimation:null,
-      fullAlertDisplay:"none"
+      fullAlertDisplay:"none",
+      againButtonDisplay:"none",
+      againButton:"再来一局"
     }
 
 
@@ -58,10 +60,15 @@ function BaseLayerout(config){
       
     }
 
+    baseConfig.againButtonClick = function(){
+      this.eventListener.againClick();
+    },
+
 
     baseConfig.fullAlertButtonClick = function(){
       this.setData({
-        "baseData.fullAlertDisplay": "none"
+        "baseData.fullAlertDisplay": "none",
+        "baseData.againButtonDisplay":"inline-block"
       });
     }
 

@@ -32,6 +32,10 @@ var layerout = new baseLayerout.BaseLayerout({
     maxinum:0,
     mininum:0,
     num:0,
+    remainderHour:0,
+    remainderMin:0,
+    remainderSecond:0,
+    timeDiffer:1,
     projects: [{
       isOpen: 1
     }],
@@ -44,6 +48,45 @@ var layerout = new baseLayerout.BaseLayerout({
     }],
 
     rewards:[]
+  },
+
+  reckonTime:function(){
+    var outThis = this;
+    var interval = setInterval(function () {
+      var timeDiffer = outThis.data.timeDiffer;
+      
+      var hour = parseInt(timeDiffer/3600);
+      var min = parseInt((timeDiffer - hour*3600)/60);
+      var second = timeDiffer - (hour*3600+min*60);
+
+      if(hour<10){
+        hour = "0"+hour;
+      }
+
+      if(min<10){
+        min = "0"+min;
+      }
+
+      if(second<10){
+        second = "0"+second;
+      }
+
+      timeDiffer--;
+      outThis.setData({
+        timeDiffer: timeDiffer,
+        remainderHour: hour,
+        remainderMin: min,
+        remainderSecond: second
+      });
+
+      if(timeDiffer<=0){
+        clearInterval(interval);
+        wx.navigateTo({
+          url: '../progressScore/progressScore?roomId=' + outThis.data.roomId + "&battleId=" + outThis.data.battleId + "&againButton=返回"
+        });
+      }
+
+    }, 1000); 
   },
 
   initDanRoomInfo:function(){
@@ -62,22 +105,17 @@ var layerout = new baseLayerout.BaseLayerout({
           rewards:room.rewards,
           status:room.status,
           roomStatus:room.roomStatus,
-          num:room.num
+          num:room.num,
+          timeDiffer: room.timeDiffer
         });
+        outThis.reckonTime();
         outThis.showMembers(room.members);
         outThis.initBattleMembers({
           success:function(){
             outThis.hideLoading();
             if (room.roomStatus == 3) {
-              outThis.showConfirm("比赛已经结束", "确定查看比赛情况", {
-                  confirm:function(){
-                    wx.navigateTo({
-                      url: '../progressScore/progressScore?roomId=' + room.roomId + "&battleId=" + room.battleId
-                    });
-                  },
-                  cancel:function(){
-
-                  }
+              wx.navigateTo({
+                url: '../progressScore/progressScore?roomId=' + room.roomId + "&battleId=" + room.battleId +"&againButton=返回"
               });
             }
           }
@@ -147,8 +185,14 @@ var layerout = new baseLayerout.BaseLayerout({
 
     if(status==1){
       this.hideLoading();
+      var remainder = outThis.data.timeDiffer;
+      if (remainder>0){
+        outThis.showToast("比赛未开始");
+        return;
+      } 
+
       wx.navigateTo({
-        url: '../progressScore/progressScore?roomId='+roomId+"&battleId="+battleId
+        url: '../progressScore/progressScore?roomId=' + roomId + "&battleId=" + battleId +"&againButton=返回"
       });
       return;
     }
@@ -287,6 +331,12 @@ var layerout = new baseLayerout.BaseLayerout({
         callback.fail();
       }
     }, 15000);
+  },
+
+  restart:function(){
+    setTimeout(function(){
+      wx.navigateBack({});
+    },500);
   },
 
   /**

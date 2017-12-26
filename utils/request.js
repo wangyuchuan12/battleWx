@@ -1,4 +1,4 @@
-var domain = "http://www.chengxihome.com";
+var domain = "https://www.chengxihome.com";
 //根据code登陆用户bbin
 var loginByJsCodeUrl = domain + "/api/common/login/loginByJsCode";
 var registerUserByJsCode = domain +"/api/common/login/registerUserByJsCode";
@@ -80,7 +80,11 @@ function request(url, params, callback,data) {
       'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
     }
   }
- // token = 'b9ca6b0d-06bb-4a25-8e0f-aa6fefc40908';
+  /*token = '6464d106-88ab-4227-a8f6-9f934efc0ede';
+  token = 'e29d555b-a94c-433a-b3c7-346911baeb19';
+  token = 'de8230bb-f2fa-42d1-b78d-e366722ef846';
+  token = 'ef43f422-cb7c-416d-9c41-2fe69baa5b2a';
+  token = 'afb30048-02c3-460f-a3be-ceeb61fdc59f';*/
   params.token = token;
   wx.request({
     url: url,

@@ -7,6 +7,7 @@
   width:20%;
   height:70px;
   display:inline-block;
+  margin: 10px;
 }
 
 .danInfoMemberImg{
@@ -41,11 +42,9 @@
 .danInfoRewardContent{
   width:80%;
   max-height:200px;
-  background: RGBA(37,75,140,1);
   margin: 0 auto;
   position: relative;
   padding-top:5px;
-  padding-bottom:20px;
   margin-top:20px;
   border-radius:20px;
 }
@@ -64,9 +63,8 @@
 }
 
 .danInfoMembers{
-  padding-top:70px;
-  padding-left:20px;
-  padding-right:20px;
+  padding-left:50px;
+  padding-right:50px;
 
   text-align: center;
 }
@@ -96,4 +94,5 @@
   position: relative;
   text-align: center;
   padding-top:20px;
+  padding-bottom:20px;
 }

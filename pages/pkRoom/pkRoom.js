@@ -22,7 +22,8 @@ var layerout = new baseLayerout.BaseLayerout({
     role:0,
     isObtain:0,
     battleId:"",
-    periodId:""
+    periodId:"",
+    isEnd:0
   },
 
   /**
@@ -40,13 +41,22 @@ var layerout = new baseLayerout.BaseLayerout({
       id:id
     });
 
-    console.log("role:"+role);
-    if(role == 0){
+    this.init();
+    
+  },
+
+  init:function(){
+    var role = this.data.role;
+    if (role == 0) {
       this.homeInto();
-    }else{
+    } else {
       this.beatInto();
     }
-    
+
+    var outThis = this;
+    setTimeout(function () {
+     // outThis.immediate();
+    }, 5000);
   },
 
   doReady:function(){
@@ -61,7 +71,6 @@ var layerout = new baseLayerout.BaseLayerout({
       success: function (data) {
         outThis.hideLoading();
         outThis.setData({
-          id: data.id,
           homeUserId: data.homeUserId,
           homeUsername: data.homeUsername,
           homeUserImgurl: data.homeUserImgurl,
@@ -72,10 +81,11 @@ var layerout = new baseLayerout.BaseLayerout({
           homeStatus: data.homeStatus,
           beatStatus: data.beatStatus,
           roomStatus: data.roomStatus,
-          battleCount: data.battleCount,
-          battleId: "",
-          periodId: ""
+          battleCount: data.battleCount
         });
+        if (data.roomStatus == 2) {
+          outThis.skipToProgress();
+        }
       },
       fail: function () {
         outThis.showToast("网络繁忙，请稍后再试");
@@ -89,12 +99,33 @@ var layerout = new baseLayerout.BaseLayerout({
 
   },
 
+  restart:function(){
+    var outThis = this;
+    var role = this.data.role;
+    if(role==0){
+      battlePkRequest.restartRequest({
+        success: function () {
+          outThis.homeInto();
+        },
+        fail: function () {
+          outThis.showToast("网路繁忙");
+        }
+      });
+    }else if(role==1){
+      this.setData({
+        role: 0
+      });
+      this.init();
+    }
+    
+  },
+
   homeInto:function(){
     console.log("homeInto");
     var outThis = this;
     battlePkRequest.homeIntoRequest({
       success:function(data){
-        console.log("data:"+JSON.stringify(data));
+        console.log("data.roomId:"+data.roomId);
         outThis.setData({
           id: data.id,
           homeUserId: data.homeUserId,
@@ -114,9 +145,7 @@ var layerout = new baseLayerout.BaseLayerout({
           role:data.role
         });
         if(data.roomStatus==2){
-          wx.navigateTo({
-            url: '../progressScore/progressScore?battleId='+data.battleId+"&roomId="+data.roomId
-          });
+          outThis.skipToProgress();
         }
       },
       fail:function(){
@@ -125,11 +154,73 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
+  immediate:function(){
+    var outThis = this;
+    var id = this.data.id;
+    battlePkRequest.immediateRequest(id,{
+      success:function(data){
+        outThis.setData({
+          homeUserId: data.homeUserId,
+          homeUsername: data.homeUsername,
+          homeUserImgurl: data.homeUserImgurl,
+          beatUserId: data.beatUserId,
+          beatUsername: data.beatUsername,
+          beatUserImgurl: data.beatUserImgurl,
+          homeStatus: data.homeStatus,
+          beatStatus: data.beatStatus,
+          roomStatus: data.roomStatus,
+        });
+
+        if (data.roomStatus == 2) {
+          outThis.skipToProgress();
+        }
+        setTimeout(function(){
+          if(outThis.data.isEnd==0){
+            outThis.immediate();
+          }
+        },5000);
+        
+      },
+      fail:function(){
+        setTimeout(function () {
+          if (outThis.data.isEnd == 0) {
+            var errorCount = outThis.data.errorCount;
+            if(errorCount>=3){
+              outThis.immediate();
+              if (!errorCount) {
+                errorCount++;
+                outThis.setData({
+                  errorCount: errorCount,
+                  isEnd:1
+                });
+              }
+            }
+            
+          }
+        }, 5000);
+      }
+    });
+  },
+
+  skipToProgress:function(){
+    var battleId = this.data.battleId;
+    var roomId = this.data.roomId;
+    if(this.data.isEnd==0){
+      wx.navigateTo({
+        url: '../progressScore/progressScore?battleId=' + battleId + "&roomId=" + roomId
+      });
+      this.setData({
+        isEnd: 1
+      });
+    }
+  },
+
   beatInto:function(){
     var outThis = this;
     var id = this.data.id;
     battlePkRequest.beatIntoRequest(id,{
       success: function (data) {
+        console.log("data.roomId2:"+data.roomId);
         outThis.setData({
           id: data.id,
           homeUserId: data.homeUserId,
@@ -149,10 +240,9 @@ var layerout = new baseLayerout.BaseLayerout({
           role:data.role
         });
         if (data.roomStatus == 2) {
-          console.log("data:"+JSON.stringify(data));
-          wx.navigateTo({
-            url: '../progressScore/progressScore?battleId=' + data.battleId + "&roomId=" + data.roomId
-          });
+          
+          outThis.skipToProgress();
+          
         }
       },
       fail: function () {
