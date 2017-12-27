@@ -66,18 +66,38 @@
   <scroll-view class="battlePeriodManagerSubjects" scroll-x style="white-space:nowrap;display:flex;" wx:if="{{model==1||model==0}}">
     <block wx:for="{{subjects}}" wx:for-item="subject">
       <block wx:if="{{subject.id==selectSubjectId}}">
-        <view class="battlePeriodManagerSubject" style='border:1px solid red;'>
-          <image src="{{subject.imgUrl}}" class="battlePeriodManagerSubjectImg"></image>
-          <view class="battlePeriodManagerSubjectText">{{subject.name}}</view>
-        </view>
+        
+          <view class="battlePeriodManagerSubject" style='border:1px solid red;'>
+            <image src="{{subject.imgUrl}}" class="battlePeriodManagerSubjectImg"></image>
+            <view class="battlePeriodManagerSubjectText">{{subject.name}}</view>
+            
+            <block wx:for="{{questionNumData}}" wx:for-item="numItem">
+              <block wx:if="{{numItem.subjectId==selectSubjectId && numItem.stageId==selectStageId}}">
+                <view class="subjectNum">{{numItem.num}}</view>
+              </block>
+            </block>
+          </view>
+        
       </block>
 
       <block wx:else>
         <view class="battlePeriodManagerSubject" bindtap='subjectItemClick' id="{{subject.id}}">
           <image src="{{subject.imgUrl}}" class="battlePeriodManagerSubjectImg"></image>
           <view class="battlePeriodManagerSubjectText">{{subject.name}}</view>
+
+          <block wx:for="{{questionNumData}}" wx:for-item="numItem">
+              <block wx:if="{{numItem.subjectId==subject.id && numItem.stageId==selectStageId}}">
+                <view class="subjectNum">{{numItem.num}}</view>
+              </block>
+          </block>
+       
         </view>
+
       </block>
+
+      
+
+      
     </block>
   </scroll-view>
 

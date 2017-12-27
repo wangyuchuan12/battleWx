@@ -168,8 +168,27 @@ var layerout = new baseLayerout.BaseLayerout({
       id: "world3",
       index: 3,
       status: 0
-    }]
+    }],
+    questionNumData:[]
   },
+
+  initQueryQuestionCount:function(){
+    var outThis = this;
+    var battleId = this.data.battleId;
+    var periodId = this.data.periodId;
+    battleManagerRequest.requestQueryQuestionCount(battleId,periodId,{
+      success:function(data){
+        console.log("data:"+JSON.stringify(data));
+        outThis.setData({
+          questionNumData:data
+        });
+      },
+      fail:function(){
+
+      }
+    })
+  },
+
 
   startUpPeriodClick:function(){
     var outThis = this;
@@ -969,6 +988,8 @@ var layerout = new baseLayerout.BaseLayerout({
   stageItemClick:function(e){
     var id = e.currentTarget.id;
     var stages = this.data.stages;
+
+    console.log("stages:"+JSON.stringify(stages));
     
     for(var i=0;i<stages.length;i++){
       var stage = stages[i];
@@ -1086,6 +1107,8 @@ var layerout = new baseLayerout.BaseLayerout({
 
     this.initSubjects();
     this.initStages();
+
+    this.initQueryQuestionCount();
   },
 
   /**

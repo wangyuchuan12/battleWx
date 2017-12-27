@@ -35,6 +35,28 @@ var editRoomImgUrl = request.getDomain() + "/api/manager/roomImgEdit";
 var editRoomSearchAble = request.getDomain() + "/api/manager/roomSearchAbleEdit";
 
 var editRoomIsDisplay = request.getDomain() + "/api/manager/roomIsDisplayEdit";
+
+var queryQuestionCountUrl = request.getDomain() + "/api/manager/queryQuestionCount";
+
+
+function requestQueryQuestionCount(battleId,periodId, callback) {
+  request.request(queryQuestionCountUrl, {
+    battleId: battleId,
+    periodId: periodId
+  }, {
+      success: function (resp) {
+        if (resp.success) {
+          callback.success(resp.data);
+        } else {
+          callback.fail();
+        }
+      },
+      fail: function () {
+        callback.fail();
+      }
+    });
+}
+
 function requestAddBattleInfo(params,callback){
   request.request(addBattleInfoUrl, {
     name: params.name,
@@ -472,5 +494,6 @@ module.exports = {
   requestEditRoomInstruction: requestEditRoomInstruction,
   requestEditRoomImgUrl: requestEditRoomImgUrl,
   requestEditRoomIsDisplay: requestEditRoomIsDisplay,
-  requestEditRoomSearchAble: requestEditRoomSearchAble
+  requestEditRoomSearchAble: requestEditRoomSearchAble,
+  requestQueryQuestionCount: requestQueryQuestionCount
 }

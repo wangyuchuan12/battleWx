@@ -52,6 +52,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
   reckonTime:function(){
     var outThis = this;
+    var flag = true;
     var interval = setInterval(function () {
       var timeDiffer = outThis.data.timeDiffer;
       
@@ -81,11 +82,15 @@ var layerout = new baseLayerout.BaseLayerout({
 
       if(timeDiffer<=0){
         clearInterval(interval);
-        wx.navigateTo({
-          url: '../progressScore/progressScore?roomId=' + outThis.data.roomId + "&battleId=" + outThis.data.battleId + "&againButton=返回"
-        });
+        if (!flag){
+          wx.navigateTo({
+            url: '../progressScore/progressScore?roomId=' + outThis.data.roomId + "&battleId=" + outThis.data.battleId + "&againButton=返回"
+          });
+          return;
+        }
       }
 
+      flag = false;
     }, 1000); 
   },
 
@@ -336,7 +341,7 @@ var layerout = new baseLayerout.BaseLayerout({
   restart:function(){
     setTimeout(function(){
       wx.navigateBack({});
-    },500);
+    },1000);
   },
 
   /**

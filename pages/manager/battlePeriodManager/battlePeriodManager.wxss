@@ -31,6 +31,7 @@
   height:60px;
   margin: 10px;
   display:inline-block;
+  position: relative;
 }
 
 .battlePeriodManagerSubjectImg{
@@ -212,4 +213,12 @@
 
 .inputItemFillTermsWorlds{
   height:100px;
+}
+
+.subjectNum{
+  position: absolute;
+  color:blue;
+  z-index: 10000000000;
+  top:0px;
+  left:40px;
 }

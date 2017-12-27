@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/battleHome/battleHome3",
     "pages/battleHome/battleHome",
+    "pages/battleHome/battleHome3",
     "pages/progressScore/progressScore",
     "pages/pkRoom/pkRoom",
     "pages/test/test",
