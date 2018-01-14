@@ -1,6 +1,9 @@
 <!--baseLayerout.wxml-->
 
 <template name="baseLayerout" hidden="true">
+  <view class="preLoad" wx:if="{{preProcess<100}}" style="background:url('http://ovqk5bop3.bkt.clouddn.com/bg.jpeg');background-size:100% 100%;">
+    <progress class="preLoadProgress" color='red;' percent='{{preProcess}}' style="position:fixed;"></progress>
+  </view>
   <loading hidden="{{hiddenLoading}}">请等待...</loading>
   <toast duration="{{toastDuration}}" bindchange="hideToast" hidden="{{hiddenToast}}" style="width:100px;height:100px;">{{toastMsg}}</toast>
   <view class="fullAlert" style="display:{{fullAlertDisplay}}">
@@ -17,4 +20,5 @@
   </view>
 
   <view class="againButton" style="display:{{againButtonDisplay}}" bindtap='againButtonClick'>{{againButton}}</view>
+  
 </template>

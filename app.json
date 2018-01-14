@@ -1,7 +1,8 @@
 {
   "pages": [
-    "pages/battleHome/battleHome",
     "pages/battleHome/battleHome3",
+    "pages/rankBattle/rankBattle",
+    "pages/battleHome/battleHome",
     "pages/progressScore/progressScore",
     "pages/pkRoom/pkRoom",
     "pages/test/test",
@@ -39,7 +40,6 @@
     "pages/logs/logs",
     "pages/myBattleRooms/myBattleRooms",
     "pages/stock/stock"
-
   ],
   "window": {
     "backgroundTextStyle": "light",

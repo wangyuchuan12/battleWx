@@ -10,6 +10,9 @@ var util = require("../../utils/util.js");
 var battleAddRoomRequest = require("../../utils/battleAddRoomRequest.js");
 
 var resourceRequest = require("../../utils/resourceRequest.js");
+
+
+var rankBattleRequest = require("../../utils/rankBattleRequest.js");
 var layerout = new baseLayerout.BaseLayerout({
 
   /**
@@ -22,6 +25,7 @@ var layerout = new baseLayerout.BaseLayerout({
     isManager: 0,
     userImgUrl: "",
     shareAlert: 0,
+    userId:null,
     rooms: [/*{
       imgUrl:"http://7xlw44.com1.z0.glb.clouddn.com/0042aeda-d8a5-4222-b79d-1416ab222898",
       name:"火影忍者",
@@ -93,6 +97,17 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
+  rankBattleClick:function(){
+    wx.navigateTo({
+      url: '../rankBattle/rankBattle'
+    });
+  },
+
+
+  registRankBattle: function (recommendUserId,callback){
+    rankBattleRequest.registRankBattle(recommendUserId,callback);
+  },
+
 
   initBattles: function (battleId, flag) {
     this.showLoading();
@@ -138,7 +153,7 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var outThis = this;
+    /*var outThis = this;
 
     request.requestLogin({
       success: function () {
@@ -146,7 +161,49 @@ var layerout = new baseLayerout.BaseLayerout({
       },
       fail: function () {
       }
-    })
+    });*/
+
+    var skipType = options.skipType;
+    var registUserId = options.registUserId;
+
+    
+
+    var outThis = this;
+    request.requestLogin({
+      success: function (userInfo) {
+        outThis.setData({
+          userId:userInfo.id
+        });
+        outThis.registRankBattle(registUserId,{
+          success:function(){
+            //这里跳转到排位赛
+            if (skipType == 0) {
+              wx.navigateTo({
+                url: '../rankBattle/rankBattle'
+              });
+              //跳转到闯关
+            }else if(skipType==1){
+              wx.navigateTo({
+                url: '../danList/danList'
+              });
+            }
+          },
+          fail:function(){
+
+          }
+        });
+        if (userInfo.openid == "o6hwf0S9JT_Ff0LVBORFsBrhAtpM") {
+          outThis.setData({
+            isManager: 1
+          });
+        } else {
+
+        }
+      },
+      fail: function () {
+
+      }
+    });
   },
 
   init: function () {
@@ -154,6 +211,7 @@ var layerout = new baseLayerout.BaseLayerout({
     this.initBattles(null, true);
     request.getUserInfo({
       success: function (userInfo) {
+        console.log("")
         if (userInfo) {
           outThis.setData({
             userImgUrl: userInfo.avatarUrl
@@ -262,28 +320,18 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    var outThis = this;
-    request.requestLogin({
-      success: function (userInfo) {
-        if (userInfo.openid == "o6hwf0S9JT_Ff0LVBORFsBrhAtpM") {
-          outThis.setData({
-            isManager: 1
-          });
-        } else {
-
-        }
-      },
-      fail: function () {
-
-      }
-    });
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    this.initAccountInfo();
+    var outThis = this;
+    this.initAccountInfo({
+      success:function(){
+        outThis.loadPreProgress();
+      }
+    });
   },
 
   /**
@@ -320,7 +368,7 @@ var layerout = new baseLayerout.BaseLayerout({
   onShareAppMessage: function () {
 
     var outThis = this;
-    var roomId = "2";
+    var userId = this.data.userId;
 
     var shareCreate = this.data.shareCreate;
     this.setData({
@@ -332,37 +380,9 @@ var layerout = new baseLayerout.BaseLayerout({
       });
       var uuid = util.uuid();
       return {
-        title: this.data.battleInfoName,
-        desc: this.data.battleInfoContent,
-        path: 'pages/battleTakepart/battleTakepart?key=' + uuid,
+        path: 'pages/battleHome/battleHome?registUserId=' + userId,
         success: function () {
-          battleAddRoomRequest.requestAddRoomWithShare(roomId, uuid, 2, 2, {
-            success: function (battleRoom) {
-              wx.redirectTo({
-                url: '../battleTakepart/battleTakepart?battleId=' + battleRoom.battleId + "&roomId=" + battleRoom.id + "&autoTakepart=" + 1
-              });
-            },
-            fail: function () {
-
-            },
-            createEntry: function (battleRoom) {
-              wx.redirectTo({
-                url: '../battleTakepart/battleTakepart?battleId=' + battleRoom.battleId + "&roomId=" + battleRoom.id + "&autoTakepart=" + 1
-              });
-            },
-            reCreate: function (battleRoom) {
-              outThis.showConfirm("您已经创建过该房间,不能重复创建", "是否跳转到该房间", {
-                confirm: function () {
-                  wx.redirectTo({
-                    url: '../battleTakepart/battleTakepart?battleId=' + battleRoom.battleId + "&roomId=" + battleRoom.id
-                  });
-                },
-                cancel: function () {
-
-                }
-              }, "跳转", "取消");
-            }
-          });
+          
         }
       }
     }

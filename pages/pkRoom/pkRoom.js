@@ -55,7 +55,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
     var outThis = this;
     setTimeout(function () {
-     // outThis.immediate();
+      outThis.immediate();
     }, 5000);
   },
 
@@ -121,11 +121,10 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   homeInto:function(){
-    console.log("homeInto");
     var outThis = this;
     battlePkRequest.homeIntoRequest({
       success:function(data){
-        console.log("data.roomId:"+data.roomId);
+        outThis.loadPreProgress();
         outThis.setData({
           id: data.id,
           homeUserId: data.homeUserId,
@@ -220,7 +219,7 @@ var layerout = new baseLayerout.BaseLayerout({
     var id = this.data.id;
     battlePkRequest.beatIntoRequest(id,{
       success: function (data) {
-        console.log("data.roomId2:"+data.roomId);
+        outThis.loadPreProgress();
         outThis.setData({
           id: data.id,
           homeUserId: data.homeUserId,

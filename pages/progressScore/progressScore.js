@@ -48,7 +48,8 @@ var layerout = new baseLayerout.BaseLayerout({
     shareAlert:0,
     "rewardBean": 0,
     "addExp": 0,
-    memberInfo:null
+    memberInfo:null,
+    isStart:0
   },
   eventListener:{
 
@@ -79,7 +80,7 @@ var layerout = new baseLayerout.BaseLayerout({
       var subjectIds = new Array();
 
       for(var i=0;i<subjects.length;i++){
-        subjectIds.push(subjects[i].id);
+        subjectIds.push(subjects[i].targetId);
       }
       outThis.setData({
         stageIndex:stageIndex
@@ -145,8 +146,9 @@ var layerout = new baseLayerout.BaseLayerout({
 
   skipToRank: function () {
     var roomId = this.data.roomId;
+    var groupId = this.data.groupId;
     wx.navigateTo({
-      url: '../battleRank/battleRank?battleId=' + this.data.battleId+"&roomId="+roomId
+      url: '../battleRank/battleRank?battleId=' + this.data.battleId+"&roomId="+roomId+"&groupId="+groupId
     });
   },
 
@@ -176,6 +178,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
       var battleId = this.data.battleId;
       var roomId = this.data.roomId;
+      var groupId = this.data.groupId;
 
       battleMembersRequest.getBattleMembers(battleId, roomId, {
         cache: function (battleMembers) {
@@ -196,15 +199,26 @@ var layerout = new baseLayerout.BaseLayerout({
                 questionSelectorDisplay: "none",
                 questionResultDisplay: "none"
               });
-              if (battleMembers && battleMembers.length>2){
+              if(memberInfo.places>=i+1){
+                setTimeout(function(){
+                  outThis.showFullAlert("比赛已经结束", "胜利，第" + (i + 1) + "名", rewardBean, "确定");
+                },2000);
+                return;
+              }else{
+                setTimeout(function () {
+                  outThis.showFullAlert("比赛已经结束", "失败，第"+(i+1)+"名", rewardBean, "确定");
+                },2000);
+                return;
+              }
+              /*if (battleMembers && battleMembers.length>2){
                 outThis.showFullAlert("比赛已经结束", "您获取第" + (i + 1) + "名", rewardBean, "确定");
               }else{
                 if(i==0){
-                  outThis.showFullAlert("比赛已经结束", "胜利", rewardBean, "确定");
+                  
                 }else{
-                  outThis.showFullAlert("比赛已经结束", "失败", rewardBean, "确定");
+                  
                 }
-              }
+              }*/
               
             }
           }
@@ -212,7 +226,7 @@ var layerout = new baseLayerout.BaseLayerout({
         fail: function () {
 
         }
-      });
+      },null,groupId);
 
       
     }
@@ -223,6 +237,7 @@ var layerout = new baseLayerout.BaseLayerout({
     var outThis = this;
     var battleId = this.data.battleId;
     var roomId = this.data.roomId;
+    var groupId = this.data.groupId;
     requestTarget = battleMembersRequest.getBattleMembers(battleId, roomId, {
       cache: function (battleMembers) {
         
@@ -230,6 +245,7 @@ var layerout = new baseLayerout.BaseLayerout({
       success: function (battleMembers) {
         var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
         var oldBattleMembers = outThis.getMembers();
+        membersRankUtil.rankByProcess(battleMembers);
         outThis.setMembers(battleMembers);
         for(var i=0;i<battleMembers.length;i++){
           for(var j=0;j<oldBattleMembers.length;j++){
@@ -259,7 +275,7 @@ var layerout = new baseLayerout.BaseLayerout({
       fail: function () {
         
       }
-    }, 15000);
+    }, 150000, groupId);
   },
 
   closeDisplayPanel:function(){
@@ -303,8 +319,8 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   startResult: function (rightCount, wrongCount, process, battleMemberPaperAnswerId, rewardBean, isPass){
-    
-    
+    this.initLoveCooling();
+
     outThis.setData({
       isRun: 1
     });
@@ -340,7 +356,7 @@ var layerout = new baseLayerout.BaseLayerout({
       loveCount = 0;
     }
 
-    outThis.setLove(loveLimit,loveCount);
+   // outThis.setLove(loveLimit,loveCount);
     setTimeout(function(){
       outThis.syncPaperData();
     },1000);
@@ -528,6 +544,7 @@ var layerout = new baseLayerout.BaseLayerout({
     currentLoveCoolingRequest.currentLoveCooling(battleId,roomId,{
       success:function(data){
         outThis.showLoveCooling(data);
+        outThis.setLove(data.loveCount, data.loveResidule);
       },
       fail:function(){
         console.log("initLoveCooling fail");
@@ -547,23 +564,31 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   onUnload: function () {
-    requestTarget.stop();
-    clearInterval(redpackInterval);
+  //  requestTarget.stop();
+  //  clearInterval(redpackInterval);
     var pages = getCurrentPages();
     var prevPage = pages[pages.length - 2];
     if (prevPage.initRoomInfoFromRequest){
       prevPage.initRoomInfoFromRequest();
     }
+
+    if (prevPage.backListener){
+      prevPage.backListener();
+    }
+    
   },
 
   onHide: function () {
-    requestTarget.stop();
+    if (requestTarget && requestTarget.stop){
+      requestTarget.stop();
+    }
   },
 
   syncPaperData:function(callback){
     var outThis = this;
     var battleId = this.data.battleId;
     var roomId = this.data.roomId;
+    var groupId = this.data.groupId;
     syncPaperDateRequest.syncPapersData(battleId,roomId,{
       success:function(data){
         if(callback){
@@ -580,6 +605,7 @@ var layerout = new baseLayerout.BaseLayerout({
         outThis.setScore(data.score);
         var battleMembers = data.members;
         var oldBattleMembers = outThis.getMembers();
+        membersRankUtil.rankByProcess(battleMembers);
         outThis.setMembers(battleMembers);
         for (var i = 0; i < battleMembers.length; i++) {
           for (var j = 0; j < oldBattleMembers.length; j++) {
@@ -609,7 +635,7 @@ var layerout = new baseLayerout.BaseLayerout({
       fail:function(){
         
       }
-    })
+    }, groupId)
   },
 
   onShareAppMessage: function () {
@@ -644,7 +670,17 @@ var layerout = new baseLayerout.BaseLayerout({
     var outThis = this;
     var battleId = this.data.battleId;
     var roomId = this.data.roomId;
-    var path = "pages/battleTakepart/battleTakepart?battleId=" + battleId + "&roomId=" + roomId
+    var memberInfo = this.data.memberInfo;
+    var userId = memberInfo.userId;
+    var path = "pages/battleTakepart/battleTakepart?battleId=" + battleId + "&roomId=" + roomId;
+    if(memberInfo.isDanRoom==1){
+      path = "pages/battleHome/battleHome3?skipType=1&registUserId="+userId;
+    } else if (memberInfo.isFrendGroup==1){
+      path = "pages/battleHome/battleHome3?skipType=0&registUserId=" + userId;
+    }else{
+
+    }
+    
     return {
       title: outThis.data.title,
       desc: outThis.data.desc,
@@ -681,11 +717,11 @@ var layerout = new baseLayerout.BaseLayerout({
     }
 
     setTimeout(function () {
-      outThis.processUpdate({
+      /*outThis.processUpdate({
         success: function () {
 
         }
-      });
+      });*/
 
     }, 2000);
     outThis = this;
@@ -699,6 +735,12 @@ var layerout = new baseLayerout.BaseLayerout({
     var model = options.model;
     var battleId = options.battleId;
 
+    var groupId = options.groupId;
+
+    if(!groupId){
+      groupId = "";
+    }
+
     if(battleId){
       wx.setStorageSync("battleId", battleId);
     }else{
@@ -709,31 +751,39 @@ var layerout = new baseLayerout.BaseLayerout({
       title: options.title,
       desc:options.desc,
       battleId:battleId,
-      roomId: roomId
+      roomId: roomId,
+      groupId: groupId
     });
 
     battleMemberInfoRequest.getBattleMemberInfo(battleId,roomId,{
       success:function(memberInfo){
-
         battleMembersRequest.getBattleMembers(battleId, roomId, {
           cache: function (battleMembers) {
 
           },
           success: function (battleMembers) {
+            outThis.loadPreProgress({
+              complite:function(){
+                outThis.setData({
+                  isStart:1
+                });
+              }
+            });
             membersRankUtil.rankByProcess(battleMembers);
             outThis.setMembers(battleMembers);
             outThis.setData({
-              members: battleMembers
+              members: battleMembers,
+              memberInfo: memberInfo
             });
 
-            var memberInfo = outThis.data.memberInfo;
+           
 
             outThis.initPositions();
           },
           fail: function () {
 
           }
-        });
+        }, null, groupId);
 
 
 

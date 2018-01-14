@@ -13,6 +13,7 @@ var attrPlug = {
       masonryDisplay: "none",
       masonryTop: 20,
       moneyDisplay:"none",
+      attrDisplay:"none",
       moneyTop: 20,
 
       plusNum:20,

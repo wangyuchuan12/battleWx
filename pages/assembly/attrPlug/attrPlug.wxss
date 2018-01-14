@@ -1,7 +1,7 @@
 .personalAttr{
 	position: fixed;
 	width:100%;
-	z-index: 2;
+  z-index: 2;
   padding-left:10px;
   top:10px;
 }

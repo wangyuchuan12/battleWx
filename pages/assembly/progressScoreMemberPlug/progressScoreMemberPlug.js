@@ -58,11 +58,12 @@ var progressScoreMembers={
         imgUrl:ms[i].headImg,
         percent: percent,
         id:ms[i].id,
-        process:process
+        process:process,
+        score:score
       });
     }
     members.sort(function(member1,member2){
-      return member2.process-member1.process;
+      return member2.score-member1.score;
     });
     this.setData({
       "progressScoreMemberData.members":members

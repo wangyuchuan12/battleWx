@@ -85,7 +85,9 @@
   margin: 0 auto;
   color: white;
   background:green;
-  top:30px;
+
+  margin-top:20px;
+  margin-bottom:20px;
 }
 
 .danInfoRewardWait{
@@ -94,5 +96,4 @@
   position: relative;
   text-align: center;
   padding-top:20px;
-  padding-bottom:20px;
 }

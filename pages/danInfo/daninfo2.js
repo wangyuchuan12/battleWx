@@ -17,6 +17,8 @@ var takepartRequest = require("../../utils/takepartRequest.js");
 
 var requestTarget;
 
+var flushMembersInterval;
+
 var layerout = new baseLayerout.BaseLayerout({
 
   /**
@@ -53,6 +55,8 @@ var layerout = new baseLayerout.BaseLayerout({
   reckonTime:function(){
     var outThis = this;
     var flag = true;
+    var num = this.data.num;
+    var mininum = this.data.mininum;
     var interval = setInterval(function () {
       var timeDiffer = outThis.data.timeDiffer;
       
@@ -80,12 +84,13 @@ var layerout = new baseLayerout.BaseLayerout({
         remainderSecond: second
       });
 
-      if(timeDiffer<=0){
+      if (timeDiffer <= 0 && num >= mininum){
         clearInterval(interval);
         if (!flag){
-          wx.navigateTo({
+          wx.redirectTo({
             url: '../progressScore/progressScore?roomId=' + outThis.data.roomId + "&battleId=" + outThis.data.battleId + "&againButton=返回"
           });
+          flag = true;
           return;
         }
       }
@@ -100,6 +105,8 @@ var layerout = new baseLayerout.BaseLayerout({
     outThis.showLoading();
     battleDanRequest.danRoomInfo(danId,{
       success:function(room){
+        outThis.hideLoading();
+        outThis.loadPreProgress();
         outThis.setData({
           name:room.name,
           places:room.places,
@@ -113,15 +120,25 @@ var layerout = new baseLayerout.BaseLayerout({
           num:room.num,
           timeDiffer: room.timeDiffer
         });
+        var num = outThis.data.num;
+        var mininum = outThis.data.mininum;
         outThis.reckonTime();
         outThis.showMembers(room.members);
         outThis.initBattleMembers({
           success:function(){
             outThis.hideLoading();
-            if (room.roomStatus == 3) {
-              wx.navigateTo({
-                url: '../progressScore/progressScore?roomId=' + room.roomId + "&battleId=" + room.battleId +"&againButton=返回"
+            if ((room.roomStatus == 3 || room.timeDiffer <= 0) && num>=mininum) {
+              outThis.showConfirm("跳转到游戏", "是否确定挑战", {
+                confirm:function(){
+                  wx.redirectTo({
+                    url: '../progressScore/progressScore?roomId=' + room.roomId + "&battleId=" + room.battleId + "&againButton=返回"
+                  });
+                },
+                cancel:function(){
+
+                }
               });
+              
             }
           }
         });
@@ -137,12 +154,24 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var outThis = this;
     var danId = options.danId;
     this.setData({
       danId: danId
     });
 
     this.initDanRoomInfo();
+
+    flushMembersInterval = setInterval(function(){
+      outThis.initBattleMembers({
+        success:function(){
+          outThis.takepartClick(null,1,1);
+        },
+        fail:function(){
+
+        }
+      });
+    },10000);
   },
 
   showMembers:function(ms){
@@ -171,7 +200,7 @@ var layerout = new baseLayerout.BaseLayerout({
       battleTakepartCache.members = ms;
   },
 
-  takepartClick:function(){
+  takepartClick: function (e,toastFlag,isAsk){
     var outThis = this;
     var members = outThis.data.members;
     var num = this.data.num;
@@ -182,25 +211,62 @@ var layerout = new baseLayerout.BaseLayerout({
     var battleId = this.data.battleId;
     var roomId = this.data.roomId;
     var status = this.data.status;
-    if(status==1&&mininum>num){
-      this.showToast("人数不足，请等待...");
-      this.hideLoading();
+    
+
+    var roomStatus = this.data.roomStatus;
+
+    if (roomStatus == 3) {
+      wx.navigateBack({
+
+      });
+      var pages = getCurrentPages();
+      var prevPage = pages[pages.length - 2];
+
+      var danId = this.data.danId;
+      prevPage.restart(danId);
       return;
     }
 
     if(status==1){
       this.hideLoading();
       var remainder = outThis.data.timeDiffer;
-      if (remainder>0){
-        outThis.showToast("比赛未开始");
+      if (remainder > 0 ){
+        if (!toastFlag){
+          outThis.showToast("比赛未开始");
+        }
         return;
-      } 
+      }
 
-      wx.navigateTo({
-        url: '../progressScore/progressScore?roomId=' + roomId + "&battleId=" + battleId +"&againButton=返回"
-      });
+      if (mininum > num ) {
+        if (!toastFlag) {
+          this.showToast("人数最少为"+mininum+"人，请等待...");
+        }
+        return;
+      }
+
+      if(isAsk){
+        this.showConfirm("跳转到游戏", "是否确定挑战", {
+          confirm:function(){
+            wx.redirectTo({
+              url: '../progressScore/progressScore?roomId=' + roomId + "&battleId=" + battleId + "&againButton=返回"
+            });
+          },
+          cancel:function(){
+
+          }
+        });
+      }else{
+        wx.redirectTo({
+          url: '../progressScore/progressScore?roomId=' + roomId + "&battleId=" + battleId + "&againButton=返回"
+        });
+      }
+      
       return;
     }
+   
+
+    
+
     takepartRequest.battleTakepart(battleId,roomId,{
       success: function (member) {
         outThis.setData({
@@ -278,7 +344,7 @@ var layerout = new baseLayerout.BaseLayerout({
     var num = 0;
     requestTarget = battleMembersRequest.getBattleMembers(battleId, roomId, {
       cache: function (battleMembers) {
-        var members = new Array();
+        /*var members = new Array();
         var length = 0;
         if (battleMembers != null && battleMembers.length > 0) {
           length = battleMembers.length;
@@ -299,7 +365,7 @@ var layerout = new baseLayerout.BaseLayerout({
         outThis.setData({
           members: members,
           num: num
-        });
+        });*/
       },
       success: function (battleMembers) {
         battleTakepartCache.members = battleMembers;
@@ -335,13 +401,31 @@ var layerout = new baseLayerout.BaseLayerout({
       fail: function () {
         callback.fail();
       }
-    }, 15000);
+    },0);
   },
 
   restart:function(){
-    setTimeout(function(){
+    var outThis = this;
+    this.showLoading();
+    setTimeout(function () {
+      outThis.hideLoading();
+      var pages = getCurrentPages();
+      var prevPage = pages[pages.length - 2];
       wx.navigateBack({});
-    },1000);
+      var danId = outThis.data.danId;
+      if (prevPage.restart){
+        prevPage.restart();
+      }
+    }, 2000);
+  },
+
+  backListener:function(){
+    /*var outThis = this;
+    this.showLoading();
+    setTimeout(function () {
+      outThis.hideLoading();
+      wx.navigateBack({});
+    }, 1000);*/
   },
 
   /**
@@ -360,14 +444,18 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-
+    if (flushMembersInterval){
+      clearInterval(flushMembersInterval);
+    }
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-    requestTarget.stop();
+    if (flushMembersInterval) {
+      clearInterval(flushMembersInterval);
+    }
   },
 
   /**
@@ -388,7 +476,12 @@ var layerout = new baseLayerout.BaseLayerout({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-
+    var path = "pages/battleHome/battleHome3";
+    return {
+      path: path,
+      success: function () {
+      }
+    }
   }
 });
 

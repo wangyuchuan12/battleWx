@@ -155,7 +155,7 @@ var layerout = new baseLayerout.BaseLayerout({
     worlds: [{
       id: "world0",
       status: 0,
-      index: "0"
+      index:0
     }, {
       id: "world1",
       index: 1,
@@ -178,7 +178,6 @@ var layerout = new baseLayerout.BaseLayerout({
     var periodId = this.data.periodId;
     battleManagerRequest.requestQueryQuestionCount(battleId,periodId,{
       success:function(data){
-        console.log("data:"+JSON.stringify(data));
         outThis.setData({
           questionNumData:data
         });
@@ -340,7 +339,9 @@ var layerout = new baseLayerout.BaseLayerout({
               if (rightAnswer){
                 worlds = new Array();
                 for (var i = 0; i < rightAnswer.length;i++){
-                  worlds.push({});
+                  worlds.push({
+                    index:i
+                  });
                 }
               }
 
@@ -530,7 +531,9 @@ var layerout = new baseLayerout.BaseLayerout({
   worldCheckClick: function (e) {
     var worldChecks = this.data.worldChecks;
     var worlds = this.data.worlds;
+    console.log("worlds:"+JSON.stringify(worlds));
     var id = e.currentTarget.id;
+    console.log("id:"+id);
     var worldCheck;
     var world;
     for (var i = 0; i < worldChecks.length; i++) {
@@ -558,6 +561,8 @@ var layerout = new baseLayerout.BaseLayerout({
       }
 
       var worldKey = "worlds[" + world.index + "]";
+
+      console.log("worldKey:"+worldKey);
       this.setData({
         [worldKey]: {
           id: world.id,

@@ -2,8 +2,9 @@
 
 <import src="../assembly/baseLayerout/baseLayerout"/>
 <import src="../assembly/attrPlug/attrPlug"/>
-<template is="baseLayerout" data="{{...baseData}}"/>
 <template is="attrPlug" data="{{...attrPlugData}}"/>
+<template is="baseLayerout" data="{{...baseData}}"/>
+
 
 
 <view class="shareAlertPlug" wx:if="{{shareAlert==1}}">
@@ -23,9 +24,9 @@
       <view class="battleHomeMenu2Background"></view>
       <view class="battleHomeMenu2Name">好友对战</view>
     </view>
-    <view class="battleHomeMenu3" bindtap='mallClick'>
+    <view class="battleHomeMenu3" bindtap='rankBattleClick'>
       <view class="battleHomeMenu3Background"></view>
-      <view class="battleHomeMenu3Name">商城</view>
+      <view class="battleHomeMenu3Name">排位赛</view>
     </view>
     <view class="battleHomeMenu4" bindtap='factoryClick'>
       <view class="battleHomeMenu4Background"></view>
@@ -34,6 +35,11 @@
     <view class="battleHomeMenu5"  bindtap='takeoutClick'>
        <view class="battleHomeMenu5Background"></view>
        <view class="battleHomeMenu5Name">提现</view>
+    </view>
+
+    <view class="battleHomeMenu6"  bindtap='mallClick'>
+       <view class="battleHomeMenu6Background"></view>
+       <view class="battleHomeMenu5Name">商城</view>
     </view>
   </view>
 </view>

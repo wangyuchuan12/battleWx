@@ -113,6 +113,7 @@ var layerout = new baseLayerout.BaseLayerout({
     goodRequest.listRequest(null,{
 
         success:function(goods){
+          outThis.loadPreProgress();
           outThis.hideLoading();
           var array = new Array();
           for(var i=0;i<goods.length;i++){

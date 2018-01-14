@@ -60,7 +60,7 @@
   <template is="progressScorePlug" data="{{...progressScoreData}}"></template>
   </view>
 
-  <view class="progressScoreButtons" style="z-index:20000;">
+  <view class="progressScoreButtons" style="z-index:20000;" wx:if="{{isStart==1}}">
     <view class="progressScoreStartButton" style="background:RGBA(4,190,2,0.9);" bindtap='startSelector' wx:if="{{isLast==0}}">开始</view>
     <view class="progressScoreStartButton gray" style="background:RGBA(4,190,2,0.9);"  wx:if="{{isLast==1}}">开始</view>
     <view class="progressScoreRankButton" style="background:RGBA(255,255,255,0.5);color:black;" bindtap="skipToRank">排名</view>

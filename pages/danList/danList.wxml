@@ -24,7 +24,8 @@
       <view class="danListInfoContent">
         <image src="{{alertDan.imgUrl}}" class="danListInfoContentImg"></image>
         <view class="danListInfoContentRank" wx:if="{{alertDan.signCount==0}}">未参与</view>
-        <view class="danListInfoContentRank" wx:else>闯关失败，重新报名</view>
+        <view class="danListInfoContentRank" wx:elif="{{alertDan.status==2}}">重新开始</view>
+         <view class="danListInfoContentRank" wx:elif="{{alertDan.status==3}}">闯关失败，重新报名</view>
       </view>
       <view class="danListInfoButtons">
         <view class="danListInfoButton" style="background:rgba(255,145,173,1)" bindtap='signClick'>

@@ -145,12 +145,12 @@ var questionSelector = {
 
   selectComplete: function (){
     var outThis = this;
+    var selectContentList = outThis.data.questionSelectorData.questionSelectorHeaderList;
     wx.showModal({
       title: "提示",
       content: "确定开始吗",
       success: function (sm) {
         if (sm.confirm) {
-          var selectContentList = outThis.data.questionSelectorData.questionSelectorContentList;
           outThis.eventListener.selectComplete(selectContentList);
         } else if (sm.cancel) {
           console.log("cancel");
@@ -231,6 +231,7 @@ var questionSelector = {
           item.num = num;
         }
       }
+      
       outThis.setData({
         "questionSelectorData.questionSelectorContentList": questionSelectorContentList
       });

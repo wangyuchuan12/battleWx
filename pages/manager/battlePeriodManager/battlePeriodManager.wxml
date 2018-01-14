@@ -95,9 +95,6 @@
 
       </block>
 
-      
-
-      
     </block>
   </scroll-view>
 
@@ -171,7 +168,7 @@
             
             <block wx:for="{{worlds}}" wx:for-item="world">
               <view class="inputItemFillTermsWorld"  
-              bindtap="worldClick" id="{{world.id}}">{{world.content}}</view>
+              bindtap="worldClick" id="{{world.id}}">{{world.content}}{{world.id}}</view>
             </block>
             <view>
               <view class="inputItemFillTermsWorldPlus" bindtap='worldMinusClick'><span class="fa fa-minus-square"></span></view>

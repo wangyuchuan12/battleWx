@@ -41,6 +41,7 @@ var layerout = new baseLayerout.BaseLayerout({
     var outThis = this;
     accountRequest.accountResultInfo({
       success: function (accountResult) {
+        outThis.loadPreProgress();
         outThis.setData({
           headimgurl: accountResult.headimgurl,
           nickname: accountResult.nickname,
@@ -117,6 +118,21 @@ var layerout = new baseLayerout.BaseLayerout({
     
   },
 
+  restart:function(danId){
+    var dans = this.data.dans;
+    for (var i = 0; i < dans.length; i++) {
+      var dan = dans[i];
+      if(dan.id = danId){
+        
+        this.setData({
+          isDanAlert: 1,
+          alertDan: dan
+        });
+        return;
+      }
+    }
+  },
+
   signClick:function(){
     var outThis = this;
     var alertDan = this.data.alertDan;
@@ -129,8 +145,6 @@ var layerout = new baseLayerout.BaseLayerout({
         });
         battleDanRequest.danSign(alertDan.danId, {
           success: function (data) {
-           
-            console.log(".....data:"+JSON.stringify(data));
             takepartRequest.battleTakepart(data.battleId, data.roomId, {
               success: function (member) {
                 outThis.hideLoading();
@@ -153,7 +167,9 @@ var layerout = new baseLayerout.BaseLayerout({
                 }
               },
               battleIn: function () {
-                
+                wx.navigateTo({
+                  url: '../danInfo/daninfo2?danId=' + alertDan.danId
+                });
               },
               battleEnd: function () {
                 
@@ -165,13 +181,6 @@ var layerout = new baseLayerout.BaseLayerout({
                 
               }
             });
-
-
-
-
-
-
-
           },
           beanNotEnough: function () {
             outThis.hideLoading();

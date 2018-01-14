@@ -1,5 +1,5 @@
 <template name="attrPlug">
-  <view class="personalAttr">
+  <view class="personalAttr" style="display:{{attrDisplay}}">
     <view class="personalAttrData">
       <view class="personalAttrDataItem" style="width:20%;">
           <view style="background:url('http://7xugu1.com1.z0.glb.clouddn.com/light.png');position:absolute;width:{{loveLight.width}}%;height:{{loveLight.height}}%;background-size:100% 100%;"></view>

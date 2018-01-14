@@ -24,7 +24,8 @@ function BaseLayerout(config){
       fullAlertAnimation:null,
       fullAlertDisplay:"none",
       againButtonDisplay:"none",
-      againButton:"再来一局"
+      againButton:"再来一局",
+      preProcess:0
     }
 
 
@@ -34,6 +35,43 @@ function BaseLayerout(config){
       });
     }
 
+    baseConfig.setPreProgress = function(process){
+      this.setData({
+        "baseData.preProcess": process
+      });
+    }
+
+    baseConfig.loadToPreProgress = function(process,callback){
+      var outThis = this;
+      var preProcess = this.data.baseData.preProcess;
+      if (process > preProcess){
+        var interval = setInterval(function(){
+          preProcess++;
+          outThis.setData({
+            "baseData.preProcess": preProcess
+          });
+          if (process <= preProcess){
+            clearInterval(interval);
+            outThis.setData({
+              "attrPlugData.attrDisplay":"block"
+            });
+            if(callback){
+              callback.complite();
+            }
+          }
+        },10);
+      }
+    }
+    
+    baseConfig.loadPreProgress = function(callback){
+      this.loadToPreProgress(100,{
+        complite:function(){
+          if(callback){
+            callback.complite();
+          }
+        }
+      });
+    }
     baseConfig.showFullAlert = function(title,title2,rewardNum,button){
 
       this.setData({

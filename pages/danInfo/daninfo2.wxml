@@ -7,15 +7,23 @@
     <view class="danInfoRewardTitle" wx:if="{{places>1}}">前{{places}}名通过</view>
     <view class="danInfoRewardTitle" wx:else>胜利者通过</view>
     <view class="danInfoRewardContent">
-      <view class="danInfoRewardContentItem" wx:for="{{rewards}}" wx:for-item="reward">第{{reward.rank}}名:<view style="display:inline-block;width:50px;">{{reward.rewardBean}}</view>欢乐豆</view>
+      <view class="danInfoRewardContentItem" wx:for="{{rewards}}" wx:for-item="reward">第{{reward.rank}}名:<view style="display:inline-block;width:50px;">{{reward.rewardBean}}</view>智慧豆</view>
     </view>
   </view>
 
-  <view class="danInfoRewardWait" wx:if="{{status==1&&timeDiffer>0}}">开始剩余时间：{{remainderHour}}:{{remainderMin}}:{{remainderSecond}}</view>
-  <view class="danInfoRewardWait" wx:if="{{timeDiffer<=0}}">比赛进行中</view>
+  
+  <view class="danInfoRewardWait" wx:if="{{timeDiffer>0}}">开始剩余时间：{{remainderHour}}:{{remainderMin}}:{{remainderSecond}}</view>
+  <view class="danInfoRewardWait" wx:if="{{timeDiffer<=0&&num<mininum}}">还差{{mininum-num}}人</view>
+  <view class="danInfoRewardWait" wx:if="{{timeDiffer<=0&&roomStatus==1&&num>=mininum}}">比赛进行中</view>
   
 
-  <view class="danInfoRewardWait" wx:if="{{status==3}}">比赛已经结束</view>
+  <view class="danInfoRewardWait" wx:if="{{roomStatus==3}}">比赛已经结束</view>
+
+  <view class="danInfoButton" bindtap='takepartClick' wx:if="{{status==0||status==2||status==1}}">
+    <span wx:if="{{status==0&&roomStatus!=3}}">参加</span>
+    <span wx:elif="{{status==1&&roomStatus!=3}}">开始</span>
+    <span wx:elif="{{roomStatus==3}}">重新开始</span>
+  </view>
 
   <view class="danInfoMembers">
     <block wx:if="{{members.length!=2}}">
@@ -34,12 +42,6 @@
         <image src="{{members[1].imgUrl}}" class="danInfoMemberImg"></image>
       </view>
     </block>
-  </view>
-
-  <view class="danInfoButton" bindtap='takepartClick' wx:if="{{status==0||status==2||status==1}}">
-    <span wx:if="{{status==0}}">参加</span>
-    <span wx:elif="{{status==1}}">开始</span>
-    <span wx:elif="{{status==2}}">开始</span>
   </view>
  
 </scroll-view>

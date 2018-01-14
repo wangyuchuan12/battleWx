@@ -110,13 +110,13 @@ var layerout = new baseLayerout.BaseLayerout({
       battleInfoContent: battleRequest.battleInfo.instruction,
       battleInfoName: battleRequest.battleInfo.name
     });
-
     this.showLoading();
   
     this.initBattleInfo({
       success:function(){
         outThis.initMemberInfo({
           success:function(){
+            outThis.loadPreProgress();
             var memberInfo = battleMemberInfoRequest.getBattleMemberInfoFromCache();
             if(outThis.data.owner==memberInfo.battleUserId){
               outThis.setData({

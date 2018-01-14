@@ -9,7 +9,7 @@ function setBattleMembersCache(members){
   battleMembers = members;
 }
 
-function getBattleMembers(battleId,roomId, callback,time) {
+function getBattleMembers(battleId,roomId, callback,time,groupId) {
   flag = true;
   if (battleMembers){
     if(callback.cache){
@@ -17,7 +17,7 @@ function getBattleMembers(battleId,roomId, callback,time) {
     }
    
   }
-  requestBattleMembers(battleId,roomId,{
+  requestBattleMembers(battleId,roomId,groupId,{
       success:function(members){
           wx.setStorageSync("battleMembers", members);
           callback.success(members);
@@ -31,7 +31,7 @@ function getBattleMembers(battleId,roomId, callback,time) {
   if(time&&time>0){
     interval  = setInterval(function () {
      if(flag){
-       requestBattleMembers(battleId, roomId, {
+       requestBattleMembers(battleId, roomId, groupId,{
          success: function (members) {
            wx.setStorageSync("battleMembers", members);
            callback.success(members);
@@ -54,10 +54,13 @@ function getBattleMembers(battleId,roomId, callback,time) {
 
 }
 
-function requestBattleMembers(battleId,roomId,callback){
+function requestBattleMembers(battleId,roomId,groupId,callback){
   var params = new Object();
   params.battleId = battleId;
   params.roomId = roomId;
+  if(groupId){
+    params.groupId = groupId;
+  }
   request.requestWithLogin(url, params, {
     success: function (resp) {
       if (resp.success) {

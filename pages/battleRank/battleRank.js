@@ -50,7 +50,7 @@ var layerout = new baseLayerout.BaseLayerout({
       loveResidule:2
     }*/]
   },
-  initRankData: function (battleId,roomId) {
+  initRankData: function (battleId, roomId, groupId) {
     var outThis = this;
     request.getBattleMembers(battleId, roomId,{
       success: function (data) {
@@ -94,12 +94,13 @@ var layerout = new baseLayerout.BaseLayerout({
       fail: function () {
 
       }
-    });
+    }, null, groupId);
   },
   onLoad: function (options) {
     var battleId = options.battleId;
     var roomId = options.roomId;
-    this.initRankData(battleId,roomId);
+    var groupId = options.groupId;
+    this.initRankData(battleId, roomId, groupId);
   },
   onUnload: function () {
     console.log("........likai");
