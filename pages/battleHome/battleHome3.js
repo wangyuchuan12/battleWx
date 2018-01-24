@@ -167,6 +167,7 @@ var layerout = new baseLayerout.BaseLayerout({
     var registUserId = options.registUserId;
 
     
+    console.log("registUserId:" + registUserId);
 
     var outThis = this;
     request.requestLogin({
@@ -185,6 +186,11 @@ var layerout = new baseLayerout.BaseLayerout({
             }else if(skipType==1){
               wx.navigateTo({
                 url: '../danList/danList'
+              });
+            }else if(skipType==2){
+              var roomId = options.roomId;
+              wx.navigateTo({
+                url: '../pkRoom/pkRoom?role=1&id='+roomId
               });
             }
           },
@@ -366,24 +372,11 @@ var layerout = new baseLayerout.BaseLayerout({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-
     var outThis = this;
     var userId = this.data.userId;
-
-    var shareCreate = this.data.shareCreate;
-    this.setData({
-      shareAlert: 0
-    });
-    if (shareCreate == 1) {
-      this.setData({
-        shareCreate: 0
-      });
-      var uuid = util.uuid();
-      return {
-        path: 'pages/battleHome/battleHome?registUserId=' + userId,
-        success: function () {
-          
-        }
+    return {
+      path: 'pages/battleHome/battleHome3?registUserId=' + userId,
+      success: function () {
       }
     }
   }

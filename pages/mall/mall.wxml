@@ -3,8 +3,31 @@
 
 <import src ="../assembly/attrPlug/attrPlug"/>
 <template is="attrPlug" data= "{{...attrPlugData}}" />
-<scroll-view class="mall" scroll-y>
-  <view class="mallGoods">
+
+
+<view class="mall" >
+  <view class="mallTabList">
+    <view class="mallTabItem" wx:if="{{type==1}}" 
+      style='background:rgba(239,85,3,1);'>
+      <view class="mallTabItemName">智慧豆</view>
+      <view class="mallTabItemIcon"></view>
+    </view>
+    <view class="mallTabItem" bindtap='beanClick' wx:else>
+      <view class="mallTabItemName">智慧豆</view>
+      <view class="mallTabItemIcon"></view>
+    </view>
+
+    <view class="mallTabItem" wx:if="{{type==3}}" 
+      style='background:rgba(239,85,3,1);'>
+      <view class="mallTabItemName">爱心</view>
+      <view class="mallTabItemIcon"></view>
+    </view>
+    <view class="mallTabItem" bindtap='loveClick' wx:else>
+      <view class="mallTabItemName">爱心</view>
+      <view class="mallTabItemIcon"></view>
+    </view>
+  </view>
+  <scroll-view class="mallGoods" scroll-y>
     <view class="mallGood" wx:for="{{goods}}" wx:for-item="good" id="{{good.id}}" bindtap='goodItemClick'>
       <view class="mallGoodBackground"></view>
       <view class="mallGoodContent">
@@ -21,5 +44,5 @@
         </view>
       </view>
     </view>
-  </view>
-</scroll-view>
+  </scroll-view>
+</view>

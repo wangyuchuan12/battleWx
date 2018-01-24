@@ -1,5 +1,6 @@
 var currentLoveCoolingRequest = require("../../../utils/currentLoveCoolingRequest.js");
 var battleMemberInfoRequest = require("../../../utils/battleMemberInfoRequest.js");
+var supperLoveRequest = require("../../../utils/supperLoveRequest.js");
 var interval;
 var progressScorePlug = {
 data: {
@@ -643,6 +644,40 @@ data: {
   },
 },
 
+supplyLoveClick:function(){
+  var outThis = this;
+  var battleId = this.data.battleId;
+  var roomId = this.data.roomId;
+  this.showLoading();
+  supperLoveRequest.syncPapersData(battleId,roomId,{
+    loveIsFull:function(){
+      outThis.hideLoading();
+      outThis.showToast("爱心已满，无需补充");
+    },
+    superloveNotEnough:function(){
+      outThis.hideLoading();
+      outThis.showConfirm("爱心库存不足，请充值", "是否充值", {
+        confirm: function () {
+          wx.navigateTo({
+            url: '../mall/mall?type=3'
+          });
+        },
+        cancel: function () {
+
+        }
+      }, "充值", "取消");
+    },
+    success:function(memberInfo){
+      outThis.hideLoading();
+      outThis.setLove(memberInfo.loveCount, memberInfo.loveResidule);
+      outThis.initAccountInfo();
+    },
+    fail:function(){
+      outThis.hideLoading();
+    }
+  });
+},
+
 speedCoolClick:function(){
   var outThis = this;
   this.showLoading();
@@ -653,7 +688,7 @@ speedCoolClick:function(){
     this.showConfirm("智慧豆不足，请充值", "是否充值", {
       confirm:function(){
         wx.navigateTo({
-          url: '../mall/mall'
+          url: '../mall/mall?type=1'
         });
       },
       cancel:function(){

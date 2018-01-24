@@ -14,12 +14,30 @@
 
  
 }
+
+.mallTabList{
+  padding-top:50px;
+}
+
+.mallTabItem{
+  display: inline-block;
+  margin: 2px;
+  width:100px;
+  background:rgba(9,52,0,0.4);
+  padding-top:10px;
+  padding-bottom:10px;
+  color: rgba(245,202,0,1);
+  border-radius: 5px;
+
+}
+
+
 .mallGoods{
   text-align: left;
   margin-left:5.5%;
   position: relative;
 
-  padding-top:50px;
+  padding-top:20px;
 }
 .mallGood{
   width:45%;

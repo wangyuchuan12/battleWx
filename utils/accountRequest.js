@@ -10,6 +10,7 @@ var accountResultInfoUrl = domain + "/api/battle/dan/accountResultInfo";
 function accountInfo(callback){
   request.requestWithLogin(accountInfoUrl, {}, {
     success: function (resp) {
+      console.log("resp:"+JSON.stringify(resp));
       if(resp.success){
         callback.success(resp.data);
       }else{

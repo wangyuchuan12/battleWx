@@ -8,6 +8,8 @@ var layerout = new baseLayerout.BaseLayerout({
    * 页面的初始数据
    */
   data: {
+    //0是道具 1是智慧豆 2砖石 3爱心
+    type:1,
     goods:[/*
       {
         id:0,
@@ -51,6 +53,20 @@ var layerout = new baseLayerout.BaseLayerout({
         outThis.hideLoading();
       }
     });
+  },
+
+  beanClick:function(){
+    this.setData({
+      type:1
+    });
+    this.initGoodList();
+  },
+
+  loveClick: function () {
+    this.setData({
+      type: 3
+    });
+    this.initGoodList();
   },
 
   goodItemClick:function(e){
@@ -102,6 +118,35 @@ var layerout = new baseLayerout.BaseLayerout({
     
   },
 
+  initGoodList:function(){
+    var outThis = this;
+    var type = this.data.type;
+    this.showLoading();
+    goodRequest.listRequest(type, {
+      success: function (goods) {
+        outThis.loadPreProgress();
+        outThis.hideLoading();
+        var array = new Array();
+        for (var i = 0; i < goods.length; i++) {
+          var good = goods[i];
+          array.push({
+            id: good.id,
+            type: good.type,
+            num: good.num,
+            cost: good.cost,
+            costType: good.costType
+          });
+        }
+        outThis.setData({
+          goods: array
+        });
+      },
+      fail: function () {
+        outThis.hideLoading();
+      }
+    });
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
@@ -109,31 +154,16 @@ var layerout = new baseLayerout.BaseLayerout({
 
     this.initAccountInfo();
     var outThis = this;
-    outThis.showLoading();
-    goodRequest.listRequest(null,{
 
-        success:function(goods){
-          outThis.loadPreProgress();
-          outThis.hideLoading();
-          var array = new Array();
-          for(var i=0;i<goods.length;i++){
-            var good = goods[i];  
-            array.push({
-              id:good.id,
-              type:good.type,
-              num:good.num,
-              cost:good.cost,
-              costType:good.costType
-            }); 
-          }
-          outThis.setData({
-            goods:array
-          });
-        },
-        fail:function(){
-          outThis.hideLoading();
-        }
-    });
+    var type = options.type;
+
+    if(type!=null){
+      this.setData({
+        type:type
+      });
+    }
+    
+    this.initGoodList();
   },
 
   /**

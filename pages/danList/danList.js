@@ -87,6 +87,7 @@ var layerout = new baseLayerout.BaseLayerout({
   danItemClick:function(e){
     var id = e.currentTarget.id;
     var dans = this.data.dans;
+    console.log("id:"+id);
     for(var i=0;i<dans.length;i++){
       var dan = dans[i];
       if(dan.id==id){
@@ -104,7 +105,7 @@ var layerout = new baseLayerout.BaseLayerout({
         var isSign = dan.isSign;
         if(isSign==1){
           wx.navigateTo({
-            url: '../danInfo/daninfo2?danId=' + dan.danId
+            url: '../danInfo/daninfo3?danId=' + dan.danId
           });
         }else{
           this.setData({
@@ -143,13 +144,13 @@ var layerout = new baseLayerout.BaseLayerout({
         outThis.setData({
           isDanAlert: 0
         });
-        battleDanRequest.danSign(alertDan.danId, {
+        battleDanRequest.danSign(alertDan.id, {
           success: function (data) {
             takepartRequest.battleTakepart(data.battleId, data.roomId, {
               success: function (member) {
                 outThis.hideLoading();
                 wx.navigateTo({
-                  url: '../danInfo/daninfo2?danId=' + alertDan.danId
+                  url: '../danInfo/daninfo3?danId=' + alertDan.id
                 });
               },
               beanNotEnough: function () {
@@ -168,7 +169,7 @@ var layerout = new baseLayerout.BaseLayerout({
               },
               battleIn: function () {
                 wx.navigateTo({
-                  url: '../danInfo/daninfo2?danId=' + alertDan.danId
+                  url: '../danInfo/daninfo3?danId=' + alertDan.id
                 });
               },
               battleEnd: function () {

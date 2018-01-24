@@ -40,11 +40,19 @@
                   </view>
                 </view>
             </view>
-              <view style="width:100px;height:50px;background:RGBA(114,80,113,1); vertical-align: top;display:inline-block;color:white;vertical-align:top;border-radius:5px;" bindtap='speedCoolClick'>
+              <view style="width:70px;;background:RGBA(114,80,113,1);vertical-align: top;display:inline-block;color:white;vertical-align:top;border-radius:5px;font-size:10px; padding-top:5px;" bindtap='speedCoolClick'>
                 加速{{loveCooling.speedCoolSecond}}秒钟
                 <view>
                   <view class="personalAttrDataHeader personalAttrDataHeaderBean" style=""></view>
-                  <span style="vertical-align: top">×{{loveCooling.speedCoolBean}}</span>
+                  <span style="vertical-align: top;font-size:15px;">×{{loveCooling.speedCoolBean}}</span>
+                </view>
+              </view>
+
+              <view style="width:70px;;background:RGBA(114,80,113,1);vertical-align: top;display:inline-block;color:white;vertical-align:top;border-radius:5px;font-size:10px; padding-top:5px;margin-left:1px;" bindtap='supplyLoveClick'>
+                补充爱心
+                <view>
+                  <view class="personalAttrDataHeader personalAttrDataHeaderLove" style=""></view>
+                  <span style="vertical-align: top;font-size:15px;">×1</span>
                 </view>
               </view>
           </view>

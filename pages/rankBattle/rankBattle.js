@@ -63,13 +63,22 @@ var layerout = new baseLayerout.BaseLayerout({
           roomId:groupInfo.roomId,
           groupId:groupInfo.id
         });
-        outThis.takepartClick();
+        var frendRank = outThis.data.frendRank;
+        var allRank = outThis.data.allRank;
+        wx.showModal({
+          title: "好友排名:" + frendRank + "名,总排名:" + allRank,
+          content: '是否确定重新开始',
+          success: function () {
+            outThis.takepartClick();
+          }
+        });
       },
       timeNotReached:function(){
-        var rank = outThis.data.rank;
+        var frendRank = outThis.data.frendRank;
+        var allRank = outThis.data.allRank;
         setTimeout(function(){
-          outThis.showConfirm("您获得第" + rank + "名", "今天的比赛已经结束,请明天再来一决高下吧");
-        },2000);
+          outThis.showConfirm("好友排名:" + frendRank + "名,总排名:"+allRank, "今天的比赛已经结束,请明天再来一决高下吧");
+        },1000);
       },
       fail:function(){
 

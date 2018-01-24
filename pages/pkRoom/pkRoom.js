@@ -296,7 +296,15 @@ var layerout = new baseLayerout.BaseLayerout({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-    var path = "pages/pkRoom/pkRoom?role=1&id="+this.data.id;
+    var role = this.data.role;
+    var userId = "";
+    if(role==0){
+      userId = this.data.homeUserId;
+    }else if(role==1){
+      userId = this.data.beatUserId;
+    }
+    var path = 'pages/battleHome/battleHome3?registUserId=' + userId+"&roomId="+this.data.id+"&skipType=2";
+    //var path = "pages/pkRoom/pkRoom?role=1&id="+this.data.id;
     return {
       path: path,
       success: function () {

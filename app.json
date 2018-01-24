@@ -1,12 +1,13 @@
 {
   "pages": [
     "pages/battleHome/battleHome3",
-    "pages/rankBattle/rankBattle",
+    "pages/danList/danList",
+    "pages/danInfo/daninfo3",
     "pages/battleHome/battleHome",
     "pages/progressScore/progressScore",
+    "pages/mall/mall",
+    "pages/rankBattle/rankBattle",
     "pages/pkRoom/pkRoom",
-    "pages/test/test",
-    "pages/danList/danList",
     "pages/danInfo/daninfo2",
     "pages/danInfo/danInfo",
     "pages/questionFactory/questionFactoryMain/questionFactoryMain",
@@ -23,7 +24,6 @@
     "pages/manager/redPackEdit/redPackEdit",
     "pages/manager/roomEdit/roomEdit",
     "pages/redPackInfo/redPackInfo",
-    "pages/mall/mall",
     "pages/invitation/invitation",
     "pages/battleRoomEdit/battleRoomEdit",
     "pages/questionInfo/questionInfo",
@@ -39,7 +39,9 @@
     "pages/battleInfo/battleInfo",
     "pages/logs/logs",
     "pages/myBattleRooms/myBattleRooms",
-    "pages/stock/stock"
+    "pages/stock/stock",
+    "pages/test/test",
+    "pages/battleDekorn"
   ],
   "window": {
     "backgroundTextStyle": "light",

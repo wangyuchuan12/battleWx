@@ -86,6 +86,7 @@ var layerout = new baseLayerout.BaseLayerout({
         stageIndex:stageIndex
       });
       var roomId = outThis.data.roomId;
+      outThis.showLoading();
       outThis.syncPaperData({
         success:function(data){
           if(!data){
@@ -96,6 +97,7 @@ var layerout = new baseLayerout.BaseLayerout({
           if(status==1||status==2){
             battleStageTakepartRequest.stageTakepart(outThis.data.battleId, subjectIds, roomId, {
               success: function (data) {
+                outThis.hideLoading();
                 var ids = data.questionIds;
                 var questionIds = "";
                 var isLast = data.isLast;
@@ -116,6 +118,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
               },
               fail: function () {
+                outThis.hideLoading();
                 console.log("fail");
               }
             });
@@ -162,6 +165,8 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   roomAlert:function(roomScore){
+
+    console.log(".ssssssssssssssssssssssssssssroomAlert");
     var outThis = this;
     var memberInfo = this.data.memberInfo;
 
@@ -170,6 +175,7 @@ var layerout = new baseLayerout.BaseLayerout({
     }
 
     this.setRoomPercent(roomScore, memberInfo.scrollGogal);
+    console.log(".ssssssssssssssssssssssssssssroomAlert"+JSON.stringify(memberInfo));
     if (memberInfo.status == 2 || memberInfo.roomStatus == 3) {
       var members = outThis.getMembers();
       this.setData({
@@ -185,7 +191,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
         },
         success: function (battleMembers) {
-
+          console.log(".ssssssssssssssssssssssssssss");
           membersRankUtil.rankByProcess(battleMembers);
 
           for(var i=0;i<battleMembers.length;i++){
@@ -386,12 +392,12 @@ var layerout = new baseLayerout.BaseLayerout({
   showQuestionResult:function(){
     var battleMemberPaperAnswerId = this.data.battleMemberPaperAnswerId;
     var outThis = this;
+    this.showLoading();
     this.initQuestionResultData(battleMemberPaperAnswerId,{
       success:function(){
         outThis.hideLoading();
         outThis.syncPaperData({
           success:function(data){
-           
           }
         });
       },
@@ -439,6 +445,8 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   startSelector:function(){
+    var outThis = this;
+    this.showLoading();
     var loveCount = this.getLoveCount();
     if(!loveCount){
       var hour = this.getLoveCoolHour();
@@ -757,6 +765,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
     battleMemberInfoRequest.getBattleMemberInfo(battleId,roomId,{
       success:function(memberInfo){
+        console.log("memberinfo2222:"+JSON.stringify(memberInfo));
         battleMembersRequest.getBattleMembers(battleId, roomId, {
           cache: function (battleMembers) {
 

@@ -1,4 +1,4 @@
-var request = require("../../utils/request.js");
+var test = require("../../utils/test.js");
 Page({
 
   /**
@@ -13,14 +13,7 @@ Page({
    */
   onLoad: function (options) {
     
-    request.request("http://192.168.1.101/api/test/test", {}, {
-      success:function(data){
-        console.log(JSON.stringify(data));
-      },
-      fail:function(){
-        console.log("fail");
-      }
-    }, {});
+    test.testSave();
   },
 
   /**

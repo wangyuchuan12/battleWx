@@ -14,7 +14,7 @@
       <view class="shareAlertPlugContent">开始一对一pk对战</view>
       <button class="shareAlertPlugButton" open-type='share'>确定</button>
 </view>
-<view class="battleHome">
+<scroll-view class="battleHome" scroll-y>
   <view class="battleHomeMenu">
     <view class="battleHomeMenu1" bindtap='danClick'>
       <view class="battleHomeMenu1Background"></view>
@@ -26,23 +26,39 @@
     </view>
     <view class="battleHomeMenu3" bindtap='rankBattleClick'>
       <view class="battleHomeMenu3Background"></view>
-      <view class="battleHomeMenu3Name">排位赛</view>
+      <view class="battleHomeMenu3Name">每日排位赛</view>
     </view>
     <view class="battleHomeMenu4" bindtap='factoryClick'>
       <view class="battleHomeMenu4Background"></view>
       <view class="battleHomeMenu4Name">题目工厂</view>
     </view>
-    <view class="battleHomeMenu5"  bindtap='takeoutClick'>
+    <view class="battleHomeMenu5">
        <view class="battleHomeMenu5Background"></view>
+       <view class="battleHomeMenu6Name">我的房间</view>
+        <view class="danLock" style="top:0px;color:white;">
+          <view class="fa fa-lock danLockContent" style="color:white;"></view>
+       </view>
+    </view>
+
+    <view class="battleHomeMenu6">
+       <view class="battleHomeMenu6Background"></view>
+       <view class="battleHomeMenu7Name">福利模式</view>
+       <view class="danLock" style="top:0px;color:white;">
+          <view class="fa fa-lock danLockContent" style="color:white;"></view>
+       </view>
+    </view>
+
+     <view class="battleHomeMenu7"  bindtap='takeoutClick'>
+       <view class="battleHomeMenu7Background"></view>
        <view class="battleHomeMenu5Name">提现</view>
     </view>
 
-    <view class="battleHomeMenu6"  bindtap='mallClick'>
-       <view class="battleHomeMenu6Background"></view>
+    <view class="battleHomeMenu8"  bindtap='mallClick'>
+       <view class="battleHomeMenu8Background"></view>
        <view class="battleHomeMenu5Name">商城</view>
     </view>
   </view>
-</view>
+</scroll-view>
 
 
     

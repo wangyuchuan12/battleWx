@@ -71,6 +71,7 @@ function request(url, params, callback,data) {
   var sessionId = wx.getStorageSync("SESSIONID");
   var header;
   if (sessionId) {
+    console.log("sessionId:" + sessionId + ",url:" + url);
     header = {
       'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
       'Cookie': 'JSESSIONID=' + sessionId

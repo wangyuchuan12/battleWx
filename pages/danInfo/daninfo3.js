@@ -19,6 +19,8 @@ var requestTarget;
 
 var flushMembersInterval;
 
+var dotAnFunInterval;
+
 var layerout = new baseLayerout.BaseLayerout({
 
   /**
@@ -27,53 +29,53 @@ var layerout = new baseLayerout.BaseLayerout({
   data: {
     danId: 0,
     danName: "",
-    name:"",
+    name: "",
     imgUrl: "",
     roomId: "",
-    battleId:"",
-    maxinum:0,
-    mininum:0,
-    num:0,
-    remainderHour:0,
-    remainderMin:0,
-    remainderSecond:0,
-    timeDiffer:1,
+    battleId: "",
+    maxinum: 0,
+    mininum: 0,
+    num: 0,
+    remainderHour: 0,
+    remainderMin: 0,
+    remainderSecond: 0,
+    timeDiffer: 1,
     projects: [{
       isOpen: 1
     }],
-    members:[{
-      imgUrl:"http://otsnwem87.bkt.clouddn.com/user.png"
-    },{
-        imgUrl: "http://otsnwem87.bkt.clouddn.com/user.png"
-    },{
-        imgUrl: "http://otsnwem87.bkt.clouddn.com/user.png"
+    members: [{
+      imgUrl: "http://otsnwem87.bkt.clouddn.com/user.png"
+    }, {
+      imgUrl: "http://otsnwem87.bkt.clouddn.com/user.png"
+    }, {
+      imgUrl: "http://otsnwem87.bkt.clouddn.com/user.png"
     }],
 
-    rewards:[]
+    rewards: []
   },
 
-  reckonTime:function(){
+  reckonTime: function () {
     var outThis = this;
     var flag = true;
     var num = this.data.num;
     var mininum = this.data.mininum;
     var interval = setInterval(function () {
       var timeDiffer = outThis.data.timeDiffer;
-      
-      var hour = parseInt(timeDiffer/3600);
-      var min = parseInt((timeDiffer - hour*3600)/60);
-      var second = timeDiffer - (hour*3600+min*60);
 
-      if(hour<10){
-        hour = "0"+hour;
+      var hour = parseInt(timeDiffer / 3600);
+      var min = parseInt((timeDiffer - hour * 3600) / 60);
+      var second = timeDiffer - (hour * 3600 + min * 60);
+
+      if (hour < 10) {
+        hour = "0" + hour;
       }
 
-      if(min<10){
-        min = "0"+min;
+      if (min < 10) {
+        min = "0" + min;
       }
 
-      if(second<10){
-        second = "0"+second;
+      if (second < 10) {
+        second = "0" + second;
       }
 
       timeDiffer--;
@@ -84,9 +86,9 @@ var layerout = new baseLayerout.BaseLayerout({
         remainderSecond: second
       });
 
-      if (timeDiffer <= 0 && num >= mininum){
+      if (timeDiffer <= 0 && num >= mininum) {
         clearInterval(interval);
-        if (!flag){
+        if (!flag) {
           wx.redirectTo({
             url: '../progressScore/progressScore?roomId=' + outThis.data.roomId + "&battleId=" + outThis.data.battleId + "&againButton=返回"
           });
@@ -96,7 +98,7 @@ var layerout = new baseLayerout.BaseLayerout({
       }
 
       flag = false;
-    }, 1000); 
+    }, 1000);
   },
 
   showCircleDo: function () {
@@ -113,7 +115,7 @@ var layerout = new baseLayerout.BaseLayerout({
       transformOrigin: "80px 80px",
     });
 
-    var dotAnFun = setInterval(function () {
+    dotAnFunInterval = setInterval(function () {
       i = i + 1;
       dotAnData.rotate(10 * i).step();
       outThis.setData({
@@ -128,54 +130,52 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
 
-  initDanRoomInfo:function(){
+  initDanRoomInfo: function () {
     var outThis = this;
     var danId = this.data.danId;
     outThis.showLoading();
-    battleDanRequest.danRoomInfo(danId,{
-      success:function(room){
+    battleDanRequest.danRoomInfo(danId, {
+      success: function (room) {
         outThis.hideLoading();
         outThis.loadPreProgress();
         outThis.setData({
-          name:room.name,
-          places:room.places,
-          roomId:room.roomId,
-          battleId:room.battleId,
-          maxinum:room.maxinum,
-          mininum:room.mininum,
-          rewards:room.rewards,
-          status:room.status,
-          roomStatus:room.roomStatus,
-          num:room.num,
+          name: room.name,
+          places: room.places,
+          roomId: room.roomId,
+          battleId: room.battleId,
+          maxinum: room.maxinum,
+          mininum: room.mininum,
+          rewards: room.rewards,
+          status: room.status,
+          roomStatus: room.roomStatus,
+          num: room.num,
           timeDiffer: room.timeDiffer
         });
         var num = outThis.data.num;
         var mininum = outThis.data.mininum;
-
-        console.log("room.roomStatus:" + room.roomStatus + ",room.timeDiffer:" + room.timeDiffer + ",num:" + num + ",mininum:" + mininum);
         outThis.reckonTime();
         outThis.showMembers(room.members);
         outThis.initBattleMembers({
-          success:function(){
+          success: function () {
             outThis.hideLoading();
-            if ((room.roomStatus == 3 || room.timeDiffer <= 0) && num>=mininum) {
+            if ((room.roomStatus == 3 || room.timeDiffer <= 0) && num >= mininum) {
               outThis.showConfirm("跳转到游戏", "是否确定挑战", {
-                confirm:function(){
+                confirm: function () {
                   wx.redirectTo({
                     url: '../progressScore/progressScore?roomId=' + room.roomId + "&battleId=" + room.battleId + "&againButton=返回"
                   });
                 },
-                cancel:function(){
+                cancel: function () {
 
                 }
               });
-              
+
             }
           }
         });
-        
+
       },
-      fail:function(){
+      fail: function () {
         console.log("fail");
       }
     });
@@ -193,45 +193,48 @@ var layerout = new baseLayerout.BaseLayerout({
 
     this.initDanRoomInfo();
 
-    flushMembersInterval = setInterval(function(){
+    flushMembersInterval = setInterval(function () {
       outThis.initBattleMembers({
-        success:function(){
-          outThis.takepartClick(null,1,1);
+        success: function () {
+          outThis.takepartClick(null, 1, 1);
         },
-        fail:function(){
+        fail: function () {
 
         }
       });
-    },10000);
+    }, 10000);
+
+    this.showCircleDo();
   },
 
-  showMembers:function(ms){
-      var members = new Array();
-      var maxinum = this.data.maxinum;
+  showMembers: function (ms) {
+    var members = new Array();
+    var maxinum = this.data.maxinum;
 
-      if (ms && ms.length > 0) {
-        for (var i = 0; i < ms.length; i++) {
-          members.push({
-            imgUrl:ms[i].headImg
-          });
-        }
+    if (ms && ms.length > 0) {
+      for (var i = 0; i < ms.length; i++) {
+        members.push({
+          imgUrl: ms[i].headImg,
+          index:i
+        });
       }
+    }
 
-      if(maxinum){
-        for (var i = 0; i < maxinum-ms.length; i++) {
-          members.push({
-            imgUrl: "http://otsnwem87.bkt.clouddn.com/user.png"
-          });
-        }
+    if (maxinum) {
+      for (var i = 0; i < maxinum - ms.length; i++) {
+        members.push({
+          imgUrl: "http://otsnwem87.bkt.clouddn.com/user.png"
+        });
       }
+    }
 
-      this.setData({
-        members:members
-      });
-      battleTakepartCache.members = ms;
+    this.setData({
+      members: members
+    });
+    battleTakepartCache.members = ms;
   },
 
-  takepartClick: function (e,toastFlag,isAsk){
+  takepartClick: function (e, toastFlag, isAsk) {
     var outThis = this;
     var members = outThis.data.members;
     var num = this.data.num;
@@ -242,7 +245,7 @@ var layerout = new baseLayerout.BaseLayerout({
     var battleId = this.data.battleId;
     var roomId = this.data.roomId;
     var status = this.data.status;
-    
+
 
     var roomStatus = this.data.roomStatus;
 
@@ -258,50 +261,50 @@ var layerout = new baseLayerout.BaseLayerout({
       return;
     }
 
-    if(status==1){
+    if (status == 1) {
       this.hideLoading();
       var remainder = outThis.data.timeDiffer;
-      if (remainder > 0 ){
-        if (!toastFlag){
+      if (remainder > 0) {
+        if (!toastFlag) {
           outThis.showToast("比赛未开始");
         }
         return;
       }
 
-      if (mininum > num ) {
+      if (mininum > num) {
         if (!toastFlag) {
-          this.showToast("人数最少为"+mininum+"人，请等待...");
+          this.showToast("人数最少为" + mininum + "人，请等待...");
         }
         return;
       }
 
-      if(isAsk){
+      if (isAsk) {
         this.showConfirm("跳转到游戏", "是否确定挑战", {
-          confirm:function(){
+          confirm: function () {
             wx.redirectTo({
               url: '../progressScore/progressScore?roomId=' + roomId + "&battleId=" + battleId + "&againButton=返回"
             });
           },
-          cancel:function(){
+          cancel: function () {
 
           }
         });
-      }else{
+      } else {
         wx.redirectTo({
           url: '../progressScore/progressScore?roomId=' + roomId + "&battleId=" + battleId + "&againButton=返回"
         });
       }
-      
+
       return;
     }
-   
 
-    
 
-    takepartRequest.battleTakepart(battleId,roomId,{
+
+
+    takepartRequest.battleTakepart(battleId, roomId, {
       success: function (member) {
         outThis.setData({
-          status:1
+          status: 1
         });
         outThis.hideLoading();
         outThis.initBattleMembers();
@@ -425,17 +428,17 @@ var layerout = new baseLayerout.BaseLayerout({
         if (mininum <= num) {
           requestTarget.stop();
         }
-        if(callback&&callback.success){
+        if (callback && callback.success) {
           callback.success();
         }
       },
       fail: function () {
         callback.fail();
       }
-    },0);
+    }, 0);
   },
 
-  restart:function(){
+  restart: function () {
     var outThis = this;
     this.showLoading();
     setTimeout(function () {
@@ -444,13 +447,13 @@ var layerout = new baseLayerout.BaseLayerout({
       var prevPage = pages[pages.length - 2];
       wx.navigateBack({});
       var danId = outThis.data.danId;
-      if (prevPage.restart){
+      if (prevPage.restart) {
         prevPage.restart();
       }
     }, 2000);
   },
 
-  backListener:function(){
+  backListener: function () {
     /*var outThis = this;
     this.showLoading();
     setTimeout(function () {
@@ -469,15 +472,16 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-    if (flushMembersInterval){
+    /*if (flushMembersInterval) {
       clearInterval(flushMembersInterval);
-    }
+    }*/
   },
 
   /**
@@ -486,6 +490,9 @@ var layerout = new baseLayerout.BaseLayerout({
   onUnload: function () {
     if (flushMembersInterval) {
       clearInterval(flushMembersInterval);
+    }
+    if (dotAnFunInterval){
+      clearInterval(dotAnFunInterval);
     }
   },
 

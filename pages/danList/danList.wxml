@@ -9,7 +9,7 @@
     <view class="battleHomeHeaderContent">
       <view class="battleHomeHeaderContentItem1">{{nickname}}</view>
       <view class="battleHomeHeaderContentItem3">
-          段位：<block wx:if="{{danName}}">{{danName}}</block>
+          段位：<block wx:if="{{name}}">{{name}}</block>
                <block wx:else>原始人</block>
       </view>
       <view class="battleHomeHeaderContentItem2" style="display:none;">
@@ -98,7 +98,7 @@
         <view class="danItemSuccess" wx:if="{{dan.status==2}}">成功</view>
         <view class="danItemFail" wx:if="{{dan.status==3}}">失败</view>
         <image src="{{dan.imgUrl}}" class="danItemImg"></image>
-        <view class="danItemName">{{dan.danName}}</view>
+        <view class="danItemName">{{dan.name}}</view>
       </view>
     </block>
   </scroll-view>

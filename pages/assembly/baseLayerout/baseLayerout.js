@@ -25,13 +25,15 @@ function BaseLayerout(config){
       fullAlertDisplay:"none",
       againButtonDisplay:"none",
       againButton:"再来一局",
-      preProcess:0
+      preProcess:0,
+      loadMsg:""
     }
 
 
-    baseConfig.showLoading = function(){
+    baseConfig.showLoading = function(loadMsg){
       this.setData({
-        "baseData.hiddenLoading":false
+        "baseData.hiddenLoading":false,
+        "baseData.loadMsg": loadMsg
       });
     }
 
