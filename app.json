@@ -1,9 +1,9 @@
 {
   "pages": [
+    "pages/battleHome/battleHome",
     "pages/battleHome/battleHome3",
     "pages/battleDekornList/battleDekornList",
     "pages/pkMain/pkMain",
-    "pages/battleHome/battleHome",
     "pages/danList/danList",
     "pages/battleDekorn/battleDekorn",
     "pages/danInfo/daninfo3",
