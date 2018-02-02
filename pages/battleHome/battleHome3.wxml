@@ -15,7 +15,7 @@
       <button class="shareAlertPlugButton" open-type='share'>确定</button>
 </view>
 <scroll-view class="battleHome" scroll-y>
-  <view class="battleHomeMenu">
+  <scroll-view class="battleHomeMenu">
     <view class="battleHomeMenu1" bindtap='danClick'>
       <view class="battleHomeMenu1Background"></view>
       <view class="battleHomeMenu1Name">闯关</view>
@@ -24,9 +24,9 @@
       <view class="battleHomeMenu2Background"></view>
       <view class="battleHomeMenu2Name">好友对战</view>
     </view>
-    <view class="battleHomeMenu3" bindtap='rankBattleClick'>
+    <view class="battleHomeMenu3" bindtap='dekornBattleClick'>
       <view class="battleHomeMenu3Background"></view>
-      <view class="battleHomeMenu3Name">每日排位赛</view>
+      <view class="battleHomeMenu3Name">挑战赛</view>
     </view>
     <view class="battleHomeMenu4" bindtap='factoryClick'>
       <view class="battleHomeMenu4Background"></view>
@@ -57,7 +57,7 @@
        <view class="battleHomeMenu8Background"></view>
        <view class="battleHomeMenu5Name">商城</view>
     </view>
-  </view>
+  </scroll-view>
 </scroll-view>
 
 

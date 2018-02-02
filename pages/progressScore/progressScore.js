@@ -56,7 +56,9 @@ var layerout = new baseLayerout.BaseLayerout({
     againClick:function(){
       var pages = getCurrentPages();
       var prevPage = pages[pages.length - 2];
-      prevPage.restart();
+      if (prevPage.restart){
+        prevPage.restart();
+      }
       wx.navigateBack({
         
       });
@@ -89,6 +91,7 @@ var layerout = new baseLayerout.BaseLayerout({
       outThis.showLoading();
       outThis.syncPaperData({
         success:function(data){
+          console.log("....data:"+JSON.stringify(data));
           if(!data){
             return;
           }
@@ -165,8 +168,6 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   roomAlert:function(roomScore){
-
-    console.log(".ssssssssssssssssssssssssssssroomAlert");
     var outThis = this;
     var memberInfo = this.data.memberInfo;
 
@@ -175,7 +176,6 @@ var layerout = new baseLayerout.BaseLayerout({
     }
 
     this.setRoomPercent(roomScore, memberInfo.scrollGogal);
-    console.log(".ssssssssssssssssssssssssssssroomAlert"+JSON.stringify(memberInfo));
     if (memberInfo.status == 2 || memberInfo.roomStatus == 3) {
       var members = outThis.getMembers();
       this.setData({
@@ -191,7 +191,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
         },
         success: function (battleMembers) {
-          console.log(".ssssssssssssssssssssssssssss");
+          outThis.hideLoading();
           membersRankUtil.rankByProcess(battleMembers);
 
           for(var i=0;i<battleMembers.length;i++){
@@ -451,6 +451,7 @@ var layerout = new baseLayerout.BaseLayerout({
     if(!loveCount){
       var hour = this.getLoveCoolHour();
       var min = this.getLoveCoolMin();
+      outThis.hideLoading();
       this.showToast("爱心恢复中,还剩"+hour+"时"+min+"分");
       var isShare = this.data.isShare;
       if (!isShare){
@@ -563,6 +564,12 @@ var layerout = new baseLayerout.BaseLayerout({
   mallClick:function(){
     wx.navigateTo({
       url: '../mall/mall'
+    });
+  },
+
+  homeClick:function(){
+    wx.navigateTo({
+      url: '../battleHome/battleHome3'
     });
   },
 
@@ -685,8 +692,8 @@ var layerout = new baseLayerout.BaseLayerout({
       path = "pages/battleHome/battleHome3?skipType=1&registUserId="+userId;
     } else if (memberInfo.isFrendGroup==1){
       path = "pages/battleHome/battleHome3?skipType=0&registUserId=" + userId;
-    }else{
-
+    } else if (memberInfo.isDekorn){
+      path = "pages/battleHome/battleHome3?skipType=3&registUserId=" + userId;
     }
     
     return {
@@ -765,7 +772,6 @@ var layerout = new baseLayerout.BaseLayerout({
 
     battleMemberInfoRequest.getBattleMemberInfo(battleId,roomId,{
       success:function(memberInfo){
-        console.log("memberinfo2222:"+JSON.stringify(memberInfo));
         battleMembersRequest.getBattleMembers(battleId, roomId, {
           cache: function (battleMembers) {
 

@@ -1,9 +1,12 @@
 {
   "pages": [
     "pages/battleHome/battleHome3",
-    "pages/danList/danList",
-    "pages/danInfo/daninfo3",
+    "pages/battleDekornList/battleDekornList",
+    "pages/pkMain/pkMain",
     "pages/battleHome/battleHome",
+    "pages/danList/danList",
+    "pages/battleDekorn/battleDekorn",
+    "pages/danInfo/daninfo3",
     "pages/progressScore/progressScore",
     "pages/mall/mall",
     "pages/rankBattle/rankBattle",
@@ -36,12 +39,12 @@
     "pages/manager/battleInfoSave/battleInfoSave",
     "pages/manager/battleInfoManager/battleInfoManager",
     "pages/manager/addSubject/addSubject",
+    "pages/manager/manager/managerMain/managerMain",
     "pages/battleInfo/battleInfo",
     "pages/logs/logs",
     "pages/myBattleRooms/myBattleRooms",
     "pages/stock/stock",
-    "pages/test/test",
-    "pages/battleDekorn"
+    "pages/test/test"
   ],
   "window": {
     "backgroundTextStyle": "light",

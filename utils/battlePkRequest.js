@@ -8,8 +8,42 @@ var readyUrl = domain + "/api/battlePk/ready";
 
 var restartUrl = domain + "/api/battlePk/restart";
 
-var immediateDataUrl = domain + "/api/battlePk/immediateData";
+var battleRoomPkIntoUrl = domain + "/api/battlePk/battleRoomPkInto";
 
+var pkMainUrl = domain + "/api/battlePk/pkMain";
+
+function pkMainRequest(callback){
+  request.requestWithLogin(pkMainUrl, {}, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
+      } else {
+        callback.fail();
+      }
+    },
+    fail: function (resp) {
+      console.log("fail");
+      callback.fail("网络繁忙");
+    }
+  });
+}
+
+
+function battleRoomPkIntoRequest(min,max,callback){
+  request.requestWithLogin(battleRoomPkIntoUrl, { maxinum: max, mininum:min}, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
+      } else {
+        callback.fail();
+      }
+    },
+    fail: function (resp) {
+      console.log("fail");
+      callback.fail("网络繁忙");
+    }
+  });
+}
 
 function immediateRequest(id,callback) {
   var params = new Object();
@@ -126,5 +160,7 @@ module.exports = {
   immediateDataRequest: immediateDataRequest,
   readyRequest: readyRequest,
   restartRequest: restartRequest,
-  immediateRequest: immediateRequest
+  immediateRequest: immediateRequest,
+  battleRoomPkIntoRequest: battleRoomPkIntoRequest,
+  pkMainRequest: pkMainRequest
 }

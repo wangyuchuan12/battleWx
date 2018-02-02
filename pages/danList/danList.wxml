@@ -9,7 +9,7 @@
     <view class="battleHomeHeaderContent">
       <view class="battleHomeHeaderContentItem1">{{nickname}}</view>
       <view class="battleHomeHeaderContentItem3">
-          段位：<block wx:if="{{name}}">{{name}}</block>
+          段位：<block wx:if="{{danName}}">{{danName}}</block>
                <block wx:else>原始人</block>
       </view>
       <view class="battleHomeHeaderContentItem2" style="display:none;">

@@ -63,7 +63,7 @@ var layerout = new baseLayerout.BaseLayerout({
       shareAlert: 1
     });*/
     wx.navigateTo({
-      url: '../pkRoom/pkRoom'
+      url: '../pkMain/pkMain'
     });
   },
 
@@ -100,6 +100,12 @@ var layerout = new baseLayerout.BaseLayerout({
   rankBattleClick:function(){
     wx.navigateTo({
       url: '../rankBattle/rankBattle'
+    });
+  },
+
+  dekornBattleClick:function(){
+    wx.navigateTo({
+      url: '../battleDekornList/battleDekornList'
     });
   },
 
@@ -184,14 +190,17 @@ var layerout = new baseLayerout.BaseLayerout({
               });
               //跳转到闯关
             }else if(skipType==1){
-              wx.navigateTo({
+              /*wx.navigateTo({
                 url: '../danList/danList'
-              });
+              });*/
             }else if(skipType==2){
               var roomId = options.roomId;
               wx.navigateTo({
                 url: '../pkRoom/pkRoom?role=1&id='+roomId
               });
+              //挑战赛
+            }else if(skipType==3){
+              
             }
           },
           fail:function(){

@@ -7,10 +7,9 @@
 }
 .battleHomeMenu{
   width:95%;
-  background:red;
   position: relative;
   margin: 0 auto;
-
+  height:650px;
 }
 
 .battleHomeMenu1{

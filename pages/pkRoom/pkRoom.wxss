@@ -19,7 +19,7 @@
   padding-top:50px;
 }
 .pkRoomUser{
-  width:120px;
+  width:100px;
   height:150px;
   background: rgba(19,23,50,0.7);
   border-radius:5px;

@@ -17,9 +17,11 @@ function stageTakepart(battleId,subjectIds,roomId,callback){
     roomId:roomId
   },{
     success:function(resp){
+      console.log("resp:"+JSON.stringify(resp));
       callback.success(resp.data);
     },
     fail:function(){
+      console.log("...faile");
       callback.fail();
     }
   });

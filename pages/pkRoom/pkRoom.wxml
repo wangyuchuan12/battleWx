@@ -53,7 +53,5 @@
       <view class="pkRoomUserPlus fa fa-plus"></view>
       <view class="pkRoomUserLabel">邀请</view>
     </button>
-
-
   </view>
 </view>

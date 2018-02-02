@@ -823,6 +823,9 @@ containerScrollToDom: function(index) {
       var top = res.top;
       outThis.containerRes({
         success: function (res) {
+          if(!res){
+            return;
+          }
           var scrollTop = res.scrollTop;
           wx.getSystemInfo({
             success: function (res) {
@@ -885,6 +888,9 @@ location:function(id,index){
   var outThis = this;
   outThis.containerRes({
     success: function (res) {
+      if(!res){
+        return;
+      }
       var scrollTop = res.scrollTop;
       var scrollLeft = res.scrollLeft;
       outThis.domRes(index, {
@@ -926,6 +932,9 @@ toPosition: function(id,index, callback){
   var outThis = this;
   outThis.containerRes({
     success: function (res) {
+      if(!res){
+        return;
+      }
       var scrollTop = res.scrollTop;
       var scrollLeft = res.scrollLeft;
       outThis.domRes(index, {

@@ -73,6 +73,11 @@
       <view class="fa fa-shopping-cart" style="font-size:30px;display:inline-block"></view>
       <view style="font-size:10px;font-weight: bold">商城</view>
     </view>
+
+    <view class="progressScoreHomeButton" style="background:RGBA(13,161,255,0.8);color:white;" bindtap='homeClick'>
+      <view class="fa fa-home" style="font-size:30px;display:inline-block"></view>
+      <view style="font-size:10px;font-weight: bold">主页</view>
+    </view>
     
     <view class="progressScoreBackButton" bindtap='skipToTakepart' style="background:RGBA(255,255,255,0.5);color:black;">返回</view>
 

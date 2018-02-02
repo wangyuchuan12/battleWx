@@ -356,6 +356,10 @@ var questionInputPlug = {
         option = target;
       }
     }
+
+    if(!option){
+      return;
+    }
     var optionKey = "questionInputData.options["+option.index+"].background";
 
     this.setData({
