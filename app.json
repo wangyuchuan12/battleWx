@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/battleHome/battleHome",
     "pages/battleHome/battleHome3",
+    "pages/battleHome/battleHome",
     "pages/battleDekornList/battleDekornList",
     "pages/pkMain/pkMain",
     "pages/danList/danList",
@@ -39,7 +39,6 @@
     "pages/manager/battleInfoSave/battleInfoSave",
     "pages/manager/battleInfoManager/battleInfoManager",
     "pages/manager/addSubject/addSubject",
-    "pages/manager/manager/managerMain/managerMain",
     "pages/battleInfo/battleInfo",
     "pages/logs/logs",
     "pages/myBattleRooms/myBattleRooms",
