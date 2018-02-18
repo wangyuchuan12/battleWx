@@ -18,6 +18,8 @@ var layerout = new baseLayerout.BaseLayerout({
     nickname:"",
     level:1,
     exp:0,
+    currentDanId:"",
+    scrollTop:0,
     dans:[/*{
       id:0,
       status:0,
@@ -41,7 +43,6 @@ var layerout = new baseLayerout.BaseLayerout({
     var outThis = this;
     accountRequest.accountResultInfo({
       success: function (accountResult) {
-        outThis.loadPreProgress();
         outThis.setData({
           headimgurl: accountResult.headimgurl,
           nickname: accountResult.nickname,
@@ -68,8 +69,31 @@ var layerout = new baseLayerout.BaseLayerout({
     var outThis = this;
     battleDanRequest.listRequest({
       success:function(dans){
+        
         outThis.setData({
           dans:dans
+        });
+
+        var thisDan;
+        for(var i=0;i<dans.length;i++){
+          if(dans[i].status==1){
+            thisDan = dans[i];
+          }
+        }
+
+        outThis.setData({
+          thisDan: thisDan
+        });
+
+        outThis.loadPreProgress({
+          complite: function () {
+            setTimeout(function(){
+              outThis.setData({
+                currentDanId: "dan_" + thisDan.id
+              });
+            },500);
+            
+          }
         });
       },
       fail:function(){
@@ -86,6 +110,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
   danItemClick:function(e){
     var id = e.currentTarget.id;
+    console.log("....id:"+id);
     var dans = this.data.dans;
     console.log("id:"+id);
     for(var i=0;i<dans.length;i++){

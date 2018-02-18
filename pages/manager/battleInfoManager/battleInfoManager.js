@@ -76,6 +76,13 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
+  auditClick:function(){
+    var battleId = this.data.battleId;
+    wx.navigateTo({
+      url: '../../questionFactory/questionFactoryAudit/questionFactoryAudit?battleId='+battleId
+    });
+  },
+
   subjectDelDo:function(e){
     var outThis = this;
     var id = e.currentTarget.id;

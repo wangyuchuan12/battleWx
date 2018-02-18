@@ -49,6 +49,7 @@
   <view class="battleInfoManagerPeriods" >
 
     <view class="battleInfoManagerPeriodAdd" bindtap='addSubjectClick'>添加主题</view>
+    <view class="battleInfoManagerPeriodAdd" bindtap='auditClick'>审题</view>
     <view class="battleInfoManagerPeriodAdd" bindtap='updateBattleInfoClick'>修改基本信息</view>
     <view class="battleInfoManagerPeriodAdd" bindtap="addPeriodClick">新建题库</view>
     

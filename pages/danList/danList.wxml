@@ -86,19 +86,23 @@
     </view>
     
   </view>
-  <scroll-view class="danListContent" scroll-y>
+  <scroll-view class="danListContent" 
+  bindscrolltoupper="upper" bindscrolltolower="lower"       bindscroll="scroll" scroll-top="{{scrollTop}}" scroll-with-animation="true"
+  scroll-into-view="{{currentDanId}}" scroll-y>
     <block wx:for="{{dans}}" wx:for-item="dan">
-      <view class="danItem"  bindtap='danItemClick' id="{{dan.id}}">
-        <view class="danLock" wx:if="{{dan.status==0}}">
-          <view class="fa fa-lock danLockContent"></view>
-        </view>
+      <view id="dan_{{dan.id}}">
+        <view class="danItem"  bindtap='danItemClick' id="{{dan.id}}">
+          <view class="danLock" wx:if="{{dan.status==0}}">
+            <view class="fa fa-lock danLockContent"></view>
+          </view>
 
-        <view class="danItemFree" wx:if="{{dan.status==0}}">未开启</view>
-        <view class="danItemIn" wx:if="{{dan.status==1}}">进行中</view>
-        <view class="danItemSuccess" wx:if="{{dan.status==2}}">成功</view>
-        <view class="danItemFail" wx:if="{{dan.status==3}}">失败</view>
-        <image src="{{dan.imgUrl}}" class="danItemImg"></image>
-        <view class="danItemName">{{dan.name}}</view>
+          <view class="danItemFree" wx:if="{{dan.status==0}}">未开启</view>
+          <view class="danItemIn" wx:if="{{dan.status==1}}">进行中</view>
+          <view class="danItemSuccess" wx:if="{{dan.status==2}}">成功</view>
+          <view class="danItemFail" wx:if="{{dan.status==3}}">失败</view>
+          <image src="{{dan.imgUrl}}" class="danItemImg"></image>
+          <view class="danItemName">{{dan.name}}</view>
+        </view>
       </view>
     </block>
   </scroll-view>

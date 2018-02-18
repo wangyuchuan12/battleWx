@@ -24,7 +24,7 @@
       <view class="battleHomeMenu2Background"></view>
       <view class="battleHomeMenu2Name">好友对战</view>
     </view>
-    <view class="battleHomeMenu3" bindtap='dekornBattleClick'>
+    <view class="battleHomeMenu3" bindtap='rankBattleClick'>
       <view class="battleHomeMenu3Background"></view>
       <view class="battleHomeMenu3Name">挑战赛</view>
     </view>
