@@ -1,4 +1,5 @@
-var domain = "https://www.chengxihome.com";
+//var domain = "https://www.vlingquan.com";
+var domain = "http://www.chengxihome.com";
 //根据code登陆用户bbin
 var loginByJsCodeUrl = domain + "/api/common/login/loginByJsCode";
 var registerUserByJsCode = domain +"/api/common/login/registerUserByJsCode";
@@ -81,29 +82,7 @@ function request(url, params, callback,data) {
       'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
     }
   }
-  //token = '56270a70-863f-4fff-95bf-1ec1278dadd7';
-  //token = '6464d106-88ab-4227-a8f6-9f934efc0ede';
-  //token = 'e29d555b-a94c-433a-b3c7-346911baeb19';
-  //token = 'de8230bb-f2fa-42d1-b78d-e366722ef846';
-  //token = 'ef43f422-cb7c-416d-9c41-2fe69baa5b2a';
-  //token = 'afb30048-02c3-460f-a3be-ceeb61fdc59f';
-  //token = '1ed504c1-2e59-441c-99fc-d64d17deaaa2';
-  //token = 'b9ca6b0d-06bb-4a25-8e0f-aa6fefc40908';
-  //token = 'e29d555b-a94c-433a-b3c7-346911baeb19';
-  //token = '1f82defb-0138-456d-82ff-8e0b7719f08b';
-  //token = '23c58444-9f8e-48e9-8d3e-47a7e8810e5c';
-  //token = 'befdc60f-5eb7-4159-a0c0-7c476ccb80b2';
-  //token = 'a6a11e25-2e44-4886-a28a-55231a0ee0a8';
-  //token = 'e2770aa1-9b9c-4afa-ab90-4697e20888e3';
-  //token = '0bde0782-4ec0-41e3-bbbf-abbe3f51b110';
-  //token = '26d8d32c-eb71-4ba7-a8ff-cfbde983502c';
-  //token = '5672f4a5-f655-489a-80de-f91bdb1d9ba9';
-  //token = '06bc3bc6-dd4d-43d7-a274-17602373236e';
-  //token = '692d656f-0aa8-4f39-b54a-a00cf2ddcc1d';
-  //token = '3b52d26e-2e3f-4a84-8ea1-072039f5cf05';
-  //token = '8df223df-d232-4908-9dd5-c9cc24b3b2d8';
-  //token = 'b5a2c28c-ee6a-4efb-b3a3-46768e919be4';
-  //token = 'ec15c7d2-9a7b-4476-b2c5-bcf246df3375';
+  //token = "e551d44a-cbe5-48e4-a1a7-0beab113beab";
   params.token = token;
   wx.request({
     url: url,

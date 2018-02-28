@@ -21,26 +21,29 @@
   position: absolute;
   right:10px;
   bottom:10px;
-  width:50px;
-  height:50px;
+  width:70px;
+  height:70px;
   border-radius:100px;
-  line-height: 50px;
+  line-height: 70px;
   text-align: center;
-  background:RGBA(76,76,76,0.8);
+  background:url("http://p42rx7glw.bkt.clouddn.com/4bc7ff5e5a5e18a5b625e25baf7f815c.png");
+  background-size:100% 100%;
   color:white;
 }
 
 .progressScoreRankButton{
   position: absolute;
-  right:10px;
-  bottom:80px;
+  right:15px;
+  bottom:90px;
   width:50px;
   height:50px;
-  line-height:50px;
   text-align: center;
-  border-radius:100px;
-  background:RGBA(76,76,76,0.5);
+  background:url("http://p42rx7glw.bkt.clouddn.com/d5cba429b3b245b3885a7c308eb4f744.png");
+  background-size:100% 100%;
+  line-height: 100px;
   color:white;
+  font-weight: bolder;
+  font-size: 20px;
 }
 
 .progressScoreMallButton{
@@ -95,16 +98,19 @@
 }
 
 .progressScoreBackButton{
- position: absolute;
+  position: absolute;
   right:90px;
   bottom:10px;
   width:50px;
   height:50px;
-  line-height:50px;
+  line-height:110px;
   text-align: center;
-  border-radius:100px;
-  background:RGBA(76,76,76,0.5);
+  padding-left:18px;
+  background:url("http://p42rx7glw.bkt.clouddn.com/7ab573a79a3e6cb13d21f4147db96e34.png");
+  background-size:100% 100%;
   color:white;
+  font-weight: bolder;
+  font-size: 20px;
 }
 
 .closeButton{
@@ -113,7 +119,7 @@
 
 .displayPanel{
   width:200px;
-  top:30vh;
+  top:45vh;
   left:50%;
   margin-left:-100px;
   position: absolute;

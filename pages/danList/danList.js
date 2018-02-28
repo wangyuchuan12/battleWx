@@ -69,7 +69,6 @@ var layerout = new baseLayerout.BaseLayerout({
     var outThis = this;
     battleDanRequest.listRequest({
       success:function(dans){
-        
         outThis.setData({
           dans:dans
         });
@@ -110,9 +109,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
   danItemClick:function(e){
     var id = e.currentTarget.id;
-    console.log("....id:"+id);
     var dans = this.data.dans;
-    console.log("id:"+id);
     for(var i=0;i<dans.length;i++){
       var dan = dans[i];
       if(dan.id==id){
@@ -206,7 +203,7 @@ var layerout = new baseLayerout.BaseLayerout({
               roomFull: function () {
                 
               }
-            });
+            }, alertDan.id);
           },
           beanNotEnough: function () {
             outThis.hideLoading();

@@ -49,7 +49,9 @@ var layerout = new baseLayerout.BaseLayerout({
     "rewardBean": 0,
     "addExp": 0,
     memberInfo:null,
-    isStart:0
+    isStart:0,
+    //0普通 1自动
+    selectorType:1
   },
   eventListener:{
 
@@ -162,13 +164,27 @@ var layerout = new baseLayerout.BaseLayerout({
     /*wx.redirectTo({
       url: '../battleTakepart/battleTakepart?battleId=' + this.data.battleId+"&roomId="+this.data.roomId
     });*/
-    wx.navigateBack({
-      
+
+    outThis.showConfirm("提示","你确定要退出吗？",{
+      confirm:function(){
+        var pages = getCurrentPages();
+        var prevPage = pages[pages.length - 2];
+
+        if (prevPage.signoutListener) {
+          prevPage.signoutListener();
+        }
+
+        wx.navigateBack({
+
+        });
+      }
     });
+    
   },
 
   roomAlert:function(roomScore){
     var outThis = this;
+    var selectorType = this.data.selectorType;
     var memberInfo = this.data.memberInfo;
 
     if(!roomScore){
@@ -181,6 +197,15 @@ var layerout = new baseLayerout.BaseLayerout({
       this.setData({
         isLast: 1
       });
+      //对方退出比赛
+      if (memberInfo.endType==4){
+        outThis.hideLoading();
+        outThis.showFullAlert("比赛已经结束", "对方退出比赛", 0,"确定");
+        outThis.setData({
+          questionSelectorDisplay:"none"
+        });
+        return;
+      }
 
       var battleId = this.data.battleId;
       var roomId = this.data.roomId;
@@ -203,7 +228,8 @@ var layerout = new baseLayerout.BaseLayerout({
               }
               outThis.setData({
                 questionSelectorDisplay: "none",
-                questionResultDisplay: "none"
+                questionResultDisplay: "none",
+                displayPanel:0
               });
               if(memberInfo.places>=i+1){
                 setTimeout(function(){
@@ -235,6 +261,8 @@ var layerout = new baseLayerout.BaseLayerout({
       },null,groupId);
 
       
+    } else if (selectorType==1){
+     // outThis.startSelector();
     }
     
   },
@@ -373,6 +401,13 @@ var layerout = new baseLayerout.BaseLayerout({
           outThis.setData({
             isRun: 0
           });
+          var selectorType = outThis.data.selectorType;
+          
+          if (selectorType==1){
+            
+            outThis.startSelector();
+            
+          }
           if (outThis.data.isLast == 1) {
         //    outThis.showQuestionResult();
           // outThis.skipToRank();
@@ -396,10 +431,10 @@ var layerout = new baseLayerout.BaseLayerout({
     this.initQuestionResultData(battleMemberPaperAnswerId,{
       success:function(){
         outThis.hideLoading();
-        outThis.syncPaperData({
+        /*outThis.syncPaperData({
           success:function(data){
           }
-        });
+        });*/
       },
       fail:function(){
         outThis.hideLoading();
@@ -445,6 +480,7 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   startSelector:function(){
+    var memberInfo = this.data.memberInfo;
     var outThis = this;
     this.showLoading();
     var loveCount = this.getLoveCount();
@@ -462,10 +498,14 @@ var layerout = new baseLayerout.BaseLayerout({
       }
       return;
     }
+    if (memberInfo.status == 2 || memberInfo.roomStatus == 3) {
+      return;
+    }
     var roomId = this.data.roomId;
    
     var battleId = this.data.battleId;
     var subjectCount = this.data.subjectCount;
+    var selectorType = this.data.selectorType;
     var outThis = this;
     this.initBattleSubjects(subjectCount, battleId,roomId,{
       success: function () {
@@ -479,7 +519,7 @@ var layerout = new baseLayerout.BaseLayerout({
       isLast:function(){
 
       }
-    });
+    }, selectorType);
   },
 
   redPackAnn:function(){
@@ -591,6 +631,9 @@ var layerout = new baseLayerout.BaseLayerout({
       prevPage.backListener();
     }
     
+    if (this.stopDrawSelectInterval){
+      this.stopDrawSelectInterval();
+    }
   },
 
   onHide: function () {
@@ -622,9 +665,30 @@ var layerout = new baseLayerout.BaseLayerout({
         var oldBattleMembers = outThis.getMembers();
         membersRankUtil.rankByProcess(battleMembers);
         outThis.setMembers(battleMembers);
+        var positions = outThis.getPositions();
         for (var i = 0; i < battleMembers.length; i++) {
+          var battleMember = battleMembers[i];
+          var flag = false;
+          for (var k = 0; k < positions.length;k++){
+            var postion = positions[k];
+            if (postion.id == battleMember.id){
+              flag = true;
+            }
+          }
+
+          if(!flag){
+            positions.push({
+              id: battleMember.id,
+              imgUrl: battleMember.headImg,
+              animationData: {},
+              begin: battleMember.process,
+              end: 0,
+              isMy: 0
+            });
+            progressScoreCache.positions = positions;
+            outThis.setPositions(positions);
+          }
           for (var j = 0; j < oldBattleMembers.length; j++) {
-            var battleMember = battleMembers[i];
             var oldBattleMember = oldBattleMembers[j];
             if (battleMember.id == oldBattleMember.id && battleMember.id != memberInfo.id) {
               var isRun = outThis.data.isRun;
@@ -689,11 +753,11 @@ var layerout = new baseLayerout.BaseLayerout({
     var userId = memberInfo.userId;
     var path = "pages/battleTakepart/battleTakepart?battleId=" + battleId + "&roomId=" + roomId;
     if(memberInfo.isDanRoom==1){
-      path = "pages/battleHome/battleHome3?skipType=1&registUserId="+userId;
+      path = "pages/battleHome/battleHome4?skipType=1&registUserId="+userId;
     } else if (memberInfo.isFrendGroup==1){
-      path = "pages/battleHome/battleHome3?skipType=0&registUserId=" + userId;
+      path = "pages/battleHome/battleHome4?skipType=0&registUserId=" + userId;
     } else if (memberInfo.isDekorn){
-      path = "pages/battleHome/battleHome3?skipType=3&registUserId=" + userId;
+      path = "pages/battleHome/battleHome4?skipType=4&registUserId=" + userId;
     }
     
     return {
@@ -710,6 +774,11 @@ var layerout = new baseLayerout.BaseLayerout({
             });
             var loveLimit = outThis.getLoveLimit();
             outThis.setLove(loveLimit, data.loveResidule);
+
+            var selectorType = outThis.data.selectorType;
+            if (selectorType==1){
+              outThis.startSelector();
+            }
 
           },
           fail: function () {
@@ -791,7 +860,8 @@ var layerout = new baseLayerout.BaseLayerout({
               memberInfo: memberInfo
             });
 
-           
+            console.log(".......isIncrease:" + memberInfo.isIncrease);
+            outThis.setIncrease(memberInfo.isIncrease);
 
             outThis.initPositions();
           },

@@ -114,6 +114,11 @@ var layerout = new baseLayerout.BaseLayerout({
     rankBattleRequest.registRankBattle(recommendUserId, callback);
   },
 
+  quickStart:function(){
+    wx.navigateTo({
+      url: '../luckDraw/luckDraw'
+    });
+  },
 
   initBattles: function (battleId, flag) {
     this.showLoading();
@@ -201,6 +206,10 @@ var layerout = new baseLayerout.BaseLayerout({
               //挑战赛
             } else if (skipType == 3) {
 
+            }else if(skipType==4){
+              wx.navigateTo({
+                url: '../rankDanBattle/rankDanBattle'
+              });
             }
           },
           fail: function () {

@@ -25,7 +25,7 @@ function battleSignout(battleId,roomId,callback){
 }
 
 
-function battleTakepart(battleId,roomId,callback) {
+function battleTakepart(battleId,roomId,callback,danId) {
   requestBattleTakepart(battleId,roomId, {
     success: function (member) {
       callback.success(member);
@@ -53,13 +53,16 @@ function battleTakepart(battleId,roomId,callback) {
     masonryNotEnough:function(){
       callback.masonryNotEnough();
     }
-  });
+  },danId);
 }
 
-function requestBattleTakepart(battleId, roomId,callback) {
+function requestBattleTakepart(battleId, roomId,callback,danId) {
   var params = new Object();
   params.battleId = battleId;
   params.roomId = roomId;
+  if(danId){
+    params.danId = danId;
+  }
   request.requestWithLogin(takepartUrl, params, {
     success: function (resp) {
       console.log("resp:"+JSON.stringify(resp));

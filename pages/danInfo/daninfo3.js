@@ -56,7 +56,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
   reckonTime: function () {
     var outThis = this;
-    var flag = true;
+    var flag = false;
     var num = this.data.num;
     var mininum = this.data.mininum;
     var interval = setInterval(function () {

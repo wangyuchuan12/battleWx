@@ -27,9 +27,9 @@
       <view class="battleHomeMenu12Background"></view>
       <view class="battleHomeMenu2Name">提现</view>
     </view>
-    <view class="battleHomeMenu3" bindtap='rankBattleClick'>
-      <view class="battleHomeMenu3Background"></view>
-      <view class="battleHomeMenu3Name">挑战赛</view>
+    <view class="battleHomeMenu3" bindtap='quickStart'>
+      <view class="battleHomeMenu16Background"></view>
+      <view class="battleHomeMenu3Name">快速开始</view>
     </view>
 
     <view class="battleHomeMenu14" bindtap='factoryClick'>
@@ -48,6 +48,9 @@
     <view class="battleHomeMenu13">
        <view class="battleHomeMenu13Background"></view>
        <view class="battleHomeMenu7Name">企业空间</view>
+       <view class="danLock" style="top:0px;color:white;">
+          <view class="fa fa-lock danLockContent" style="color:white;"></view>
+       </view>
     </view>
 
   </scroll-view>

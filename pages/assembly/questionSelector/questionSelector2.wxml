@@ -1,0 +1,32 @@
+<!--questionSelector.wxml-->
+<template name="questionSelector2">
+  
+  <view class="questionSelector2" style="display:{{display}}">
+  
+    <view class="questionSelectorHeader2">
+      <scroll-view class="questionSelectorHeaderList" scroll-x="true" scroll-left="10" style="white-space:nowrap;display:flex;" >
+        <view class="questionSelectorHeaderItem2" wx:for="{{questionSelectorHeaderList}}" wx:for-item="questionSelectorHeaderItem" wx:key="id" id="{{index}}">
+          <image src="{{questionSelectorHeaderItem.imgUrl}}" class="questionSelectorHeaderItemImg2"></image>
+          <view class="questionSelectorHeaderItemText" style="display:none;">第{{index+1}}题</view>
+        </view>
+
+      </scroll-view>
+    </view>
+
+      <view class="questionSelectorContent">
+          <scroll-view class="questionSelectorContentList" scroll-y="true" scroll-left="10">
+            <block  wx:for="{{questionSelectorContentList}}" wx:for-item="questionSelectorContentItem">
+              <view wx:if="{{questionSelectorContentItem.num>0}}" class="questionSelectorContentItem2"  wx:key="id"  id="{{questionSelectorContentItem.id}}" style="background:{{questionSelectorContentItem.background}};">
+                <image src="{{questionSelectorContentItem.imgUrl}}" class="questionSelectorContentItemImg"></image>
+                <view class="questionSelectorContentItemTest" wx:if="{{true}}">{{questionSelectorContentItem.name}}</view>
+              </view>
+
+              <view wx:if="{{questionSelectorContentItem.num==0}}" class="questionSelectorContentItem" style="background:rgba(186,186,186,0.6);" wx:key="id" id="{{questionSelectorContentItem.id}}">
+                <image src="{{questionSelectorContentItem.imgUrl}}" class="questionSelectorContentItemImg gray"></image>
+                <view class="questionSelectorContentItemTest" wx:if="{{true}}">{{questionSelectorContentItem.name}}</view>
+              </view>
+          </block>
+        </scroll-view>
+    </view>
+  </view>
+</template >

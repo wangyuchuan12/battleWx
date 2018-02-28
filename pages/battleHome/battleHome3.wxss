@@ -9,7 +9,7 @@
   width:95%;
   position: relative;
   margin: 0 auto;
-  height:650px;
+  height:500px;
 }
 
 .battleHomeMenu1{

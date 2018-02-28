@@ -1,7 +1,10 @@
 {
   "pages": [
-    "pages/battleHome/battleHome4",
     "pages/battleHome/battleHome",
+    "pages/battleHome/battleHome4",
+    "pages/luckDraw/luckDraw",
+    "pages/luckDrawWait/luckDrawWait",
+    "pages/progressScore/progressScore",
     "pages/rankDanBattle/rankDanBattle",
     "pages/rankBattle/rankBattle",
     "pages/battleHome/battleHome3",
@@ -13,7 +16,6 @@
     "pages/danList/danList",
     "pages/battleDekorn/battleDekorn",
     "pages/danInfo/daninfo3",
-    "pages/progressScore/progressScore",
     "pages/mall/mall",
     "pages/pkRoom/pkRoom",
     "pages/danInfo/daninfo2",

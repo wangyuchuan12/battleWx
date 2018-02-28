@@ -133,7 +133,8 @@ var questionInputPlug = {
       optionArray.push({
         content:option.content,
         index:i,
-        id:option.id
+        id:option.id,
+        isRight:option.isRight
       });
     }
 
@@ -348,25 +349,49 @@ var questionInputPlug = {
   selectItemClick:function(e){
     var id = e.currentTarget.id;
     var options = this.data.questionInputData.options;
-
+    var rightOption = this.data.rightOption;
+    console.log("..........rightOption:" + rightOption);
     var option;
     for(var i=0;i<options.length;i++){
       var target = options[i];
+      if(target.isRight==1){
+        target.background = "green";
+      }else{
+        //target.background = "red";
+      }
       if(target.id==id){
         option = target;
       }
     }
+
+    this.setData({
+      "questionInputData.options":options
+    });
+
+   
 
     if(!option){
       return;
     }
     var optionKey = "questionInputData.options["+option.index+"].background";
 
-    this.setData({
-      [optionKey]:"green"
-    });
-
-    this.eventListener.selectSubmit(this.data.questionInputData.questionId,id);
+    if(option.isRight==1){
+      this.setData({
+        [optionKey]: "green"
+      });
+    }else{
+      this.setData({
+        [optionKey]: "red"
+      });
+    }
+    
+    var outThis = this;
+    outThis.showLoading();
+    setTimeout(function(){
+      outThis.eventListener.selectSubmit
+        (outThis.data.questionInputData.questionId, id);
+    },1000);
+    
   },
 
   setType:function(type){

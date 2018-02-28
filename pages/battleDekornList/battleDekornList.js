@@ -87,6 +87,7 @@ var layerout = new baseLayerout.BaseLayerout({
     var outThis = this;
     battleDekornRequest.dekornList({
         success:function(dekorns){
+          console.log("dekorns:"+JSON.stringify(dekorns));
           outThis.setData({
             dekorns: dekorns
           });

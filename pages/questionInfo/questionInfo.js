@@ -160,12 +160,15 @@ var layerout = new baseLayerout.BaseLayerout({
     this.setType(0);
     var array = new Array();
     var options = data.options;
+
+    console.log("...............data:"+JSON.stringify(data));
     if(options){
       for(var i=0;i<options.length;i++){
         var option = options[i];
         array.push({
           id:option.id,
-          content:option.content
+          content:option.content,
+          isRight: option.isRight
         });
       }
       this.setOptions(array);

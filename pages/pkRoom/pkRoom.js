@@ -120,6 +120,27 @@ var layerout = new baseLayerout.BaseLayerout({
     
   },
 
+  beatOut:function(){
+    var id = this.data.id;
+    battlePkRequest.beatOutRequest(id,{
+      success:function(){
+        wx.redirectTo({
+          url: '../battleHome/battleHome4'
+        });
+      }
+    });
+  },
+
+  signoutListener:function(){
+    var role = this.data.role;
+    if(role==0){
+      this.restart();
+    }else if(role==1){
+      this.beatOut();
+    }
+    
+  },
+
   homeInto:function(){
     var outThis = this;
     battlePkRequest.homeIntoRequest({
@@ -304,7 +325,7 @@ var layerout = new baseLayerout.BaseLayerout({
     }else if(role==1){
       userId = this.data.beatUserId;
     }
-    var path = 'pages/battleHome/battleHome3?registUserId=' + userId+"&roomId="+this.data.id+"&skipType=2";
+    var path = 'pages/battleHome/battleHome4?registUserId=' + userId+"&roomId="+this.data.id+"&skipType=2";
     //var path = "pages/pkRoom/pkRoom?role=1&id="+this.data.id;
     return {
       path: path,

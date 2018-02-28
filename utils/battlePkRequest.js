@@ -12,8 +12,27 @@ var battleRoomPkIntoUrl = domain + "/api/battlePk/battleRoomPkInto";
 
 var pkMainUrl = domain + "/api/battlePk/pkMain";
 
+var beatOutUrl = domain + "/api/battlePk/beatOut";
+
 function pkMainRequest(callback){
   request.requestWithLogin(pkMainUrl, {}, {
+    success: function (resp) {
+      if (resp.success) {
+        callback.success(resp.data);
+      } else {
+        callback.fail();
+      }
+    },
+    fail: function (resp) {
+      console.log("fail");
+      callback.fail("网络繁忙");
+    }
+  });
+}
+
+
+function beatOutRequest(id,callback){
+  request.requestWithLogin(beatOutUrl, {id:id}, {
     success: function (resp) {
       if (resp.success) {
         callback.success(resp.data);
@@ -81,11 +100,9 @@ function restartRequest(callback) {
 }
 
 function homeIntoRequest(callback){
-  console.log("homeIntoRequest");
   var params = new Object();
   request.requestWithLogin(homeIntoUrl, params, {
     success: function (resp) {
-      console.log("resp:"+JSON.stringify(resp));
       if (resp.success) {
         callback.success(resp.data);
       } else {
@@ -141,7 +158,6 @@ function readyRequest(id,roomId,battleId,role,callback) {
   params.battleId = battleId;
   request.requestWithLogin(readyUrl, params, {
     success: function (resp) {
-      console.log(JSON.stringify(resp));
       if (resp.success) {
         callback.success(resp.data);
       } else {
@@ -162,5 +178,6 @@ module.exports = {
   restartRequest: restartRequest,
   immediateRequest: immediateRequest,
   battleRoomPkIntoRequest: battleRoomPkIntoRequest,
-  pkMainRequest: pkMainRequest
+  pkMainRequest: pkMainRequest,
+  beatOutRequest: beatOutRequest
 }

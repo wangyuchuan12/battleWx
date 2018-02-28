@@ -126,6 +126,123 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
 
+  init:function(){
+    this.setData({
+      battle: null,
+      subject: null,
+      question: null,
+      answer: null,
+      isImg: 0,
+      questionType: 0,
+      selectOptions: [{
+        content: "",
+        isRight: 1,
+        id: "selectOption1"
+      }, {
+        content: "",
+        isRight: 0,
+        id: "selectOption2"
+      }, {
+        content: "",
+        isRight: 0,
+        id: "selectOption3"
+      }, {
+        content: "",
+        isRight: 0,
+        id: "selectOption4"
+      }],
+      worldChecks: [{
+        index: 0,
+        id: "worldCheck0",
+        status: "2"
+      }, {
+        index: 1,
+        id: "worldCheck1",
+        status: "2"
+      }, {
+        index: 2,
+        id: "worldCheck2",
+        status: "2"
+      }, {
+        index: 3,
+        id: "worldCheck3",
+        status: "2"
+      }, {
+        index: 4,
+        id: "worldCheck4",
+        status: "2"
+      }, {
+        index: 5,
+        id: "worldCheck5",
+        status: "2"
+      }, {
+        index: 6,
+        id: "worldCheck6",
+        status: "2"
+      }, {
+        index: 7,
+        id: "worldCheck7",
+        status: "2"
+      }, {
+        index: 8,
+        id: "worldCheck8",
+        status: "2"
+      }, {
+        index: 9,
+        id: "worldCheck9",
+        status: "2"
+      }, {
+        index: 10,
+        id: "worldCheck10",
+        status: "2"
+      }, {
+        index: 11,
+        id: "worldCheck11",
+        status: "2"
+      }, {
+        index: 12,
+        id: "worldCheck12",
+        status: "2"
+      }, {
+        index: 13,
+        id: "worldCheck13",
+        status: "2"
+      }, {
+        index: 14,
+        id: "worldCheck14",
+        status: "2"
+      }, {
+        index: 15,
+        id: "worldCheck15",
+        status: "2"
+      }, {
+        index: 16,
+        id: "worldCheck16",
+        status: "2"
+      }, {
+        index: 17,
+        id: "worldCheck17",
+        status: "2"
+      }],
+      worlds: [{
+        id: "world0",
+        status: 0,
+        index: "0"
+      }, {
+        id: "world1",
+        index: 1,
+        status: 0
+      }, {
+        id: "world2",
+        index: 2,
+        status: 0
+      }, {
+        id: "world3",
+        index: 3,
+        status: 0
+      }]
+    });
+  },
 
   saveQuestionClick: function () {
     var outThis = this;
@@ -143,17 +260,21 @@ var layerout = new baseLayerout.BaseLayerout({
 
     var isImg = this.data.isImg;
 
+    this.showLoading();
     if (!battle) {
+      this.hideLoading();
       this.showToast("请输入一级主题");
       return;
     }
 
     if(!subject){
+      this.hideLoading();
       this.showToast("请输入二级主题");
       return;
     }
 
     if (isImg && !imgUrl){
+      this.hideLoading();
       this.showToast("请选择一张图片");
       return;
     }
@@ -164,16 +285,19 @@ var layerout = new baseLayerout.BaseLayerout({
     }
 
     if (!question) {
+      this.hideLoading();
       this.showToast("请输入问题");
       return;
     }
 
     if (util.isEmojiCharacter(question)) {
+      this.hideLoading();
       this.showToast("问题不能包含表情字符");
       return;
     }
 
     if (question.length > 200) {
+      this.hideLoading();
       this.showToast("问题输入不能超过200个字符");
       return;
     }
@@ -182,17 +306,20 @@ var layerout = new baseLayerout.BaseLayerout({
       for (var i = 0; i < selectOptions.length; i++) {
         var selectOption = selectOptions[i];
         if (!selectOption.content) {
+          this.hideLoading();
           this.showToast("选项请输入完整");
           return;
         }
 
         if (selectOption.content.length > 20) {
+          this.hideLoading();
           this.showToast("选项不能超过20个字节");
           return;
         }
 
 
         if (util.isEmojiCharacter(selectOption.content)) {
+          this.hideLoading();
           this.showToast("选项内容不能包含表情字符");
           return;
         }
@@ -203,16 +330,19 @@ var layerout = new baseLayerout.BaseLayerout({
 
     if (questionType == "1") {
       if (!answer) {
+        this.hideLoading();
         this.showToast("请输入答案");
         return;
       }
 
       if (answer.length > 5) {
+        this.hideLoading();
         this.showToast("输入答案不能超过5个字");
         return;
       }
 
       if (util.isEmojiCharacter(answer)) {
+        this.hideLoading();
         this.showToast("答案内容不能包含表情字符");
         return;
       }
@@ -224,6 +354,7 @@ var layerout = new baseLayerout.BaseLayerout({
       for (var i = 0; i < worlds.length; i++) {
         var world = worlds[i];
         if (!world.content) {
+          this.hideLoading();
           this.showToast("答案请选择完整");
           return;
         }
@@ -232,11 +363,13 @@ var layerout = new baseLayerout.BaseLayerout({
       for (var i = 0; i < worldChecks.length; i++) {
         var worldCheck = worldChecks[i];
         if (!worldCheck.content) {
+          this.hideLoading();
           this.showToast("内容请输入完整");
           return;
         }
 
         if (util.isEmojiCharacter(worldCheck.content)) {
+          this.hideLoading();
           this.showToast("内容不能包含表情字符");
           return;
         }
@@ -288,7 +421,7 @@ var layerout = new baseLayerout.BaseLayerout({
         });
       },
       fail:function(){
-        outThis.hideLoading();
+       outThis.hideLoading();
        outThis.showToast("发生错误");
       }
     });
@@ -355,7 +488,7 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   selectRightOptionClick: function (e) {
-    var id = e.currentTarget.id;
+    /*var id = e.currentTarget.id;
 
     var selectOptions = this.data.selectOptions;
 
@@ -369,7 +502,7 @@ var layerout = new baseLayerout.BaseLayerout({
     }
     this.setData({
       "selectOptions": selectOptions
-    });
+    });*/
   },
 
   worldCheckInputBlur: function (e) {
@@ -644,7 +777,6 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
   },
 
   /**

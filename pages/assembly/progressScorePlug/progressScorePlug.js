@@ -14,6 +14,7 @@ data: {
     scrollGogal:0,
     currentDom: 0,
     loveList: [],
+    isIncrease:0,
     //冷却数据
     loveCooling:{
       schedule:200,
@@ -644,6 +645,12 @@ data: {
   },
 },
 
+setIncrease: function (increase){
+  this.setData({
+    "progressScoreData.isIncrease": increase
+  });
+},
+
 supplyLoveClick:function(){
   var outThis = this;
   var battleId = this.data.battleId;
@@ -816,6 +823,11 @@ getPosition:function(id){
   return null;
 },
 
+getPostions:function(){
+  var positions = this.data.progressScoreData.positions;
+  return positions;
+},
+
 containerScrollToDom: function(index) {
   var outThis = this;
   this.domRes(index, {
@@ -939,6 +951,9 @@ toPosition: function(id,index, callback){
       var scrollLeft = res.scrollLeft;
       outThis.domRes(index, {
         success: function (res) {
+          if(!res){
+            return;
+          }
           var animation = wx.createAnimation({
             duration: duration,
             timingFunction: 'linear'

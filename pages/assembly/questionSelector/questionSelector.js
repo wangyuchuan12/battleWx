@@ -1,12 +1,14 @@
 var request = require("../../../utils/battleSubjectsRequest.js");
 var roomId;
+var drawSelectInterval;
 var questionSelector = {
   data:{
     questionSelectorData: {
       display:"none",
       questionSelectorHeaderCount:4,
       questionSelectorHeaderList: [],
-      questionSelectorContentList: []
+      questionSelectorContentList: [],
+      type:0
     }
   },
 
@@ -146,17 +148,22 @@ var questionSelector = {
   selectComplete: function (){
     var outThis = this;
     var selectContentList = outThis.data.questionSelectorData.questionSelectorHeaderList;
-    wx.showModal({
-      title: "提示",
-      content: "确定开始吗",
-      success: function (sm) {
-        if (sm.confirm) {
-          outThis.eventListener.selectComplete(selectContentList);
-        } else if (sm.cancel) {
-          console.log("cancel");
+    var type = outThis.data.questionSelectorData.type;
+    if(type==0){
+      wx.showModal({
+        title: "提示",
+        content: "确定开始吗",
+        success: function (sm) {
+          if (sm.confirm) {
+            outThis.eventListener.selectComplete(selectContentList);
+          } else if (sm.cancel) {
+            console.log("cancel");
+          }
         }
-      }
-    });
+      });
+    }else if(type==1){
+      outThis.eventListener.selectComplete(selectContentList);
+    }
   },
 
   questinSelectorClose:function(){
@@ -174,52 +181,117 @@ var questionSelector = {
     return -1;
   },
 
-  selectBattleSubject:function(e){
+  stopDrawSelectInterval:function(){
+    clearInterval(drawSelectInterval);
+    this.setData({
+      "questionSelectorData.display":"none"
+    });
+  },
+
+  drawSelect:function(){
+    var outThis =this;
+    
+    var index = 0;
+    var time = 0;
+    drawSelectInterval = setInterval(function(){
+      var questionSelectorContentList = outThis.data.questionSelectorData.questionSelectorContentList;
+
+      if (!questionSelectorContentList || questionSelectorContentList.length == 0) {
+        return;
+      }
+
+      if (questionSelectorContentList.length==2&&index==1){
+        index = 0;
+      } else if (questionSelectorContentList.length == 2 && index == 0){
+        index = 1;
+      } else if (questionSelectorContentList.length == 3 && index == 2){
+        index = 0;
+      }else if(index==2){
+        index = 5;
+      }else if(index==3){
+        index = 0;
+      }else if(index==0||index==1){
+        index++;
+      }else if(index==5||index==4){
+        index--;
+      }
+
+      for (var i = 0; i < questionSelectorContentList.length;i++){
+        var item = questionSelectorContentList[i];
+        item.background = "none";
+      }
+      var item = questionSelectorContentList[index];
+      time++;
+      if(item){
+        item.background = "red";
+        
+      }
+      if(time>20){
+        time = 0;
+      }
+     outThis.setData({
+        "questionSelectorData.questionSelectorContentList": questionSelectorContentList
+      });
+
+     if(item){
+       var num = Math.ceil(Math.random() * 2);
+       if (time == num + 10) {
+         time = 0;
+         outThis.doSelectBattleSubject(item.id);
+       }
+     }
+    },100);
+  },
+
+  doSelectBattleSubject:function(id){
     var outThis = this;
-    var id = e.currentTarget.id;
     var questionSelectorContentList = this.data.questionSelectorData.questionSelectorContentList;
-    if(id!="random"){
-     
+    if (id != "random") {
+
       for (var i = 0; i < questionSelectorContentList.length; i++) {
         var item = questionSelectorContentList[i];
         if (item.id == id) {
           var num = item.num;
 
-          if(num>0){
+          console.log("*********num:"+num);
+          if (num > 0) {
             var index = outThis.getFirstHeaderIndex();
-            if(index!=-1){
+            if (index != -1) {
               num--;
               item.num = num;
               outThis.setQuestionSelectorHeader(index, item, {
                 complete: function () {
                   outThis.selectComplete();
+                  if (drawSelectInterval){
+                    clearInterval(drawSelectInterval);
+                  }
                 }
               });
             }
-           
+
           }
-          
+
         }
       }
       outThis.setData({
         "questionSelectorData.questionSelectorContentList": questionSelectorContentList
       });
-    }else{
+    } else {
       var selectItems = new Array();
       for (var i = 1; i < questionSelectorContentList.length; i++) {
         var item = questionSelectorContentList[i];
         var num = item.num;
-        if(num>0){
+        if (num > 0) {
           selectItems.push(item);
         }
       }
       selectItems = this.shuffle(selectItems);
       var index = 0;
       var headerCount = this.data.questionSelectorData.questionSelectorHeaderList.length;
-      for (var i = 0; i < headerCount;i++){
+      for (var i = 0; i < headerCount; i++) {
         var item = selectItems[index];
         var headerItem = this.data.questionSelectorData.questionSelectorHeaderList[i];
-        if (item != null && headerItem.status==0){
+        if (item != null && headerItem.status == 0) {
           index++;
           outThis.setQuestionSelectorHeader(i, item, {
             complete: function () {
@@ -231,13 +303,19 @@ var questionSelector = {
           item.num = num;
         }
       }
-      
+
       outThis.setData({
         "questionSelectorData.questionSelectorContentList": questionSelectorContentList
       });
 
     }
+  },
+
+  selectBattleSubjectClick:function(e){
+    var outThis = this;
+    var id = e.currentTarget.id;
     
+    this.doSelectBattleSubject(id);
   },
 
   shuffle:function(array) {
@@ -264,21 +342,28 @@ var questionSelector = {
     });
   },
 
-  initBattleSubjects:function(count,battleId,roomId,callback){
+  initBattleSubjects:function(count,battleId,roomId,callback,type){
     this.setHeaderCount(count);
     var outThis = this;
+    if(type){
+      this.setData({
+        "questionSelectorData.type": type
+      });
+    }
     request.getBattleSubjects(battleId,roomId,{
       success:function(data){
         if(callback){
           callback.success();
         }
         var array = new Array();
-        array.push({
-          id:"random",
-          name:"一键开始",
-          imgUrl:"http://ovqk5bop3.bkt.clouddn.com/random.png",
-          num:1
-        });
+        if(type==0){
+          array.push({
+            id: "random",
+            name: "一键开始",
+            imgUrl: "http://ovqk5bop3.bkt.clouddn.com/random.png",
+            num: 1
+          });
+        }
         for(var i =0;i<data.length;i++){
 
           array.push({
@@ -286,13 +371,18 @@ var questionSelector = {
               imgUrl:data[i].imgUrl,
               id:data[i].id,
               num:data[i].num,
-              questions:data[i].questions
+              questions:data[i].questions,
+              background:"none"
           });
         }
 
        outThis.setData({
          "questionSelectorData.questionSelectorContentList":array
        });
+
+       if(type==1){
+         outThis.drawSelect();
+       }
 
       },
 

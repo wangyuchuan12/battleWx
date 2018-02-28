@@ -2,8 +2,14 @@
 <template name="inputOptions">
   <view id="subjectOptions" wx:if="{{type==0}}">
     <view class="subjectOptions">
-      <view class="subjectOption" wx:for="{{options}}" wx:for-item="option" bindtap="selectItemClick" id="{{option.id}}" style="background:{{option.background}}">{{option.content}}</view>
+      <block wx:for="{{options}}" wx:for-item="option">
+        <view class="subjectOption"  bindtap="selectItemClick" 
+          id="{{option.id}}" 
+          style="background:{{option.background}}">{{option.content}}
+        </view>
+      </block>
     </view>
+
   </view>
 
   <view id="inputItem" wx:if="{{type==1}}">

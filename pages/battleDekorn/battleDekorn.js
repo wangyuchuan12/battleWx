@@ -104,6 +104,7 @@ var layerout = new baseLayerout.BaseLayerout({
     var battleId = this.data.battleId;
     battleDekornRequest.dekornRoomInfo(battleId,roomId,{
         success:function(data){
+          console.log("data:"+JSON.stringify(data));
           outThis.setData({
             room:data.room,
             status:data.status,

@@ -126,7 +126,11 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-  
+    var pages = getCurrentPages();
+    var prevPage = pages[pages.length - 2];
+    if (prevPage.init){
+      prevPage.init();
+    }
   },
 
   /**

@@ -30,7 +30,7 @@
             <view class="progressScoreContainerHeaderRank">当前名次第<span id="rank"></span>名</view>	
           </view>
           -->
-          <view wx:if="{{loveCooling.status==1}}" style="position:relative;top:-10px;">
+          <view wx:if="{{loveCooling.status==1&&isIncrease==1}}" style="position:relative;top:-10px;">
             <view class="progressScoreContainerHeaderCooling" style="display:inline-block">
                 <view class="progressScoreContainerHeaderCoolingLabel" style="width:{{loveCooling.schedule/loveCooling.upperLimit*100}}%;"></view>
                 <view class="progressScoreContainerHeaderCoolingContent">

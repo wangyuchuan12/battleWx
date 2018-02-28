@@ -21,7 +21,7 @@
 
 .battleDekornRewardItem{
   color: rgba(101,52,11,1);
-  font-size: 20px;
+  font-size: 15px;
   font-weight: bolder;
 }
 
