@@ -244,8 +244,7 @@ var layerout = new baseLayerout.BaseLayerout({
    */
   onShareAppMessage: function () {
     var userId = this.data.userId;
-    console.log(".............userId:"+userId);
-    var path = "pages/battleHome/battleHome4?registUserId=" + userId + "&skipType=4";
+    var path = "pages/battleHome/battleHome3?registUserId=" + userId + "&skipType=4";
     return {
       path: path,
       success: function () {

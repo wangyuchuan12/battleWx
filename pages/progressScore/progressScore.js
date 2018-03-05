@@ -14,6 +14,8 @@ var battleTakepartCache = require("../../utils/cache/battleTakepartCache.js");
 
 var syncPaperDateRequest = require("../../utils/syncPaperDateRequest.js");
 
+var battleGiftRequest = require("../../utils/battleGiftRequest.js");
+
 var shareRequest = require("../../utils/shareRequest.js");
 var outThis;
 var requestTarget;
@@ -93,7 +95,6 @@ var layerout = new baseLayerout.BaseLayerout({
       outThis.showLoading();
       outThis.syncPaperData({
         success:function(data){
-          console.log("....data:"+JSON.stringify(data));
           if(!data){
             return;
           }
@@ -101,7 +102,17 @@ var layerout = new baseLayerout.BaseLayerout({
           var status = data.status;
           if(status==1||status==2){
             battleStageTakepartRequest.stageTakepart(outThis.data.battleId, subjectIds, roomId, {
+              beanNotEnough: function () {
+                outThis.hideLoading();
+                outThis.showBeanNotEnoughAlertPlug();
+                outThis.questinSelectorClose();
+              },
               success: function (data) {
+                var costBean = data.costBean;
+                if(costBean){
+                  outThis.showToast("消耗"+costBean+"豆豆");
+                  outThis.subBean(costBean);
+                }
                 outThis.hideLoading();
                 var ids = data.questionIds;
                 var questionIds = "";
@@ -117,9 +128,11 @@ var layerout = new baseLayerout.BaseLayerout({
                     questionIds = questionIds + "," + questionId;
                   }
                 }
-                wx.navigateTo({
-                  url: '../questionInfo/questionInfo?questionIds=' + questionIds + "&stageIndex=" + stageIndex + "&roomId=" + roomId,
-                });
+                setTimeout(function(){
+                  wx.navigateTo({
+                    url: '../questionInfo/questionInfo?questionIds=' + questionIds + "&stageIndex=" + stageIndex + "&roomId=" + roomId,
+                  });
+                },2000);
 
               },
               fail: function () {
@@ -180,6 +193,28 @@ var layerout = new baseLayerout.BaseLayerout({
       }
     });
     
+  },
+
+  receiveGift: function () {
+    var outThis = this;
+    battleGiftRequest.receiveGift({
+      success: function (data) {
+        var bean = data.bean;
+        var love = data.love;
+        var count = data.count;
+        outThis.showAlertPlug("今天第" + count + "次送您" + bean + "豆");
+        outThis.initAccountInfo();
+      },
+      isReceive: function () {
+        console.log("今天礼物已经领取完了");
+      },
+      unCondition: function () {
+        console.log("领取不和条件");
+      },
+      fail: function () {
+
+      }
+    });
   },
 
   roomAlert:function(roomScore){
@@ -480,6 +515,7 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   startSelector:function(){
+    this.receiveGift();
     var memberInfo = this.data.memberInfo;
     var outThis = this;
     this.showLoading();
@@ -499,6 +535,7 @@ var layerout = new baseLayerout.BaseLayerout({
       return;
     }
     if (memberInfo.status == 2 || memberInfo.roomStatus == 3) {
+      outThis.hideLoading();
       return;
     }
     var roomId = this.data.roomId;
@@ -636,6 +673,12 @@ var layerout = new baseLayerout.BaseLayerout({
     }
   },
 
+  beanNotEnoughAlertPlugGiveUpRelay:function(){
+    wx.navigateTo({
+      url: '../mall/mall'
+    });
+  },
+
   onHide: function () {
     if (requestTarget && requestTarget.stop){
       requestTarget.stop();
@@ -753,11 +796,11 @@ var layerout = new baseLayerout.BaseLayerout({
     var userId = memberInfo.userId;
     var path = "pages/battleTakepart/battleTakepart?battleId=" + battleId + "&roomId=" + roomId;
     if(memberInfo.isDanRoom==1){
-      path = "pages/battleHome/battleHome4?skipType=1&registUserId="+userId;
+      path = "pages/battleHome/battleHome3?skipType=1&registUserId="+userId;
     } else if (memberInfo.isFrendGroup==1){
-      path = "pages/battleHome/battleHome4?skipType=0&registUserId=" + userId;
+      path = "pages/battleHome/battleHome3?skipType=0&registUserId=" + userId;
     } else if (memberInfo.isDekorn){
-      path = "pages/battleHome/battleHome4?skipType=4&registUserId=" + userId;
+      path = "pages/battleHome/battleHome3?skipType=4&registUserId=" + userId;
     }
     
     return {
@@ -913,4 +956,6 @@ layerout.addProgressScorePlug();
 layerout.addQuestionSelector();
 layerout.addProgressScoreMember();
 layerout.addQuestionResult();
+layerout.addBeanNotEnoughAlertPlug();
+layerout.addAlertPlug();
 layerout.begin();

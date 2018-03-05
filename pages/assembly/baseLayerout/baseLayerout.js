@@ -1,5 +1,10 @@
-var questionSelector = require("../questionSelector/questionSelector.js");
+var questionSelector = require("../questionSelector/questionSelector.js"); 
 var progressScoreMember = require("../progressScoreMemberPlug/progressScoreMemberPlug.js");
+
+var beanNotEnoughAlertPlug = require("../beanNotEnoughAlertPlug/beanNotEnoughAlertPlug.js");
+
+var alertPlug = require("../alertPlug/alertPlug.js");
+
 var progressScorePlug = require("../progressScorePlug/progressScorePlug.js");
 var questionInputPlug = require("../questionInputPlug/questionInputPlug.js");
 var questionResultPlug = require("../questionResult/questionResult.js");
@@ -171,6 +176,14 @@ function BaseLayerout(config){
     Page(baseConfig);
   }
 
+  this.addAlertPlug = function(){
+    var configData = config.data;
+    var alertPlugData = alertPlug.alertPlug.data;
+    var data = Object.assign(configData, alertPlugData);
+    config = Object.assign(config, alertPlug.alertPlug);
+    config.data = data;
+  }
+
   this.addProgressScoreMember = function(){
     var configData = config.data;
     var progressScoreMemberData = progressScoreMember.progressScoreMembers.data;
@@ -200,6 +213,14 @@ function BaseLayerout(config){
     var questionResultPlugData = questionResultPlug.questionResultPlug.data;
     var data = Object.assign(configData, questionResultPlugData);
     config = Object.assign(config, questionResultPlug.questionResultPlug);
+    config.data = data;
+  }
+
+  this.addBeanNotEnoughAlertPlug = function () {
+    var configData = config.data;
+    var beanNotEnoughAlertPlugData = beanNotEnoughAlertPlug.beanNotEnoughAlertPlug.data;
+    var data = Object.assign(configData, beanNotEnoughAlertPlugData);
+    config = Object.assign(config, beanNotEnoughAlertPlug.beanNotEnoughAlertPlug);
     config.data = data;
   }
 

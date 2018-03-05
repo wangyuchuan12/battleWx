@@ -41,6 +41,18 @@ var layerout = new baseLayerout.BaseLayerout({
     }*/]
   },
 
+  submit:function(e){
+    var formId = e.detail.formId;
+
+    var url = "http://www.chengxihome.com/api/test/test";
+    request.request(url, { toUser: "o6hwf0S9JT_Ff0LVBORFsBrhAtpM", smgtype: "text", "content": "你好啊", "title": "标题", "description": "wew", "url": "http://www.baidu.com","thumbUrl":"sds"}, {
+      success: function (resp) {
+       
+      },
+      fail: function () {
+      }
+    });
+  },
 
   followClick:function(){
    // resourceRequest.previewImage("http://ovqk5bop3.bkt.clouddn.com/qrcode_for_gh_32c73b133282_1280.jpg");

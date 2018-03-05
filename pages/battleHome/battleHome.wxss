@@ -2,9 +2,13 @@
 
 @import '../assembly/attrPlug/attrPlug.wxss';
 
+@import '../assembly/beanNotEnoughAlertPlug/beanNotEnoughAlertPlug.wxss';
+
 @import '../manager/roomRedpacks/roomRedpacks.wxss';
 
 @import '../battleTakepart/battleTakepart.wxss';
+
+@import '../assembly/alertPlug/alertPlug.wxss';
 .battleHome{
   width:100%;
   height:100vh;

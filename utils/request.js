@@ -1,5 +1,5 @@
 //var domain = "https://www.vlingquan.com";
-var domain = "http://www.chengxihome.com";
+var domain = "https://www.chengxihome.com";
 //根据code登陆用户bbin
 var loginByJsCodeUrl = domain + "/api/common/login/loginByJsCode";
 var registerUserByJsCode = domain +"/api/common/login/registerUserByJsCode";
@@ -93,6 +93,7 @@ function request(url, params, callback,data) {
       console.log("complete");
     },
     success: function (res) {
+      console.log("res:"+JSON.stringify(res));
       var header = res.header;
       var setCookie;
       if (header) {

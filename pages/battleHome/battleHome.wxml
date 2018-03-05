@@ -27,11 +27,15 @@
     </view>
 
     <view class="battleHomeToolItem" bindtap='followClick'>
+    <form bindsubmit='submit' report-submit='true'>
       <contact-button 
-        type="default-light" 
         size="20"
+        form-type="submit" 
+        type="default"
+        size="mini"
         session-from="weapp">
       </contact-button>
+    </form>
 
       <span style="display:block;font-size:10px;">客服</span>
     </view>

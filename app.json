@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/battleHome/battleHome3",
     "pages/battleHome/battleHome",
     "pages/battleHome/battleHome4",
     "pages/luckDraw/luckDraw",
@@ -7,7 +8,6 @@
     "pages/progressScore/progressScore",
     "pages/rankDanBattle/rankDanBattle",
     "pages/rankBattle/rankBattle",
-    "pages/battleHome/battleHome3",
     "pages/battleRank/battleRank",
     "pages/questionFactory/questionFactoryAudit/questionFactoryAudit",
     "pages/battleHome/battleHome2",

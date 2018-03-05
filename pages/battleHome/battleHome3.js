@@ -3,6 +3,8 @@ var battleRoomsRequest = require("../../utils/battleRoomsRequest.js");
 var randomRoomRequest = require("../../utils/randomRoomRequest.js");
 var battlesRequest = require("../../utils/battlesRequest.js");
 
+var battleGiftRequest = require("../../utils/battleGiftRequest.js");
+
 var request = require("../../utils/request.js");
 
 var util = require("../../utils/util.js");
@@ -26,6 +28,7 @@ var layerout = new baseLayerout.BaseLayerout({
     userImgUrl: "",
     shareAlert: 0,
     userId:null,
+    csIsShow:0,
     rooms: [/*{
       imgUrl:"http://7xlw44.com1.z0.glb.clouddn.com/0042aeda-d8a5-4222-b79d-1416ab222898",
       name:"火影忍者",
@@ -62,8 +65,17 @@ var layerout = new baseLayerout.BaseLayerout({
       shareCreate: 1,
       shareAlert: 1
     });*/
-    wx.navigateTo({
+    /*wx.navigateTo({
       url: '../pkMain/pkMain'
+    });*/
+    wx.navigateTo({
+      url: '../pkRoom/pkRoom'
+    });
+  },
+
+  quickStart: function () {
+    wx.navigateTo({
+      url: '../luckDraw/luckDraw'
     });
   },
 
@@ -76,6 +88,12 @@ var layerout = new baseLayerout.BaseLayerout({
   danClick: function () {
     wx.navigateTo({
       url: '../danList/danList'
+    });
+  },
+
+  rankClick: function () {
+    wx.navigateTo({
+      url: '../rankDanBattle/rankDanBattle'
     });
   },
 
@@ -155,6 +173,28 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
+  receiveGift:function(){
+    var outThis = this;
+    battleGiftRequest.receiveGift({
+        success:function(data){
+          var bean = data.bean;
+          var love = data.love;
+          var count = data.count;
+          outThis.showAlertPlug("今天第"+count+"次送您"+bean+"豆");
+          outThis.initAccountInfo();
+        },
+        isReceive:function(){
+          console.log("今天礼物已经领取完了");
+        },
+        unCondition:function(){
+          console.log("领取不和条件");
+        },
+        fail:function(){
+
+        }
+    });
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
@@ -172,12 +212,10 @@ var layerout = new baseLayerout.BaseLayerout({
     var skipType = options.skipType;
     var registUserId = options.registUserId;
 
-    
-    console.log("registUserId:" + registUserId);
-
     var outThis = this;
     request.requestLogin({
       success: function (userInfo) {
+        outThis.receiveGift();
         outThis.setData({
           userId:userInfo.id
         });
@@ -201,6 +239,10 @@ var layerout = new baseLayerout.BaseLayerout({
               //挑战赛
             }else if(skipType==3){
               
+            }else if (skipType == 4) {
+              wx.navigateTo({
+                url: '../rankDanBattle/rankDanBattle'
+              });
             }
           },
           fail:function(){
@@ -344,6 +386,9 @@ var layerout = new baseLayerout.BaseLayerout({
     var outThis = this;
     this.initAccountInfo({
       success:function(){
+        outThis.setData({
+          csIsShow:1
+        });
         outThis.loadPreProgress();
       }
     });
@@ -392,5 +437,9 @@ var layerout = new baseLayerout.BaseLayerout({
 });
 
 layerout.addAttrPlug();
+
+layerout.addAlertPlug();
+
+layerout.addBeanNotEnoughAlertPlug();
 
 layerout.begin();

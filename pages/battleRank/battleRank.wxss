@@ -126,7 +126,7 @@
 
   padding-top:10px;
 
-  padding-left:10%;
+  padding-left:15px;
 }
 
 .battleRankMemberContentNickname{
@@ -137,6 +137,7 @@
 .battleRankMemberContentResult{
   font-size: 15px;
   color: RGBA(103,65,27,1);
+  width:300px;
 }
 
 .personalAttrDataHeaderSmall{

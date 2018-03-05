@@ -125,7 +125,7 @@ var layerout = new baseLayerout.BaseLayerout({
     battlePkRequest.beatOutRequest(id,{
       success:function(){
         wx.redirectTo({
-          url: '../battleHome/battleHome4'
+          url: '../battleHome/battleHome3'
         });
       }
     });
@@ -325,7 +325,7 @@ var layerout = new baseLayerout.BaseLayerout({
     }else if(role==1){
       userId = this.data.beatUserId;
     }
-    var path = 'pages/battleHome/battleHome4?registUserId=' + userId+"&roomId="+this.data.id+"&skipType=2";
+    var path = 'pages/battleHome/battleHome3?registUserId=' + userId+"&roomId="+this.data.id+"&skipType=2";
     //var path = "pages/pkRoom/pkRoom?role=1&id="+this.data.id;
     return {
       path: path,

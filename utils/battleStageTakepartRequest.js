@@ -17,8 +17,16 @@ function stageTakepart(battleId,subjectIds,roomId,callback){
     roomId:roomId
   },{
     success:function(resp){
-      console.log("resp:"+JSON.stringify(resp));
-      callback.success(resp.data);
+      if(resp.success){
+        callback.success(resp.data);
+      }else{
+        if(resp.errorCode==0){
+          callback.beanNotEnough();
+        }else{
+          callback.fail();
+        }
+      }
+      
     },
     fail:function(){
       console.log("...faile");
