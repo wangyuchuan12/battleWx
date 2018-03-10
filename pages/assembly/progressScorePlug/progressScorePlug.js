@@ -1,6 +1,7 @@
 var currentLoveCoolingRequest = require("../../../utils/currentLoveCoolingRequest.js");
 var battleMemberInfoRequest = require("../../../utils/battleMemberInfoRequest.js");
 var supperLoveRequest = require("../../../utils/supperLoveRequest.js");
+var imgResource = require("../../../utils/imgResource.js");
 var interval;
 var progressScorePlug = {
 data: {
@@ -39,610 +40,789 @@ data: {
       left: 12.5,
       top: 1900,
       bgUrl: "",
-      index: 0
+      index: 0,
+      isBig: 0
     }, {
       left: 21,
       top: 1870,
       bgUrl: "",
-      index: 1
+      index: 1,
+      isBig: 0
     }, {
       left: 30,
       top: 1865,
       bgUrl: "",
-      index: 2
+      index: 2,
+      isBig:0
     }, {
       left: 38,
       top: 1865,
       bgUrl: "",
-      index: 3
+      index: 3,
+      isBig: 0
     }, {
       left: 46,
       top: 1867,
       bgUrl: "",
-      index: 4
+      index: 4,
+      isBig: 0
     }, {
       left: 53,
       top: 1874,
       bgUrl: " ",
-      index: 5
+      index: 5,
+      isBig: 0
     }, {
       left: 60,
       top: 1879,
       bgUrl: " ",
-      index: 6
+      index: 6,
+      isBig: 0
     }, {
       left: 68,
       top: 1880,
       bgUrl: " ",
-      index: 7
+      index: 7,
+      isBig: 0
     }, {
       left: 75,
       top: 1875,
       bgUrl: " ",
-      index: 8
+      index: 8,
+      isBig: 0
     }, {
       left: 83,
       top: 1860,
       bgUrl: " ",
-      index: 9
+      index: 9,
+      isBig: 0
     }, {
       left: 88,
       top: 1834,
       bgUrl: " ",
-      index: 10
+      index: 10,
+      isBig: 0
     }, {
       left: 89,
       top: 1805,
       bgUrl: " ",
-      index: 11
+      index: 11,
+      isBig: 0
     }, {
       left: 84,
       top: 1787,
       bgUrl: " ",
-      index: 12
+      index: 12,
+      isBig: 0
     }, {
       left: 77,
       top: 1780,
       bgUrl: " ",
-      index: 13
+      index: 13,
+      isBig: 0
     }, {
       left: 69,
       top: 1780,
       bgUrl: " ",
-      index: 14
+      index: 14,
+      isBig: 0
     }, {
       left: 60,
       top: 1775,
       bgUrl: " ",
-      index: 15
+      index: 15,
+      isBig: 0
     }, {
       left: 50,
       top: 1775,
       bgUrl: " ",
-      index: 16
+      index: 16,
+      isBig: 0
     }, {
       left: 40,
       top: 1770,
       bgUrl: " ",
-      index: 17
+      index: 17,
+      isBig: 0
     }, {
       left: 33,
       top: 1760,
       bgUrl: " ",
-      index: 18
+      index: 18,
+      isBig: 0
     }, {
       left: 25,
       top: 1730,
       bgUrl: " ",
-      index: 19
+      index: 19,
+      isBig: 0
     }, {
       left: 26,
       top: 1695,
       bgUrl: " ",
-      index: 20
+      index: 20,
+      isBig: 0
     }, {
       left: 35,
       top: 1663,
       bgUrl: " ",
-      index: 21
+      index: 21,
+      isBig: 0
     }, {
       left: 43.5,
       top: 1655,
       bgUrl: " ",
-      index: 22
+      index: 22,
+      isBig: 0
     }, {
       left: 54,
       top: 1670,
       bgUrl: " ",
-      index: 23
+      index: 23,
+      isBig: 0
     }, {
       left: 67.5,
       top: 1670,
       bgUrl: " ",
-      index: 24
+      index: 24,
+      isBig: 0
     }, {
       left: 79.5,
       top: 1670,
       bgUrl: " ",
-      index: 25
+      index: 25,
+      isBig: 0
     }, {
       left: 82,
       top: 1620,
       bgUrl: " ",
-      index: 26
+      index: 26,
+      isBig: 0
     }, {
       left: 80,
       top: 1590,
       bgUrl: " ",
-      index: 27
+      index: 27,
+      isBig: 0
     }, {
       left: 70,
       top: 1578,
       bgUrl: " ",
-      index: 28
+      index: 28,
+      isBig: 0
     }, {
       left: 60,
       top: 1573,
       bgUrl: " ",
-      index: 29
+      index: 29,
+      isBig: 0
     }, {
       left: 53,
       top: 1567,
       bgUrl: " ",
-      index: 30
+      index: 30,
+      isBig: 0
     }, {
       left: 45,
       top: 1570,
       bgUrl: " ",
-      index: 31
+      index: 31,
+      isBig: 0
     }, {
       left: 35,
       top: 1560,
       bgUrl: " ",
-      index: 32
+      index: 32,
+      isBig: 0
     }, {
       left: 28,
       top: 1555,
       bgUrl: " ",
-      index: 33
+      index: 33,
+      isBig: 0
     }, {
       left: 22,
       top: 1530,
       bgUrl: " ",
-      index: 34
+      index: 34,
+      isBig: 0
     }, {
       left: 27,
       top: 1500,
       bgUrl: " ",
-      index: 35
+      index: 35,
+      isBig: 0
     }, {
       left: 36,
       top: 1500,
       bgUrl: " ",
-      index: 36
+      index: 36,
+      isBig: 0
     }, {
       left: 45,
       top: 1500,
       bgUrl: " ",
-      index: 37
+      index: 37,
+      isBig: 0
     }, {
       left: 53,
       top: 1510,
       bgUrl: " ",
-      index: 38
+      index: 38,
+      isBig: 0
     }, {
       left: 61,
       top: 1510,
       bgUrl: " ",
-      index: 39
+      index: 39,
+      isBig: 0
     }, {
       left: 70,
       top: 1490,
       bgUrl: " ",
-      index: 40
+      index: 40,
+      isBig: 0
     }, {
       left: 70,
       top: 1460,
       bgUrl: " ",
-      index: 41
+      index: 41,
+      isBig: 0
     }, {
       left: 70,
       top: 1430,
       bgUrl: " ",
-      index: 42
+      index: 42,
+      isBig: 0
     }, {
       left: 70,
       top: 1400,
       bgUrl: " ",
-      index: 43
+      index: 43,
+      isBig: 0
     }, {
       left: 70,
       top: 1370,
       bgUrl: " ",
-      index: 44
+      index: 44,
+      isBig: 0
     }, {
       left: 70,
       top: 1340,
       bgUrl: " ",
-      index: 45
+      index: 45,
+      isBig: 0
     }, {
       left: 70,
       top: 1310,
       bgUrl: " ",
-      index: 46
+      index: 46,
+      isBig: 0
     }, {
       left: 70,
       top: 1280,
       bgUrl: " ",
-      index: 47
+      index: 47,
+      isBig: 0
     }, {
       left: 70,
       top: 1250,
       bgUrl: " ",
-      index: 48
+      index: 48,
+      isBig: 0
     }, {
       left: 70,
       top: 1220,
       bgUrl: " ",
-      index: 49
+      index: 49,
+      isBig: 0
     }, {
       left: 73,
       top: 1160,
       bgUrl: " ",
-      index: 50
+      index: 50,
+      isBig: 0
     }, {
       left: 77,
       top: 1080,
       bgUrl: " ",
-      index: 51
+      index: 51,
+      isBig: 0
     }, {
       left: 69,
       top: 1070,
       bgUrl: " ",
-      index: 52
+      index: 52,
+      isBig: 0
     }, {
       left: 62,
       top: 1060,
       bgUrl: " ",
-      index: 53
+      index: 53,
+      isBig: 0
     }, {
       left: 55,
       top: 1050,
       bgUrl: " ",
-      index: 54
+      index: 54,
+      isBig: 0
     }, {
       left: 50,
       top: 1030,
       bgUrl: " ",
-      index: 55
+      index: 55,
+      isBig: 0
     }, {
       left: 60,
       top: 1010,
       bgUrl: " ",
-      index: 56
+      index: 56,
+      isBig: 0
     }, {
       left: 68,
       top: 993,
       bgUrl: " ",
-      index: 57
+      index: 57,
+      isBig: 0
     }, {
       left: 77,
       top: 980,
       bgUrl: " ",
-      index: 58
+      index: 58,
+      isBig: 0
     }, {
       left: 85,
       top: 950,
       bgUrl: " ",
-      index: 59
+      index: 59,
+      isBig: 0
     }, {
       left: 87,
       top: 900,
       bgUrl: " ",
-      index: 60
+      index: 60,
+      isBig: 0
     }, {
       left: 80,
       top: 870,
       bgUrl: " ",
-      index: 61
+      index: 61,
+      isBig: 0
     }, {
       left: 70,
       top: 880,
       bgUrl: " ",
-      index: 62
+      index: 62,
+      isBig: 0
     }, {
       left: 63,
       top: 885,
       bgUrl: " ",
-      index: 63
+      index: 63,
+      isBig: 0
     }, {
       left: 54,
       top: 895,
       bgUrl: " ",
-      index: 64
+      index: 64,
+      isBig: 0
     }, {
       left: 45,
       top: 911,
       bgUrl: " ",
-      index: 65
+      index: 65,
+      isBig: 0
     }, {
       left: 35,
       top: 912,
       bgUrl: " ",
-      index: 66
+      index: 66,
+      isBig: 0
     }, {
       left: 25,
       top: 905,
       bgUrl: " ",
-      index: 67
+      index: 67,
+      isBig: 0
     }, {
       left: 17,
       top: 890,
       bgUrl: " ",
-      index: 68
+      index: 68,
+      isBig: 0
     }, {
       left: 12,
       top: 865,
       bgUrl: " ",
-      index: 69
+      index: 69,
+      isBig: 0
     }, {
       left: 12,
       top: 830,
       bgUrl: " ",
-      index: 70
+      index: 70,
+      isBig: 0
     }, {
       left: 14,
       top: 800,
       bgUrl: " ",
-      index: 71
+      index: 71,
+      isBig: 0
     }, {
       left: 18,
       top: 770,
       bgUrl: " ",
-      index: 72
+      index: 72,
+      isBig: 0
     }, {
       left: 25,
       top: 760,
       bgUrl: " ",
-      index: 73
+      index: 73,
+      isBig: 0
     }, {
       left: 33,
       top: 747,
       bgUrl: " ",
-      index: 74
+      index: 74,
+      isBig: 0
     }, {
       left: 41,
       top: 743,
       bgUrl: " ",
-      index: 75
+      index: 75,
+      isBig: 0
     }, {
       left: 50,
       top: 743,
       bgUrl: " ",
-      index: 76
+      index: 76,
+      isBig: 0
     }, {
       left: 58,
       top: 744,
       bgUrl: " ",
-      index: 77
+      index: 77,
+      isBig: 0
     }, {
       left: 66,
       top: 744,
       bgUrl: " ",
-      index: 78
+      index: 78,
+      isBig: 0
     }, {
       left: 75,
       top: 747,
       bgUrl: " ",
-      index: 79
+      index: 79,
+      isBig: 0
     }, {
       left: 75,
       top: 720,
       bgUrl: " ",
-      index: 80
+      index: 80,
+      isBig: 0
     }, {
       left: 65,
       top: 710,
       bgUrl: " ",
-      index: 81
+      index: 81,
+      isBig: 0
     }, {
       left: 55,
       top: 703,
       bgUrl: " ",
-      index: 82
+      index: 82,
+      isBig: 0
     }, {
       left: 45,
       top: 694,
       bgUrl: " ",
-      index: 83
+      index: 83,
+      isBig: 0
     }, {
       left: 38,
       top: 670,
       bgUrl: " ",
-      index: 84
+      index: 84,
+      isBig: 0
     }, {
       left: 45,
       top: 647,
       bgUrl: " ",
-      index: 85
+      index: 85,
+      isBig: 0
     }, {
       left: 55,
       top: 642,
       bgUrl: " ",
-      index: 86
+      index: 86,
+      isBig: 0
     }, {
       left: 65,
       top: 638,
       bgUrl: " ",
-      index: 87
+      index: 87,
+      isBig: 0
     }, {
       left: 75,
       top: 632,
       bgUrl: " ",
-      index: 88
+      index: 88,
+      isBig: 0
     }, {
       left: 85,
       top: 615,
       bgUrl: " ",
-      index: 89
+      index: 89,
+      isBig: 0
     }, {
       left: 92,
       top: 580,
       bgUrl: " ",
-      index: 90
+      index: 90,
+      isBig: 0
     }, {
       left: 85,
       top: 540,
       bgUrl: " ",
-      index: 91
+      index: 91,
+      isBig: 0
     }, {
       left: 77,
       top: 520,
       bgUrl: " ",
-      index: 92
+      index: 92,
+      isBig: 0
     }, {
       left: 67,
       top: 513,
       bgUrl: " ",
-      index: 93
+      index: 93,
+      isBig: 0
     }, {
       left: 57,
       top: 513,
       bgUrl: " ",
-      index: 94
+      index: 94,
+      isBig: 0
     }, {
       left: 47,
       top: 519,
       bgUrl: " ",
-      index: 95
+      index: 95,
+      isBig: 0
     }, {
       left: 37,
       top: 530,
       bgUrl: " ",
-      index: 96
+      index: 96,
+      isBig: 0
     }, {
       left: 27,
       top: 539,
       bgUrl: " ",
-      index: 97
+      index: 97,
+      isBig: 0
     }, {
       left: 18,
       top: 519,
       bgUrl: " ",
-      index: 98
+      index: 98,
+      isBig: 0
     }, {
       left: 14,
       top: 495,
       bgUrl: " ",
-      index: 99
+      index: 99,
+      isBig: 0
     }, {
       left: 20,
       top: 465,
       bgUrl: " ",
-      index: 100
+      index: 100,
+      isBig: 0
     }, {
       left: 30,
       top: 452,
       bgUrl: " ",
-      index: 101
+      index: 101,
+      isBig: 0
     }, {
       left: 40,
       top: 450,
       bgUrl: " ",
-      index: 102
+      index: 102,
+      isBig: 0
     }, {
       left: 50,
       top: 450,
       bgUrl: " ",
-      index: 103
+      index: 103,
+      isBig: 0
     }, {
       left: 60,
       top: 450,
       bgUrl: " ",
-      index: 104
+      index: 104,
+      isBig: 0
     }, {
       left: 68,
       top: 450,
       bgUrl: " ",
-      index: 105
+      index: 105,
+      isBig: 0
     }, {
       left: 77,
       top: 450,
       bgUrl: " ",
-      index: 106
+      index: 106,
+      isBig: 0
     }, {
       left: 87,
       top: 438,
       bgUrl: " ",
-      index: 107
+      index: 107,
+      isBig: 0
     }, {
       left: 91,
       top: 410,
       bgUrl: " ",
-      index: 108
+      index: 108,
+      isBig: 0
     }, {
       left: 88,
       top: 380,
       bgUrl: " ",
-      index: 109
+      index: 109,
+      isBig: 0
     }, {
       left: 80,
       top: 374,
       bgUrl: " ",
-      index: 110
+      index: 110,
+      isBig: 0
     }, {
       left: 73,
       top: 364,
       bgUrl: " ",
-      index: 111
+      index: 111,
+      isBig: 0
     }, {
       left: 67,
       top: 360,
       bgUrl: " ",
-      index: 112
+      index: 112,
+      isBig: 0
     }, {
       left: 60,
       top: 360,
       bgUrl: " ",
-      index: 113
+      index: 113,
+      isBig: 0
     }, {
       left: 53,
       top: 360,
       bgUrl: " ",
-      index: 114
+      index: 114,
+      isBig: 0
     }, {
       left: 47,
       top: 358,
       bgUrl: " ",
-      index: 115
+      index: 115,
+      isBig: 0
     }, {
       left: 40,
       top: 358,
       bgUrl: " ",
-      index: 116
+      index: 116,
+      isBig: 0
     }, {
       left: 33,
       top: 352,
       bgUrl: " ",
-      index: 117
+      index: 117,
+      isBig: 0
     }, {
       left: 25,
       top: 340,
       bgUrl: " ",
-      index: 118
+      index: 118,
+      isBig: 0
     }, {
       left: 25,
       top: 310,
       bgUrl: " ",
-      index: 119
+      index: 119,
+      isBig: 0
     }, {
       left: 32,
       top: 280,
       bgUrl: " ",
-      index: 120
+      index: 120,
+      isBig: 0
     }
     ]
   },
+},
+
+addStep:function(index,type,imgUrl,beanNum){
+  var targets = this.data.progressScoreData.targets;
+  for (var i = 0; i < targets.length;i++){
+    var target = targets[i];
+    if (target.index==index){
+      target.bgUrl = imgUrl;
+      target.type = type;
+      target.isReward = 1;
+      target.beanNum = beanNum;
+      var key = "progressScoreData.targets["+index+"]";
+      this.setData({
+        [key]:target
+      });
+    }
+  }
+},
+
+setTarget:function(target){
+  var index = target.index;
+  var key = "progressScoreData.targets["+index+"]";
+  this.setData({
+    [key]:target
+  });
+},
+
+getTarget:function(index){
+  var targets = this.data.progressScoreData.targets;
+  for(var i=0;i<targets.length;i++){
+    if(targets[i].index==index){
+      return targets[i];
+    }
+  }
+  return null;
+},
+
+toBean:function(index){
+  var outThis = this;
+  var targets = this.data.progressScoreData.targets;
+  var target;
+  for(var i=0;i<targets.length;i++){
+    if(targets[i].index==index){
+      
+      target = targets[i];
+      var animation = wx.createAnimation();
+      var top = 20;
+      var left = 35;
+
+      animation.rotate(20).step().translate(100, 100).step();
+      var key = "progressScoreData.targets[" + i + "].animation";
+
+      outThis.setData({
+        [key]: animation.export()
+      });
+    }
+  }
+  
 },
 
 setIncrease: function (increase){
@@ -728,6 +908,11 @@ getLoveCoolHour:function(){
 getLoveCoolMin:function(){
   var loveCoolMin = this.data.progressScoreData.loveCooling.min;
   return loveCoolMin;
+},
+
+  getLoveCoolSecond: function () {
+    var loveCoolSecond = this.data.progressScoreData.loveCooling.second;
+    return loveCoolSecond;
 },
 
 setDistance:function(distance){
@@ -855,6 +1040,45 @@ containerScrollToDom: function(index) {
   });
 },
 
+
+/*
+initDomRes:function(){
+  var outThis = this;
+
+  outThis.containerRes({
+    success: function (res) {
+      if (!res) {
+        return;
+      }
+      var scrollTop = res.scrollTop;
+      var scrollLeft = res.scrollLeft;
+      var targets = outThis.data.progressScoreData.targets;
+      for (var i = 0; i < targets.length; i++) {
+        outThis.domRes(i, {
+          success: function (res) {
+            var target;
+          
+            console.log("top:"+res.top+",left:"+res.left);
+            target = targets[i];
+            var animation = wx.createAnimation();
+            var top = res.top + scrollTop - 10;
+            var left = res.left + scrollLeft;
+            var animation = wx.createAnimation();
+            animation.translate(100, 100).step();
+            var topKey = "progressScoreData.targets[" + i + "].fixedTop";
+            var leftKey = "progressScoreData.targets[" + i + "].fixedLeft";
+            outThis.setData({
+              topKey:200,
+              leftKey:200
+            });
+            
+          }
+        })
+      }
+    }
+  })
+},*/
+
 //容器的位置状态
 containerRes: function(callback) {
   var outThis = this;
@@ -872,7 +1096,12 @@ containerRes: function(callback) {
 
 //节点位置
 domRes: function(index, callback) {
-  wx.createSelectorQuery().select('#toDom' + index).fields({
+  var id = "#toDom"+index;
+  this.doDomRes(id,callback);
+},
+
+doDomRes:function(id,callback){
+  wx.createSelectorQuery().select(id).fields({
     dataset: true,
     size: true,
     scrollOffset: true,
@@ -923,6 +1152,7 @@ location:function(id,index){
 
 //运行到某个节点
 toPosition: function(id,index, callback){
+  var outThis = this;
   var positions = this.data.progressScoreData.positions;
   var position;
   var positionIndex = 0;
@@ -1084,6 +1314,11 @@ trendBetween: function(id,begin, end,callback,flag) {
         }
         if(begin>=end){
           callback.success();
+        }else{
+          console.log(callback.step);
+          if(callback.step){
+            callback.step(index);
+          }
         }
       }
     });

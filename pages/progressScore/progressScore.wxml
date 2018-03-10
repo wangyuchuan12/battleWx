@@ -8,8 +8,12 @@
 <import src="../assembly/attrPlug/attrPlug"/>
 <import src="../assembly/alertPlug/alertPlug.wxml"/>
 <template is="baseLayerout" data="{{...baseData}}"/>
-<template is="attrPlug" data="{{...attrPlugData}}"/>
-<template is="alertPlug" data="{{...alertPlugData}}"/>
+<view style="position:absolute;z-index:30000000000">
+  <template is="attrPlug" data="{{...attrPlugData}}"/>
+</view>
+<view style="position:absolute;z-index:20000000000">
+  <template is="alertPlug" data="{{...alertPlugData}}"/>
+</view>
 
 
 <template is="beanNotEnoughAlertPlug" data="{{...beanNotEnoughAlertPlugData}}"/>

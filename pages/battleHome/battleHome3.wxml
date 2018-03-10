@@ -41,7 +41,7 @@
     </view>
     <view class="battleHomeMenu5" bindtap='rankClick'>
        <view class="battleHomeMenu17Background"></view>
-       <view class="battleHomeMenu6Name">排行榜</view>
+       <view class="battleHomeMenu6Name" id="rankId">排行榜</view>
         <!--<view class="danLock" style="top:0px;color:white;">
           <view class="fa fa-lock danLockContent" style="color:white;"></view>
        </view>

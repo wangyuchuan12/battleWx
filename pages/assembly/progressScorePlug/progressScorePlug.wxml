@@ -63,7 +63,14 @@
       <view class="progressScore" id="progressScore">
             <view class="progressScoreBar">
                 <view class="trajectory">
-                    <view wx:for="{{targets}}" wx:for-item="target" style="left:{{target.left}}%;top:{{target.top}}px;background:url('{{target.bgUrl}}');background-size:100% 100%;" id="toDom{{target.index}}" class="trajectoryLi" wx:key="id"></view>
+                  <block wx:for="{{targets}}" wx:for-item="target">
+                    <view style="left:{{target.left}}%;top:{{target.top}}px;background:url('{{target.bgUrl}}');background-size:100% 100%;" id="toDom{{target.index}}" class="trajectoryLi" wx:key="id" wx:if="{{target.isBig==0}}">
+                    </view>
+
+                    <view style="left:{{target.left}}%;top:{{target.top}}px;background:url('{{target.bgUrl}}');background-size:100% 100%;width:30px;height:30px;" id="toDom{{target.index}}" class="trajectoryLi" wx:key="id" wx:if="{{target.isBig==1}}">
+                    </view>
+
+                  </block>
 
                     <block wx:for="{{positions}}" wx:for-item="position">
                       <view  class="fromDom"  id="fromDom" 

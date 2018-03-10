@@ -43,14 +43,14 @@ var layerout = new baseLayerout.BaseLayerout({
             var process = outThis.data.process;
             if(data.right){
               rightCount++;
-              process = process+data.process;
+              //process = process+data.process;
             }else{
               wrongCount++;
             }
             outThis.setData({
               rightCount:rightCount,
               wrongCount:wrongCount,
-              process:process,
+              process: data.process,
               rewardBean: data.rewardBean,
               isPass:data.isPass
             });
@@ -84,14 +84,14 @@ var layerout = new baseLayerout.BaseLayerout({
             var wrongCount = outThis.data.wrongCount;
             if (data.right) {
               rightCount++;
-              process = process + data.process;
+              //process = process + data.process;
             } else {
               wrongCount++;
             }
             outThis.setData({
               rightCount: rightCount,
               wrongCount: wrongCount,
-              process: process,
+              process: data.process,
               rewardBean: data.rewardBean,
               isPass: data.isPass
             })
@@ -123,16 +123,17 @@ var layerout = new baseLayerout.BaseLayerout({
           var rightCount = outThis.data.rightCount;
           var wrongCount = outThis.data.wrongCount;
           var process = outThis.data.process;
+          console.log("process:"+process);
           if (data.right) {
             rightCount++;
-            process = process + data.process;
+            //process = process + data.process;
           } else {
             wrongCount++;
           }
           outThis.setData({
             rightCount: rightCount,
             wrongCount: wrongCount,
-            process: process,
+            process: data.process,
             rewardBean: data.rewardBean,
             isPass: data.isPass
           })
@@ -160,8 +161,6 @@ var layerout = new baseLayerout.BaseLayerout({
     this.setType(0);
     var array = new Array();
     var options = data.options;
-
-    console.log("...............data:"+JSON.stringify(data));
     if(options){
       for(var i=0;i<options.length;i++){
         var option = options[i];

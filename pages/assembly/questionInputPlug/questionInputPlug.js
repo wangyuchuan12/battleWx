@@ -195,8 +195,6 @@ var questionInputPlug = {
   fillWorldCheck:function(worlds){
     var worldChecks = this.data.questionInputData.worldChecks;
 
-    console.log(JSON.stringify(worldChecks));
-
     for(var i=0;i<worldChecks.length;i++){
       worldChecks[i].content="";
     }
@@ -350,7 +348,6 @@ var questionInputPlug = {
     var id = e.currentTarget.id;
     var options = this.data.questionInputData.options;
     var rightOption = this.data.rightOption;
-    console.log("..........rightOption:" + rightOption);
     var option;
     for(var i=0;i<options.length;i++){
       var target = options[i];

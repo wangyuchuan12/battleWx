@@ -1,7 +1,53 @@
 var accountRequest = require("../../../utils/accountRequest.js");
+var beanLuck = false;
 var attrPlug = {
   data: {
     attrPlugData:{
+      luck:false,
+      beanAnimTargets:[
+        {
+          status:0,
+          animation:null,
+          left:100,
+          top:200
+        },
+        {
+          status: 0,
+          animation: null,
+          left: 100,
+          top: 200
+        },
+        {
+          status: 0,
+          animation: null,
+          left: 100,
+          top: 200
+        },
+        {
+          status: 0,
+          animation: null,
+          left: 100,
+          top: 200
+        },
+        {
+          status: 0,
+          animation: null,
+          left: 100,
+          top: 200
+        },
+        {
+          status: 0,
+          animation: null,
+          left: 100,
+          top: 200
+        },
+        {
+          status: 0,
+          animation: null,
+          left: 100,
+          top: 200
+        }
+      ],
       wisdomCount:0,
       loveLife:0,
       masonry:0,
@@ -36,6 +82,118 @@ var attrPlug = {
 
     }
   },
+
+  addBeanAnim:function(domId,num){
+    var outThis = this;
+    wx.createSelectorQuery().select("#"+domId).fields ({
+      dataset: true,
+      size: true,
+      scrollOffset: true,
+      rect: true,
+      id: true,
+      properties: ['scrollX', 'scrollY']
+    }, function (res) {
+      outThis.toBeanAnim(res.left,res.top,5000,{
+        success:function(){
+          outThis.addBean(num);
+        }
+      });
+  }).exec();
+  },
+
+  toBeanAnim: function (left, top, duration,callback){
+    
+    var outThis = this;
+    if (!duration){
+      duration = 1000;
+    }
+   
+    wx.createSelectorQuery().select("#beanAttr").fields({
+      dataset: true,
+      size: true,
+      scrollOffset: true,
+      rect: true,
+      id: true,
+      properties: ['scrollX', 'scrollY']
+    }, function (res) {
+
+      var beanAnimTargets = outThis.data.attrPlugData.beanAnimTargets;
+      var index = 0;
+      var beanAnimTarget;
+      for (var i = 0; i < beanAnimTargets.length;i++){
+        if (beanAnimTargets[i].status==0){
+          beanAnimTarget = beanAnimTargets[i];
+          index = i;
+          break;
+        }
+      }
+      
+      var targetKey = "attrPlugData.beanAnimTargets[" + index + "]";
+      var animKey = "attrPlugData.beanAnimTargets[" + index + "].animation";
+      var statusKey = "attrPlugData.beanAnimTargets[" + index + "].status";
+
+      var opacityKey = "attrPlugData.beanAnimTargets[" + index + "].opacity";
+
+    
+      console.log("targetKey:"+targetKey);
+      if (!beanAnimTarget) {
+        return;
+      }
+
+
+      beanAnimTarget.left = left;
+      beanAnimTarget.top = top;
+      beanAnimTarget.status=1;
+     // beanAnimTarget.animation = animation.export();
+
+      outThis.setData({
+        [statusKey]: 1,
+        [opacityKey]:0
+      });
+      var left2 = res.left;
+      var top2 = res.top;
+     var animation =  wx.createAnimation({
+        duration: 1,
+        timingFunction: 'ease'
+      });
+
+      animation.left(left).top(top).step();
+      outThis.setData({
+        [animKey]: animation.export(),
+      });
+
+      setTimeout(function(){
+        outThis.setData({
+          [statusKey]: 1,
+          [opacityKey]: 1
+        });
+        var animation = wx.createAnimation({
+          duration: duration,
+          timingFunction: 'ease'
+        });
+
+        animation.left(left2).top(top2).step();
+
+        outThis.setData({
+          [animKey]: animation.export()
+        });
+
+        setTimeout(function () {
+          outThis.setData({
+            [statusKey]: 0,
+            [opacityKey]: 1
+          });
+          if (callback && callback.success){
+            callback.success();
+          }
+        }, duration);
+      },100);
+
+      
+     
+    }).exec();
+  },
+
   addLove:function(num){
     var outThis = this;
     var top = 40;
@@ -67,6 +225,14 @@ var attrPlug = {
   },
   addBean: function (num) {
     var outThis = this;
+
+    if (beanLuck){
+      outThis.addBean(num);
+      return;
+    }
+
+    beanLuck = true;
+    
     var top = 40;
     this.setData({
       "attrPlugData.beanTop": top,
@@ -75,18 +241,22 @@ var attrPlug = {
     });
     var wisdomCount = this.data.attrPlugData.wisdomCount;
     wisdomCount = wisdomCount + num;
+
+    outThis.setData({
+      "attrPlugData.wisdomCount": wisdomCount
+    });
+    beanLuck = false;
     var interval = setInterval(function () {
       top--;
       if (top <= 15) {
         clearInterval(interval);
-        outThis.setData({
-          "attrPlugData.wisdomCount": wisdomCount
-        });
+        
         setTimeout(function () {
           outThis.setData({
             "attrPlugData.beanDisplay": "none"
           });
         }, 1000);
+       
       } else {
         outThis.setData({
           "attrPlugData.beanTop": top
@@ -186,6 +356,13 @@ var attrPlug = {
 
   subBean: function (num) {
     var outThis = this;
+    if (beanLuck) {
+      outThis.addBean(num);
+      return;
+    }
+
+    beanLuck = true;
+   
     var wisdomCount = this.data.attrPlugData.wisdomCount;
     wisdomCount = wisdomCount - num;
     if (wisdomCount < 0) {
@@ -194,6 +371,7 @@ var attrPlug = {
     outThis.setData({
       "attrPlugData.wisdomCount": wisdomCount
     });
+    beanLuck = false;
     var width = 0;
     var interval = setInterval(function () {
       width = width + 10;

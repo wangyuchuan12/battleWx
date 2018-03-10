@@ -1,6 +1,10 @@
 var baseLayerout = require("../assembly/baseLayerout/baseLayerout.js");
 var battleMemberInfoRequest = require("../../utils/battleMemberInfoRequest.js");
 var battleMembersRequest = require("../../utils/battleMembersRequest.js");
+
+var battleRoomStepIndexRequest = require("../../utils/battleRoomStepIndexRequest.js");
+
+
 var battleInfoRequest = require("../../utils/battleInfoRequest.js");
 var cacheUtil = require("../../utils/cacheUtil.js");
 var battleStageTakepartRequest = require("../../utils/battleStageTakepartRequest.js");
@@ -17,6 +21,9 @@ var syncPaperDateRequest = require("../../utils/syncPaperDateRequest.js");
 var battleGiftRequest = require("../../utils/battleGiftRequest.js");
 
 var shareRequest = require("../../utils/shareRequest.js");
+
+
+var imgResource = require("../../utils/imgResource.js");
 var outThis;
 var requestTarget;
 
@@ -321,21 +328,7 @@ var layerout = new baseLayerout.BaseLayerout({
             var battleMember = battleMembers[i];
             var oldBattleMember = oldBattleMembers[j];
             if (battleMember.id == oldBattleMember.id&&battleMember.id!=memberInfo.id){
-             var isRun = outThis.data.isRun;
-             if(isRun==0){
-              outThis.trendBetween(battleMember.id, oldBattleMember.process, battleMember.process, {
-                success: function () {
-                  if(callback){
-                    callback.success();
-                  }
-                },
-                fail: function () {
-
-                }
-              }, false);
-             }else if(isRun==1){
-               outThis.location(battleMember.id, battleMember.process);
-             }
+              outThis.startProcessRun(battleMember, oldBattleMember,callback)
               break;
             }
           }
@@ -396,6 +389,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
     if(isPass==1){
       this.showRewardBean(rewardBean);
+      outThis.addBean(rewardBean);
     }
     var begin = this.getProcess();
     var end = begin + process;
@@ -403,6 +397,10 @@ var layerout = new baseLayerout.BaseLayerout({
     
     outThis.setProgress(end);
 
+    var roomId = this.data.roomId;
+    var battleId = this.data.battleId;
+
+    console.log("....roomId:"+roomId+",battleId:"+battleId);
     this.setData({
       questionSelectorDisplay: "none",
       questionResultDisplay: "none",
@@ -441,7 +439,15 @@ var layerout = new baseLayerout.BaseLayerout({
           if (selectorType==1){
             
             outThis.startSelector();
-            
+            battleRoomStepIndexRequest.receive(battleId,roomId,{
+              success:function(){
+                console.log("stepSuccess");
+               // outThis.initAccountInfo();
+              },
+              fail:function(){
+                console.log("stepFail");
+              }
+            });
           }
           if (outThis.data.isLast == 1) {
         //    outThis.showQuestionResult();
@@ -451,6 +457,30 @@ var layerout = new baseLayerout.BaseLayerout({
           //  outThis.showQuestionResult();
             
           }
+        },
+        step:function(index){
+          var target = outThis.getTarget(index);
+          if (target.isReward==1){
+            if(target.type==0){
+              setTimeout(function(){
+                var i = 0;
+                var interval = setInterval(function(){
+                  i++;
+                  if(i<=target.beanNum){
+                    outThis.addBeanAnim("toDom" + index, 1);
+                    target.bgUrl = "";
+                    outThis.setTarget(target);
+                  }else{
+                    clearInterval(interval);
+                  }
+                  
+                },200);
+                
+              },500);
+              
+            }
+          }
+          
         },
         fail: function () {
 
@@ -514,6 +544,27 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
+
+  initStep:function(){
+    var outThis = this;
+    var roomId = this.data.roomId;
+    var battleId = this.data.battleId;
+    battleRoomStepIndexRequest.list(battleId,roomId,{
+      success:function(steps){
+        var beanImgUrl = imgResource.beanImgUrl;
+
+        for(var i=0;i<steps.length;i++){
+          var step = steps[i];
+          outThis.addStep(step.stepIndex, step.rewardType, beanImgUrl, step.beanNum);
+        }
+        
+      },
+      fail:function(){
+        console.log("fail");
+      }
+    });
+  },
+
   startSelector:function(){
     this.receiveGift();
     var memberInfo = this.data.memberInfo;
@@ -523,8 +574,9 @@ var layerout = new baseLayerout.BaseLayerout({
     if(!loveCount){
       var hour = this.getLoveCoolHour();
       var min = this.getLoveCoolMin();
+      var second = this.getLoveCoolSecond();
       outThis.hideLoading();
-      this.showToast("爱心恢复中,还剩"+hour+"时"+min+"分");
+      this.showToast("爱心恢复中,还剩"+hour+"时"+min+"分"+second+"秒");
       var isShare = this.data.isShare;
       if (!isShare){
         this.setData({
@@ -623,6 +675,8 @@ var layerout = new baseLayerout.BaseLayerout({
     outThis.location(memberInfo.id, process);
   },
 
+
+
   initLoveCooling:function(){
     var outThis = this;
     var battleId = this.data.battleId;
@@ -651,7 +705,7 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   onShow: function () {
-    this.initAccountInfo();
+   
     var outThis = this;
   },
 
@@ -682,6 +736,28 @@ var layerout = new baseLayerout.BaseLayerout({
   onHide: function () {
     if (requestTarget && requestTarget.stop){
       requestTarget.stop();
+    }
+  },
+
+  startProcessRun: function (battleMember, oldBattleMember,callback){
+    var outThis = this;
+    var isRun = outThis.data.isRun;
+    if (isRun == 0) {
+      outThis.trendBetween(battleMember.id, oldBattleMember.process, battleMember.process, {
+        success: function () {
+          if (callback) {
+            callback.success();
+          }
+        },
+        step:function(index){
+          console.log("............index:"+index);
+        },
+        fail: function () {
+
+        }
+      }, false);
+    } else if (isRun == 1) {
+      outThis.location(battleMember.id, battleMember.process);
     }
   },
 
@@ -734,21 +810,7 @@ var layerout = new baseLayerout.BaseLayerout({
           for (var j = 0; j < oldBattleMembers.length; j++) {
             var oldBattleMember = oldBattleMembers[j];
             if (battleMember.id == oldBattleMember.id && battleMember.id != memberInfo.id) {
-              var isRun = outThis.data.isRun;
-              if (isRun == 0) {
-                outThis.trendBetween(battleMember.id, oldBattleMember.process, battleMember.process, {
-                  success: function () {
-                    if (callback) {
-                      callback.success();
-                    }
-                  },
-                  fail: function () {
-
-                  }
-                }, false);
-              } else if (isRun == 1) {
-                outThis.location(battleMember.id, battleMember.process);
-              }
+              outThis.startProcessRun(battleMember, oldBattleMember,callback);
               break;
             }
           }
@@ -834,8 +896,8 @@ var layerout = new baseLayerout.BaseLayerout({
 
   onLoad: function (options) {
 
+    this.initAccountInfo();
  //   this.redPackAnn();
-
     var againButton = options.againButton;
     if (againButton){
       this.setData({
@@ -882,6 +944,7 @@ var layerout = new baseLayerout.BaseLayerout({
       groupId: groupId
     });
 
+    this.initStep();
     battleMemberInfoRequest.getBattleMemberInfo(battleId,roomId,{
       success:function(memberInfo){
         battleMembersRequest.getBattleMembers(battleId, roomId, {
@@ -903,7 +966,6 @@ var layerout = new baseLayerout.BaseLayerout({
               memberInfo: memberInfo
             });
 
-            console.log(".......isIncrease:" + memberInfo.isIncrease);
             outThis.setIncrease(memberInfo.isIncrease);
 
             outThis.initPositions();

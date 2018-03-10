@@ -1,5 +1,5 @@
 //var domain = "https://www.vlingquan.com";
-var domain = "https://www.chengxihome.com";
+var domain = "http://www.chengxihome.com";
 //根据code登陆用户bbin
 var loginByJsCodeUrl = domain + "/api/common/login/loginByJsCode";
 var registerUserByJsCode = domain +"/api/common/login/registerUserByJsCode";
@@ -82,7 +82,8 @@ function request(url, params, callback,data) {
       'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
     }
   }
-  //token = "e551d44a-cbe5-48e4-a1a7-0beab113beab";
+  token = "e551d44a-cbe5-48e4-a1a7-0beab113beab";
+  //token = '07f97ee4-97a5-46df-8fd4-b24ea32c5244';
   params.token = token;
   wx.request({
     url: url,
@@ -93,7 +94,6 @@ function request(url, params, callback,data) {
       console.log("complete");
     },
     success: function (res) {
-      console.log("res:"+JSON.stringify(res));
       var header = res.header;
       var setCookie;
       if (header) {
@@ -189,9 +189,6 @@ function requestPayMent(params,callback) {
         paySign: params.paySign,
         total_fee: params.cost,
         success: function (resp) {
-          console.log("resp:"+JSON.stringify(resp));
-          console.log("errMsg:"+resp.errMsg);
-          console.log(resp.errMsg == "requestPayment:ok");
           if (resp.errMsg =="requestPayment:ok"){
             callback.success();
           }
