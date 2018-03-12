@@ -7,6 +7,8 @@
 <import src="../assembly/baseLayerout/baseLayerout.wxml"/>
 <import src="../assembly/attrPlug/attrPlug"/>
 <import src="../assembly/alertPlug/alertPlug.wxml"/>
+<import src="../assembly/aircraftPlug/aircraftPlug.wxml"/>
+<import src="../assembly/toastOutPlug/toastOutPlug.wxml"/>
 <template is="baseLayerout" data="{{...baseData}}"/>
 <view style="position:absolute;z-index:30000000000">
   <template is="attrPlug" data="{{...attrPlugData}}"/>
@@ -15,7 +17,9 @@
   <template is="alertPlug" data="{{...alertPlugData}}"/>
 </view>
 
+<template is="aircraftPlug" data="{{...aircraftPlugData}}"/>
 
+<template is="toastOutPlug" data="{{...toastOutPlugData}}"/>
 <template is="beanNotEnoughAlertPlug" data="{{...beanNotEnoughAlertPlugData}}"/>
 
 <view class="shareAlertPlug" wx:if="{{shareAlert==1}}">

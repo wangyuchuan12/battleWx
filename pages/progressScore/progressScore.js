@@ -354,6 +354,9 @@ var layerout = new baseLayerout.BaseLayerout({
       rewardBeanDisplay: "block",
       rewardBeanTop:top
     });
+
+    outThis.startAnim();
+
     var interval = setInterval(function(){
       top=top-10;
       if(top>0){
@@ -438,7 +441,10 @@ var layerout = new baseLayerout.BaseLayerout({
           
           if (selectorType==1){
             
-            outThis.startSelector();
+            setTimeout(function(){
+              outThis.startSelector();
+            },2000);
+            
             battleRoomStepIndexRequest.receive(battleId,roomId,{
               success:function(){
                 console.log("stepSuccess");
@@ -566,6 +572,10 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   startSelector:function(){
+    var isLast = this.data.isLast;
+    if (isLast){
+      return;
+    }
     this.receiveGift();
     var memberInfo = this.data.memberInfo;
     var outThis = this;
@@ -707,6 +717,8 @@ var layerout = new baseLayerout.BaseLayerout({
   onShow: function () {
    
     var outThis = this;
+
+    outThis.initLoveCooling();
   },
 
   onUnload: function () {
@@ -896,7 +908,11 @@ var layerout = new baseLayerout.BaseLayerout({
 
   onLoad: function (options) {
 
+
+    this.startToastOutAnim();
+    outThis = this;
     this.initAccountInfo();
+    
  //   this.redPackAnn();
     var againButton = options.againButton;
     if (againButton){
@@ -913,7 +929,7 @@ var layerout = new baseLayerout.BaseLayerout({
       });*/
 
     }, 2000);
-    outThis = this;
+    
 
     var roomId = options.roomId;
 
@@ -981,7 +997,6 @@ var layerout = new baseLayerout.BaseLayerout({
         outThis.setLove(memberInfo.loveCount, memberInfo.loveResidule);
         outThis.setProgress(memberInfo.process);
 
-        outThis.initLoveCooling();
         outThis.setData({
           memberInfo:memberInfo
         });
@@ -1020,4 +1035,6 @@ layerout.addProgressScoreMember();
 layerout.addQuestionResult();
 layerout.addBeanNotEnoughAlertPlug();
 layerout.addAlertPlug();
+layerout.addAircraftPlug();
+layerout.addToastOutPlug();
 layerout.begin();

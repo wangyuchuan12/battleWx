@@ -1,5 +1,5 @@
 //var domain = "https://www.vlingquan.com";
-var domain = "http://www.chengxihome.com";
+var domain = "https://www.chengxihome.com";
 //根据code登陆用户bbin
 var loginByJsCodeUrl = domain + "/api/common/login/loginByJsCode";
 var registerUserByJsCode = domain +"/api/common/login/registerUserByJsCode";
@@ -82,7 +82,7 @@ function request(url, params, callback,data) {
       'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
     }
   }
-  token = "e551d44a-cbe5-48e4-a1a7-0beab113beab";
+  //token = "e551d44a-cbe5-48e4-a1a7-0beab113beab";
   //token = '07f97ee4-97a5-46df-8fd4-b24ea32c5244';
   params.token = token;
   wx.request({

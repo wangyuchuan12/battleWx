@@ -1,6 +1,8 @@
 var questionSelector = require("../questionSelector/questionSelector.js"); 
 var progressScoreMember = require("../progressScoreMemberPlug/progressScoreMemberPlug.js");
 
+var aircraftPlug = require("../aircraftPlug/aircraftPlug.js");
+
 var beanNotEnoughAlertPlug = require("../beanNotEnoughAlertPlug/beanNotEnoughAlertPlug.js");
 
 var alertPlug = require("../alertPlug/alertPlug.js");
@@ -10,6 +12,8 @@ var questionInputPlug = require("../questionInputPlug/questionInputPlug.js");
 var questionResultPlug = require("../questionResult/questionResult.js");
 var selectInputPlug = require("../selectInput/selectInput.js");
 var attrPlug = require("../attrPlug/attrPlug.js");
+
+var toastOutPlug = require("../toastOutPlug/toastOutPlug.js");
 var redPackAlertPlug = require("../redPackAlertPlug/redPackAlertPlug.js");
 function BaseLayerout(config){
     var baseConfig = config;
@@ -192,6 +196,14 @@ function BaseLayerout(config){
     config.data = data;
   }
 
+  this.addAircraftPlug = function(){
+    var configData = config.data;
+    var aircraftPlugData = aircraftPlug.aircraftPlug.data;
+    var data = Object.assign(configData, aircraftPlugData);
+    config = Object.assign(config, aircraftPlug.aircraftPlug);
+    config.data = data;
+  }
+
   this.addProgressScorePlug = function(){
     var configData = config.data;
     var progressScorePlugData = progressScorePlug.progressScorePlug.data;
@@ -229,6 +241,14 @@ function BaseLayerout(config){
     var selectInputData = selectInputPlug.selectInputPlug.data;
     var data = Object.assign(configData, selectInputData);
     config = Object.assign(config, selectInputPlug.selectInputPlug);
+    config.data = data;
+  }
+
+  this.addToastOutPlug = function () {
+    var configData = config.data;
+    var toastOutPlugData = toastOutPlug.toastOutPlug.data;
+    var data = Object.assign(configData, toastOutPlugData);
+    config = Object.assign(config, toastOutPlug.toastOutPlug);
     config.data = data;
   }
 

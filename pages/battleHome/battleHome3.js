@@ -390,6 +390,16 @@ var layerout = new baseLayerout.BaseLayerout({
           csIsShow:1
         });
         outThis.loadPreProgress();
+
+        /*outThis.startAnim();
+
+        setTimeout(function(){
+          outThis.startAnim();
+
+          setTimeout(function () {
+            outThis.startAnim();
+          }, 5000);
+        },5000);*/
       }
     });
   },
@@ -441,5 +451,11 @@ layerout.addAttrPlug();
 layerout.addAlertPlug();
 
 layerout.addBeanNotEnoughAlertPlug();
+
+layerout.addAircraftPlug();
+
+layerout.addAircraftPlug();
+
+layerout.addToastOutPlug();
 
 layerout.begin();

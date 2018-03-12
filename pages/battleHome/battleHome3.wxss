@@ -2,6 +2,10 @@
 
 @import '../danList/danList.wxss';
 
+@import '../assembly/aircraftPlug/aircraftPlug.wxss';
+
+@import '../assembly/toastOutPlug/toastOutPlug.wxss';
+
 .battleHome{
   /*height: 110vh;*/
 }
