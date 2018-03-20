@@ -41,9 +41,15 @@
       <view class="battleHomeMenu16Background"></view>
       <view class="battleHomeMenu3Name">快速开始</view>
     </view>
-    <view class="battleHomeMenu4" bindtap='factoryClick'>
-      <view class="battleHomeMenu4Background"></view>
-      <view class="battleHomeMenu4Name">题目工厂</view>
+    <view class="battleHomeMenu4">
+      <view class="battleHomeMenu18Background"></view>
+      <view class="battleHomeMenu4Name">个人中心</view>
+
+      <view class="danLock" style="top:0px;color:white;">
+          <view class="fa fa-lock danLockContent" 
+          style="color:white;">
+          </view>
+       </view>
     </view>
     <view class="battleHomeMenu5" bindtap='rankClick'>
        <view class="battleHomeMenu17Background"></view>

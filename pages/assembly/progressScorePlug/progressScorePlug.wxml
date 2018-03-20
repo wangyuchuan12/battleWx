@@ -64,10 +64,47 @@
             <view class="progressScoreBar">
                 <view class="trajectory">
                   <block wx:for="{{targets}}" wx:for-item="target">
-                    <view style="left:{{target.left}}%;top:{{target.top}}px;background:url('{{target.bgUrl}}');background-size:100% 100%;" id="toDom{{target.index}}" class="trajectoryLi" wx:key="id" wx:if="{{target.isBig==0}}">
-                    </view>
 
-                    <view style="left:{{target.left}}%;top:{{target.top}}px;background:url('{{target.bgUrl}}');background-size:100% 100%;width:30px;height:30px;" id="toDom{{target.index}}" class="trajectoryLi" wx:key="id" wx:if="{{target.isBig==1}}">
+                    <view style="left:{{target.left}}%;top:{{target.top}}px;width:20px;height:20px;" class="trajectoryLi">
+                      <view class="trajectoryLi" style="background:url('http://p5ihbm53g.bkt.clouddn.com/bean1.png');background-size:100% 100%;" id="toDom{{target.index}}" wx:key="id" wx:if="{{target.type==0 && target.beanNum ==1}}">
+                      </view>
+
+                      <view class="trajectoryLi" style="background:url('http://p5ihbm53g.bkt.clouddn.com/bean2.png');background-size:100% 100%;" id="toDom{{target.index}}" wx:key="id" wx:if="{{target.type==0 && target.beanNum ==2}}">
+                      </view>
+
+                      <view class="trajectoryLi" style="background:url('http://p5ihbm53g.bkt.clouddn.com/bean3.png');background-size:100% 100%;" id="toDom{{target.index}}" wx:key="id" wx:if="{{target.type==0 && target.beanNum ==3}}">
+                      </view>
+
+                      <view class="trajectoryLi" style="background:url('http://p5ihbm53g.bkt.clouddn.com/bean4.png');background-size:100% 100%;" id="toDom{{target.index}}" wx:key="id" wx:if="{{target.type==0 && target.beanNum ==4}}">
+                      </view>
+
+                      <view class="trajectoryLi" style="background:url('http://p5ihbm53g.bkt.clouddn.com/bean7.png');background-size:100% 100%;" id="toDom{{target.index}}" wx:key="id" wx:if="{{target.type==0 && target.beanNum ==7}}">
+                      </view>
+
+                      <view class="trajectoryLi" style="background:url('http://p5ihbm53g.bkt.clouddn.com/love.png')no-repeat;background-size:100% 50%;width:50px;height:50px;" id="toDom{{target.index}}" wx:key="id" wx:if="{{target.type==1}}">
+                      </view>
+
+                      <view class="trajectoryLi" style="background:url('http://p5ihbm53g.bkt.clouddn.com/star.png')no-repeat;background-size:50% 50%;width:100px;height:100px;background-position:-10px -20px;" id="toDom{{target.index}}" wx:key="id" wx:if="{{target.type==2}}">
+                      </view>
+
+                      <view class="trajectoryLi" style="background:url('http://p5ihbm53g.bkt.clouddn.com/bean3.png');background-size:100% 100%;" id="toDom{{target.index}}" wx:key="id" wx:if="{{target.type==0 && target.beanNum ==3}}">
+                      </view>
+
+                      <view class="trajectoryLi" style="background:url('http://p5ihbm53g.bkt.clouddn.com/shares2.png')no-repeat;background-size:100% 100%;" id="toDom{{target.index}}" wx:key="id" wx:if="{{target.type==3}}">
+                      </view>
+
+                      <view class="trajectoryLi" style="background:url('http://p5ihbm53g.bkt.clouddn.com/potion.png')no-repeat;background-size:100% 100%;" id="toDom{{target.index}}" wx:key="id" wx:if="{{target.type==4}}">
+                      </view>
+
+                      <view class="trajectoryLi" style="background:url('http://p5ihbm53g.bkt.clouddn.com/mushroom2.png')no-repeat;background-size:100% 100%;" id="toDom{{target.index}}" wx:key="id" wx:if="{{target.type==5}}">
+                      <image src="https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83epYAyfqvOYtDOHbVOiarUdRpTUhibd9WZu7bLEYpJwcmicVJW4bNyjBh3aUknKOClJIribshZAwyCL38g/0" class="" style="width:10px;height:10px;top:-10px;position:absolute;border-radius:20px;"></image>
+                      </view>
+
+
+                      <view class="trajectoryLi" style="background:url('http://p5ihbm53g.bkt.clouddn.com/house.png')no-repeat;background-size:100% 100%;" id="toDom{{target.index}}" wx:key="id" wx:if="{{target.type==6}}">
+                      <image src="https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83epYAyfqvOYtDOHbVOiarUdRpTUhibd9WZu7bLEYpJwcmicVJW4bNyjBh3aUknKOClJIribshZAwyCL38g/0" class="" style="width:10px;height:10px;top:-10px;position:absolute;border-radius:20px;"></image>
+                      </view>
+
                     </view>
 
                   </block>

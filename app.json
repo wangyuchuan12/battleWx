@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/progressScore/progressScore2",
     "pages/battleHome/battleHome3",
     "pages/battleHome/battleHome",
     "pages/battleHome/battleHome4",

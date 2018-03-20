@@ -14,6 +14,7 @@ function syncPapersData(battleId, roomId, callback,groupId) {
   console.log("......groupId:"+groupId);
   request.requestWithLogin(syncPapersUrl, params, {
     success: function (resp) {
+      console.log("resp:"+JSON.stringify(resp));
       if (resp.success) {
         callback.success(resp.data);
       } else {

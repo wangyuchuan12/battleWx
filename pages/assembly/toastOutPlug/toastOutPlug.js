@@ -7,17 +7,33 @@ var toastOutPlug = {
   data: {
     toastOutPlugData:{
       fontSize: 10,
-      content: "+5分",
+      content: "",
       toastOutAnimation: null,
       isShow: 1
     }
   },
 
-  startToastOutAnim:function(){
+  startToastOutAnim:function(content){
     this.setData({
-      "toastOutPlugData.isShow":1
+      "toastOutPlugData.isShow":1,
+      "toastOutPlugData.content": content,
+      "toastOutPlugData.fontSize":10
     });
+
+    var height = wx.getSystemInfoSync().windowHeight;
+    height = height/2;
     var outThis = this;
+
+    var animation = wx.createAnimation({
+      duration: 1,
+      timingFunction: 'ease'
+    });
+
+    animation.top(height).step();
+    outThis.setData({
+      "toastOutPlugData.toastOutAnimation": animation.export()
+    });
+    
     var interval = setInterval(function(){
       var fontSize = outThis.data.toastOutPlugData.fontSize;
       

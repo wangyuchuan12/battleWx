@@ -41,16 +41,49 @@
 .progressScoreRankButton{
   position: absolute;
   right:15px;
-  bottom:90px;
+  bottom:70px;
   width:50px;
   height:50px;
   text-align: center;
-  background:url("http://p42rx7glw.bkt.clouddn.com/d5cba429b3b245b3885a7c308eb4f744.png");
+  background:url("http://p5iui0egp.bkt.clouddn.com/%E6%8E%92%E4%BD%8D.png");
   background-size:100% 100%;
-  line-height: 100px;
   color:white;
   font-weight: bolder;
   font-size: 20px;
+}
+
+.progressPkButton{
+  position: absolute;
+  left:5px;
+  bottom:260px;
+  width:60px;
+  height:60px;
+  text-align: center;
+  background:url("http://p5iui0egp.bkt.clouddn.com/%E5%AF%B9%E6%88%98.png");
+  background-size:100% 100%;
+  z-index:30000000000;
+}
+
+.progressRandomButton{
+  position: absolute;
+  left:5px;
+  bottom:135px;
+  width:60px;
+  height:60px;
+  text-align: center;
+  background:url("http://p5iui0egp.bkt.clouddn.com/%E9%9A%8F%E6%9C%BA.png");
+  background-size:100% 100%;
+}
+
+.progressPassButton{
+  position: absolute;
+  left:5px;
+  bottom:200px;
+  width:60px;
+  height:60px;
+  text-align: center;
+  background:url("http://p5iui0egp.bkt.clouddn.com/%E9%97%AF%E5%85%B3.png");
+  background-size:100% 100%;
 }
 
 .progressScoreMallButton{
@@ -106,14 +139,11 @@
 
 .progressScoreBackButton{
   position: absolute;
-  right:90px;
+  right:70px;
   bottom:10px;
   width:50px;
   height:50px;
-  line-height:110px;
-  text-align: center;
-  padding-left:18px;
-  background:url("http://p42rx7glw.bkt.clouddn.com/7ab573a79a3e6cb13d21f4147db96e34.png");
+  background:url("http://p5iui0egp.bkt.clouddn.com/%E9%80%80%E5%87%BA.png");
   background-size:100% 100%;
   color:white;
   font-weight: bolder;

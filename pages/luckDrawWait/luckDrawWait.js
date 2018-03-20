@@ -33,7 +33,7 @@ var layerout = new baseLayerout.BaseLayerout({
     var battleId = options.battleId;
     this.setData({
       roomId: roomId,
-      battleId: battleId
+      battleId: battleId,
     });
 
     this.initDanRoomInfo();
@@ -158,6 +158,8 @@ var layerout = new baseLayerout.BaseLayerout({
 
             return;
             if ((room.roomStatus == 3 || room.timeDiffer <= 0) && num >= mininum) {
+
+
               outThis.showConfirm("跳转到游戏", "是否确定挑战", {
                 confirm: function () {
                   wx.redirectTo({
@@ -328,14 +330,13 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-  
+    
   },
 
   /**

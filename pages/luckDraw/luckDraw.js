@@ -15,7 +15,8 @@ var layerout = new baseLayerout.BaseLayerout({
     currentLevel:1,
     bufferLevel:10,
     targetLevel:20,
-    isRun:0
+    isRun:0,
+    isStop:0
   },
 
   showCurrent:function(){
@@ -41,49 +42,44 @@ var layerout = new baseLayerout.BaseLayerout({
         end:function(){
           var roomId = outThis.data.roomId;
           var battleId = outThis.data.battleId;
+          var isStop = outThis.data.isStop;
+          if(!isStop){
+            takepartRequest.battleTakepart(battleId, roomId, {
+              success: function (member) {
+                wx.redirectTo({
+                  url: '../luckDrawWait/luckDrawWait?roomId=' + roomId
+                });
+              },
+              beanNotEnough: function () {
 
-          outThis.showConfirm("提示", "是否确定参加", {
-            confirm: function () {
-              takepartRequest.battleTakepart(battleId, roomId, {
-                success: function (member) {
-                  wx.navigateTo({
-                    url: '../luckDrawWait/luckDrawWait?roomId=' + roomId
-                  });
-                },
-                beanNotEnough: function () {
+              },
+              masonryNotEnough: function () {
 
-                },
-                masonryNotEnough: function () {
-
-                },
-                fail: function (errorMsg) {
-                  outThis.hideLoading();
-                  if (!errorMsg) {
-                    outThis.showToast("网络繁忙");
-                  } else {
-                    outThis.showToast(errorMsg);
-                  }
-                },
-                battleIn: function () {
-                  wx.navigateTo({
-                    url: '../luckDrawWait/luckDrawWait?roomId=' + roomId
-                  });
-                },
-                battleEnd: function () {
-
-                },
-                roomEnd: function () {
-
-                },
-                roomFull: function () {
-
+              },
+              fail: function (errorMsg) {
+                outThis.hideLoading();
+                if (!errorMsg) {
+                  outThis.showToast("网络繁忙");
+                } else {
+                  outThis.showToast(errorMsg);
                 }
-              });
-            },
-            cancel: function () {
+              },
+              battleIn: function () {
+                wx.redirectTo({
+                  url: '../luckDrawWait/luckDrawWait?roomId=' + roomId
+                });
+              },
+              battleEnd: function () {
 
-            }
-          });
+              },
+              roomEnd: function () {
+
+              },
+              roomFull: function () {
+
+              }
+            });
+          }
         }
       });
     }
@@ -246,6 +242,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
         setTimeout(function(){
           outThis.loadPreProgress();
+          outThis.startDraw();
         },1000);
       },
       fail:function(){
@@ -276,7 +273,8 @@ var layerout = new baseLayerout.BaseLayerout({
       currentLevel: 1,
       bufferLevel: 10,
       targetLevel: 20,
-      isRun: 0
+      isRun: 0,
+      isStop:0
     });
   },
 
@@ -284,7 +282,9 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-  
+    this.setData({
+      isStop: 1
+    });
   },
 
   /**

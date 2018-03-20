@@ -71,7 +71,9 @@
     </block>
   </view>
 
+  <!--
   <view class="luckDrawButton" bindtap='startDraw' wx:if="{{isRun==0}}"></view>
 
   <view class="luckDrawButton gray"wx:if="{{isRun==1}}"></view>
+  -->
 </view>

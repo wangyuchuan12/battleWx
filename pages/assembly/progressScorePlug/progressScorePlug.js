@@ -41,43 +41,57 @@ data: {
       top: 1900,
       bgUrl: "",
       index: 0,
-      isBig: 0
+      isBig: 0,
+      type:0,
+      beanNum:1
     }, {
       left: 21,
       top: 1870,
       bgUrl: "",
       index: 1,
-      isBig: 0
+      isBig: 1,
+      type: 0,
+      beanNum: 2
     }, {
       left: 30,
       top: 1865,
       bgUrl: "",
       index: 2,
-      isBig:0
+      isBig:0,
+      type: 0,
+      beanNum: 3
     }, {
       left: 38,
       top: 1865,
       bgUrl: "",
       index: 3,
-      isBig: 0
+      isBig: 0,
+      type: 0,
+      beanNum: 4
     }, {
       left: 46,
       top: 1867,
       bgUrl: "",
       index: 4,
-      isBig: 0
+      isBig: 0,
+      type: 0,
+      beanNum: 5
     }, {
       left: 53,
       top: 1874,
       bgUrl: " ",
       index: 5,
-      isBig: 0
+      isBig: 0,
+      type: 0,
+      beanNum: 6
     }, {
       left: 60,
       top: 1879,
       bgUrl: " ",
       index: 6,
-      isBig: 0
+      isBig: 0,
+      type: 0,
+      beanNum: 7
     }, {
       left: 68,
       top: 1880,
@@ -767,7 +781,7 @@ data: {
   },
 },
 
-addStep:function(index,type,imgUrl,beanNum){
+addStep:function(index,type,imgUrl,beanNum,isBig){
   var targets = this.data.progressScoreData.targets;
   for (var i = 0; i < targets.length;i++){
     var target = targets[i];
@@ -776,6 +790,7 @@ addStep:function(index,type,imgUrl,beanNum){
       target.type = type;
       target.isReward = 1;
       target.beanNum = beanNum;
+      target.isBig = isBig;
       var key = "progressScoreData.targets["+index+"]";
       this.setData({
         [key]:target

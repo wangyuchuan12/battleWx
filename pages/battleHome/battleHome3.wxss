@@ -257,3 +257,12 @@
   font-weight: bolder;
   color: rgba(71,101,207,1);
 }
+
+.battleHomeMenu18Background{
+  width:100%;
+  height:100%;
+  background: url('http://p42rx7glw.bkt.clouddn.com/26476b0a43676beef723fda62e855aac.png') no-repeat;
+  background-size: 80% 70%;
+  background-position: 80% 50px;
+  position: absolute;
+}

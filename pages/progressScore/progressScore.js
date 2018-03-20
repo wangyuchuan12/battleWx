@@ -22,7 +22,6 @@ var battleGiftRequest = require("../../utils/battleGiftRequest.js");
 
 var shareRequest = require("../../utils/shareRequest.js");
 
-
 var imgResource = require("../../utils/imgResource.js");
 var outThis;
 var requestTarget;
@@ -558,10 +557,20 @@ var layerout = new baseLayerout.BaseLayerout({
     battleRoomStepIndexRequest.list(battleId,roomId,{
       success:function(steps){
         var beanImgUrl = imgResource.beanImgUrl;
-
+       // beanImgUrl = "http://p42rx7glw.bkt.clouddn.com/bean2.png";
         for(var i=0;i<steps.length;i++){
           var step = steps[i];
-          outThis.addStep(step.stepIndex, step.rewardType, beanImgUrl, step.beanNum);
+          var isBig = step.isBig;
+          if(!isBig){
+            isBig = 0;
+          }
+
+          console.log("step:"+JSON.stringify(step));
+          var imgUrl = step.imgUrl;
+          if(!imgUrl){
+            imgUrl = beanImgUrl;
+          }
+          outThis.addStep(step.stepIndex, step.rewardType, imgUrl, step.beanNum,isBig);
         }
         
       },
@@ -773,6 +782,24 @@ var layerout = new baseLayerout.BaseLayerout({
     }
   },
 
+  skipToLuck:function(){
+    wx.navigateTo({
+      url: '../luckDraw/luckDraw'
+    });
+  },
+
+  skipToPk:function(){
+    wx.navigateTo({
+      url: '../pkRoom/pkRoom'
+    });
+  },
+
+  skipDanList:function(){
+    wx.navigateTo({
+      url: '../danList/danList'
+    });
+  },
+
   syncPaperData:function(callback){
     var outThis = this;
     var battleId = this.data.battleId;
@@ -792,6 +819,17 @@ var layerout = new baseLayerout.BaseLayerout({
         });
         outThis.roomAlert(memberInfo.roomScore);
         outThis.setScore(data.score);
+        var thisScore = data.thisScore;
+
+        if (thisScore){
+          if (thisScore>0){
+            outThis.startToastOutAnim("积分：+" + thisScore);
+          }else{
+            outThis.startToastOutAnim("积分：-" + (-thisScore));
+          }
+          
+        }
+        
         var battleMembers = data.members;
         var oldBattleMembers = outThis.getMembers();
         membersRankUtil.rankByProcess(battleMembers);
@@ -907,9 +945,6 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   onLoad: function (options) {
-
-
-    this.startToastOutAnim();
     outThis = this;
     this.initAccountInfo();
     
