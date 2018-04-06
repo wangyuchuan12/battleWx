@@ -325,7 +325,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
   skipToProgress:function(){
     wx.redirectTo({
-      url: '../progressScore/progressScore?battleId=' + battleId + "&roomId=" + roomId
+      url: '../progressScore/progressScore2?battleId=' + battleId + "&roomId=" + roomId
     });
   },
 

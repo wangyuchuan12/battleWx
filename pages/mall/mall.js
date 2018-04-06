@@ -38,6 +38,15 @@ var layerout = new baseLayerout.BaseLayerout({
           outThis.addMasonry(good.num);
         }else if(good.type==3){
           outThis.addLove(good.num);
+
+          var pages = getCurrentPages();
+          var prevPage = pages[pages.length - 2];
+          if (prevPage.lovePaySuccess) {
+            prevPage.lovePaySuccess();
+            wx.navigateBack({
+
+            });
+          }
         }
 
         if (good.costType == 1) {

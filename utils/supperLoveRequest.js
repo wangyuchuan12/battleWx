@@ -8,6 +8,7 @@ function syncPapersData(battleId, roomId, callback) {
   params.roomId = roomId;
   request.requestWithLogin(supperLoveUrl, params, {
     success: function (resp) {
+      console.log("..sdsds:resp:"+JSON.stringify(resp));
       if (resp.success) {
         callback.success(resp.data);
       } else {

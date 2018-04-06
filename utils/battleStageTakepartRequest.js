@@ -17,6 +17,7 @@ function stageTakepart(battleId,subjectIds,roomId,callback){
     roomId:roomId
   },{
     success:function(resp){
+      console.log("resp:"+JSON.stringify(resp));
       if(resp.success){
         callback.success(resp.data);
       }else{

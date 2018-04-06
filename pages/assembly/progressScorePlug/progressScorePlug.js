@@ -42,7 +42,7 @@ data: {
       bgUrl: "",
       index: 0,
       isBig: 0,
-      type:0,
+      //type:0,
       beanNum:1
     }, {
       left: 21,
@@ -50,7 +50,7 @@ data: {
       bgUrl: "",
       index: 1,
       isBig: 1,
-      type: 0,
+      //type: 0,
       beanNum: 2
     }, {
       left: 30,
@@ -58,7 +58,7 @@ data: {
       bgUrl: "",
       index: 2,
       isBig:0,
-      type: 0,
+      //type: 0,
       beanNum: 3
     }, {
       left: 38,
@@ -66,7 +66,7 @@ data: {
       bgUrl: "",
       index: 3,
       isBig: 0,
-      type: 0,
+      //type: 0,
       beanNum: 4
     }, {
       left: 46,
@@ -74,7 +74,7 @@ data: {
       bgUrl: "",
       index: 4,
       isBig: 0,
-      type: 0,
+      //type: 0,
       beanNum: 5
     }, {
       left: 53,
@@ -82,7 +82,7 @@ data: {
       bgUrl: " ",
       index: 5,
       isBig: 0,
-      type: 0,
+      //type: 0,
       beanNum: 6
     }, {
       left: 60,
@@ -90,7 +90,7 @@ data: {
       bgUrl: " ",
       index: 6,
       isBig: 0,
-      type: 0,
+      //type: 0,
       beanNum: 7
     }, {
       left: 68,
@@ -846,7 +846,7 @@ setIncrease: function (increase){
   });
 },
 
-supplyLoveClick:function(){
+supplyLoveClick:function(callback){
   var outThis = this;
   var battleId = this.data.battleId;
   var roomId = this.data.roomId;
@@ -873,9 +873,25 @@ supplyLoveClick:function(){
       outThis.hideLoading();
       outThis.setLove(memberInfo.loveCount, memberInfo.loveResidule);
       outThis.initAccountInfo();
+
+      var members = outThis.getMembers();
+      for (var i = 0; i < members.length; i++) {
+        var member = members[i];
+        if (member.id == memberInfo.id) {
+          member.loveResidule = memberInfo.loveResidule;
+        }
+      }
+     
+      outThis.setMembers(members);
+      if(callback&&callback.success){
+        callback.success();
+      }
     },
     fail:function(){
       outThis.hideLoading();
+      if (callback && callback.fail) {
+        callback.fail();
+      }
     }
   });
 },
@@ -954,10 +970,20 @@ setScore:function(score){
   });
 },
 
+getScore:function(){
+  var score = this.data.progressScoreData.score;
+  return score;
+},
+
 setScrollGogal: function (score) {
   this.setData({
     "progressScoreData.scrollGogal": score
   });
+},
+
+getScrollGogal:function(){
+  var scrollGogal = this.data.progressScoreData.scrollGogal;
+  return scrollGogal;
 },
 
 addProcess:function(process){
@@ -1032,6 +1058,9 @@ containerScrollToDom: function(index) {
   var outThis = this;
   this.domRes(index, {
     success: function (res) {
+      if(!res){
+        return;
+      }
       var top = res.top;
       outThis.containerRes({
         success: function (res) {
@@ -1116,6 +1145,7 @@ domRes: function(index, callback) {
 },
 
 doDomRes:function(id,callback){
+  console.log("......doDomRes:id:"+id);
   wx.createSelectorQuery().select(id).fields({
     dataset: true,
     size: true,
@@ -1144,13 +1174,18 @@ location:function(id,index){
   var outThis = this;
   outThis.containerRes({
     success: function (res) {
-      if(!res){
+      /*if(!res){
         return;
-      }
+      }*/
+      console.log("containerRes:"+res);
       var scrollTop = res.scrollTop;
       var scrollLeft = res.scrollLeft;
       outThis.domRes(index, {
         success: function (res) {
+          /*if(!res){
+            return;
+          }*/
+          console.log("domRes:" + res);
           var top = res.top + scrollTop - 10;
           var left = res.left + scrollLeft;
           var leftKey = "progressScoreData.positions[" + positionIndex+"].left";

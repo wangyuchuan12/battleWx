@@ -3,7 +3,7 @@ var questionInputPlug = {
     questionInputData:{
 
       //0表示选择题 1表示填空题 2表示填词题
-      type:0,
+      type:2,
       rightAnswer:"",
       answer:"",
       rightOption:1,
@@ -94,7 +94,7 @@ var questionInputPlug = {
 
 
 
-      options:[/*{
+      options:[{
         content:"我是你",
         id:"1",
         index:0
@@ -102,7 +102,15 @@ var questionInputPlug = {
         content:"你是我",
         id:"2",
         index:1
-      }*/]
+        }, {
+          content: "你是我",
+          id: "3",
+          index: 1
+      }, {
+        content: "你是我",
+        id: "4",
+        index: 1
+      }]
     }
   },
 

@@ -28,6 +28,7 @@ function QuestionSelector(battleId, ids, roomId,callback,stepCallback){
 
   questionIds = ids;
 
+
   questionAnswerRequest.requestCreatePaperAnswer(battleId, questionIds,roomId,{
     success: function (data) {
       callback.success(data.battleMemberPaperAnswerId,data.stageIndex);
@@ -41,7 +42,6 @@ function QuestionSelector(battleId, ids, roomId,callback,stepCallback){
   this.next = function(){
     if (index <= questionIds.length-1){
       var id = questionIds[index];
-      console.log("id:"+id);
       index++;
       requestQuestionInfo(id,{
         success:function(data){

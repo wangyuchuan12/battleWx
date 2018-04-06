@@ -117,7 +117,7 @@ var layerout = new baseLayerout.BaseLayerout({
         clearInterval(interval);
         if (!flag) {
           wx.redirectTo({
-            url: '../progressScore/progressScore?roomId=' + outThis.data.roomId + "&battleId=" + outThis.data.battleId + "&againButton=返回"
+            url: '../progressScore/progressScore2?roomId=' + outThis.data.roomId + "&battleId=" + outThis.data.battleId + "&againButton=返回"
           });
           flag = true;
           return;
@@ -163,7 +163,7 @@ var layerout = new baseLayerout.BaseLayerout({
               outThis.showConfirm("跳转到游戏", "是否确定挑战", {
                 confirm: function () {
                   wx.redirectTo({
-                    url: '../progressScore/progressScore?roomId=' + room.roomId + "&battleId=" + room.battleId + "&againButton=返回"
+                    url: '../progressScore/progressScore2?roomId=' + room.roomId + "&battleId=" + room.battleId + "&againButton=返回"
                   });
                 },
                 cancel: function () {

@@ -49,17 +49,31 @@ var progressScoreMembers={
       var member = ms[i];
       var process = member.process;
       var score = member.score;
-      var scoreGogal = member.scrollGogal;
+      var scrollGogal = member.scrollGogal;
+      var loveCount = member.loveCount;
+      var status = member.status;
+      var imgUrl = member.imgUrl;
+      if(!imgUrl){
+        imgUrl = member.headImg;
+      }
+      if(!loveCount){
+
+      }
+      var loveResidule = member.loveResidule;
       var percent =0;
       if(process){
-        percent = score / scoreGogal*100;
+        percent = score / scrollGogal*100;
       }
       members.push({
-        imgUrl:ms[i].headImg,
+        imgUrl: imgUrl,
         percent: percent,
         id:ms[i].id,
         process:process,
-        score:score
+        score:score,
+        loveResidule: loveResidule,
+        loveCount: loveCount,
+        status:status,
+        scrollGogal: scrollGogal
       });
     }
     members.sort(function(member1,member2){

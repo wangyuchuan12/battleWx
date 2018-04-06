@@ -9,7 +9,10 @@
 <import src="../assembly/alertPlug/alertPlug.wxml"/>
 <import src="../assembly/aircraftPlug/aircraftPlug.wxml"/>
 <import src="../assembly/toastOutPlug/toastOutPlug.wxml"/>
-<template is="baseLayerout" data="{{...baseData}}"/>
+<import src="../assembly/questionInputPlug/questionInputPlug.wxml"/>
+<view style="position:fixed;z-index:90000000000;background:green;">
+  <template is="baseLayerout" data="{{...baseData}}"/>
+</view>
 <view style="position:absolute;z-index:30000000000">
   <template is="attrPlug" data="{{...attrPlugData}}"/>
 </view>
@@ -29,21 +32,15 @@
 </view>
 
 
-<view class="rewardBean" style='top:{{rewardBeanTop}}px;display:{{rewardBeanDisplay}}'>
-  <view class="rewardBeanHead">第{{stageIndex}}关通过</view>
-  <image src="http://otsnwem87.bkt.clouddn.com/bean.png" class="rewardBeanImg"></image>
-  <span class="rewardBeanPlus">+{{rewardBean}}</span>
-</view>
-
 
 <view class="displayPanel" wx:if="{{displayPanel==1}}">
  <view class="shareAlertPlugClose fa fa-times-circle" bindtap='closeDisplayPanel'></view>
-  <view class="">第{{stageIndex}}关</view>
-  <view class="">答对{{rightCount}}题</view>
-  <view class="">答错{{wrongCount}}题</view>
-  <view class="">前进{{process*10}}米</view>
-  <view class="">智慧豆:+{{rewardBean}}</view>
-  <view class="">经验:+{{addExp}}</view>
+  <view class="">第{{questionData.stageIndex}}关</view>
+  <view class="">答对{{questionData.rightCount}}题</view>
+  <view class="">答错{{questionData.wrongCount}}题</view>
+  <view class="">前进{{questionData.process*10}}米</view>
+  <view class="">智慧豆:+{{questionData.rewardBean}}</view>
+  <view class="">经验:+{{questionData.addExp}}</view>
     <block wx:if="{{selectorType==0}}">
       <view class="" style="background:RGBA(255,255,255,0.5);margin:0 auto;margin-top:20px;width:80%;border-radius:10px;" bindtap="showQuestionResult">查看答题结果     </view>
 
@@ -78,7 +75,7 @@
   <template is="progressScorePlug" data="{{...progressScoreData}}"></template>
   </view>
 
-  <view class="progressScoreButtons" style="z-index:20000;" wx:if="{{isStart==1}}">
+  <view class="progressScoreButtons" style="z-index:100000001;">
     <view class="progressScoreStartButton" bindtap='startSelector' wx:if="{{isLast==0}}"></view>
     <view class="progressScoreStartButton gray" style="background:RGBA(4,190,2,0.9);"  wx:if="{{isLast==1}}">开始</view>
     <view class="progressScoreRankButton" style="" bindtap="skipToRank"></view>
@@ -105,9 +102,50 @@
     
     <view class="progressScoreBackButton" bindtap='skipToTakepart'></view>
 
-    <view class="redPackImgButton" bindtap='redPackButtonClick' style="width:{{redPackWidth}}px;height:{{redPackHeight}}px;display:none;">
-      <image src="http://7xugu1.com1.z0.glb.clouddn.com/e7369bcec70f77bccd1b9a6ee16cf1b6.png" class="redPackImgButtonImg"></image>
-      <view style="background:url('http://ovqk5bop3.bkt.clouddn.com/03bf965642aeb4a91f217597b4751207.png');width:50px;height:30px;background-size:100% 100%;position:relative;top:-30px;left:5px;"></view>
+  </view>
+
+  <view class="progressScoreInput" wx:if="{{mode==1}}" style=" z-index: 1000000000;position:fixed;">
+    <view class="progressScoreInputSubjectHeader" wx:if="{{questionData.imgUrl}}">
+      <image class="progressScoreInputSubjectHeaderImg" src="{{questionData.imgUrl}}"></image>
+      <view class="progressScoreInputSubjectHeaderContent">{{questionData.content}}</view>
+    </view>
+
+    <view class="progressScoreInputSubjectHeader" wx:else>
+      <view class="progressScoreInputSubjectHeaderContentNoImg">{{questionData.content}}</view>
+    </view>
+
+  <view style="bottom:10px;position:absolute;width:100%;">
+  <template is="inputOptions" data="{{...questionInputData}}"></template>
+  </view>
+  </view>
+
+  <view class="resultRanks" wx:if="{{isRankShow}}">
+    <view class="resultRanksTitle">排行榜</view>
+    <view class="resultRanksContent">
+      <view class="resultRankItem">
+        <view class="resultRankItemRank">1</view>
+        <view class="resultRankItemName">川川</view>
+
+        <view class="resultRankItemScore">30分</view>
+        <view class="resultRankItemReward">智慧豆+1</view>
+      </view>
+
+      <view class="resultRankItem">
+        <view class="resultRankItemRank">1</view>
+        <view class="resultRankItemName">川川</view>
+
+        <view class="resultRankItemScore">30分</view>
+        <view class="resultRankItemReward">智慧豆+1</view>
+      </view>
+
+      <view class="resultRankItem">
+        <view class="resultRankItemRank">1</view>
+        <view class="resultRankItemName">川川</view>
+
+        <view class="resultRankItemScore">30分</view>
+        <view class="resultRankItemReward">智慧豆+1</view>
+      </view>
     </view>
   </view>
+
 </view>

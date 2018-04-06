@@ -1,9 +1,9 @@
 {
   "pages": [
-    "pages/progressScore/progressScore2",
-    "pages/battleHome/battleHome3",
     "pages/battleHome/battleHome",
+    "pages/battleHome/battleHome3",
     "pages/battleHome/battleHome4",
+    "pages/progressScore/progressScore2",
     "pages/luckDraw/luckDraw",
     "pages/luckDrawWait/luckDrawWait",
     "pages/progressScore/progressScore",

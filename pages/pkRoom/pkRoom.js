@@ -23,7 +23,8 @@ var layerout = new baseLayerout.BaseLayerout({
     isObtain:0,
     battleId:"",
     periodId:"",
-    isEnd:0
+    isEnd:0,
+    isBack:0
   },
 
   /**
@@ -55,6 +56,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
     var outThis = this;
     setTimeout(function () {
+      console.log(".......isEnd99:"+outThis.data.isEnd);
       outThis.immediate();
     }, 5000);
   },
@@ -99,21 +101,54 @@ var layerout = new baseLayerout.BaseLayerout({
 
   },
 
+  signOut:function(){
+    var outThis = this;
+    battlePkRequest.restartRequest({
+      success: function () {
+        outThis.setData({
+          isEnd: 0
+        });
+        outThis.init();
+      },
+      fail: function () {
+        outThis.init();
+        outThis.showToast("网路繁忙");
+      }
+    });
+  },
+
   restart:function(){
     var outThis = this;
     var role = this.data.role;
     if(role==0){
-      battlePkRequest.restartRequest({
+      /*battlePkRequest.restartRequest({
         success: function () {
-          outThis.homeInto();
+          //outThis.homeInto();
+          outThis.setData({
+            isEnd:0
+          });
+          outThis.init();
         },
         fail: function () {
+          outThis.init();
           outThis.showToast("网路繁忙");
         }
+      });*/
+      this.setData({
+        role: 0,
+        isEnd: 0,
+        errorCount: 0,
+        roomStatus: 0,
+        roomId:""
       });
+      this.init();
     }else if(role==1){
       this.setData({
-        role: 0
+        role: 1,
+        isEnd:0,
+        errorCount:0,
+        roomStatus:0,
+        roomId:""
       });
       this.init();
     }
@@ -134,7 +169,7 @@ var layerout = new baseLayerout.BaseLayerout({
   signoutListener:function(){
     var role = this.data.role;
     if(role==0){
-      this.restart();
+      this.signOut();
     }else if(role==1){
       this.beatOut();
     }
@@ -177,8 +212,11 @@ var layerout = new baseLayerout.BaseLayerout({
   immediate:function(){
     var outThis = this;
     var id = this.data.id;
+    console.log(".....immediate1");
+    console.log("...isEnd2:" + outThis.data.isEnd);
     battlePkRequest.immediateRequest(id,{
       success:function(data){
+        console.log(".....immediate.data:"+JSON.stringify(data));
         outThis.setData({
           homeUserId: data.homeUserId,
           homeUsername: data.homeUsername,
@@ -189,11 +227,13 @@ var layerout = new baseLayerout.BaseLayerout({
           homeStatus: data.homeStatus,
           beatStatus: data.beatStatus,
           roomStatus: data.roomStatus,
+          roomId:data.roomId
         });
 
         if (data.roomStatus == 2) {
           outThis.skipToProgress();
         }
+
         setTimeout(function(){
           if(outThis.data.isEnd==0){
             outThis.immediate();
@@ -202,10 +242,11 @@ var layerout = new baseLayerout.BaseLayerout({
         
       },
       fail:function(){
+        console.log("....fail:");
         setTimeout(function () {
           if (outThis.data.isEnd == 0) {
             var errorCount = outThis.data.errorCount;
-            if(errorCount>=3){
+            if(errorCount>=10){
               outThis.immediate();
               if (!errorCount) {
                 errorCount++;
@@ -223,15 +264,20 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   skipToProgress:function(){
-    var battleId = this.data.battleId;
-    var roomId = this.data.roomId;
-    if(this.data.isEnd==0){
-      wx.navigateTo({
-        url: '../progressScore/progressScore?battleId=' + battleId + "&roomId=" + roomId
-      });
-      this.setData({
-        isEnd: 1
-      });
+    var roomStatus = this.data.roomStatus;
+    console.log("..........roomStatus:" + roomStatus);
+    if(roomStatus==2){
+      var battleId = this.data.battleId;
+      var roomId = this.data.roomId;
+      if (this.data.isEnd == 0) {
+        console.log("isEnd10:" + this.data.isEnd)
+        wx.navigateTo({
+          url: '../progressScore/progressScore2?battleId=' + battleId + "&roomId=" + roomId
+        });
+        this.setData({
+          isEnd: 1
+        });
+      }
     }
   },
 
