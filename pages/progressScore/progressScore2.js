@@ -214,6 +214,9 @@ var layerout = new baseLayerout.BaseLayerout({
     var rank = memberInfo.rank;
     if(roomStatus==3){
       if (rank <= memberInfo.places){
+        outThis.setData({
+          mode:0
+        });
         outThis.showFullAlert("比赛已经结束", "胜利，第" + rank + "名", rewardBean, "确定");
       }else{
         outThis.showFullAlert("比赛已经结束", "失败，第" + rank + "名", rewardBean, "确定");
@@ -616,6 +619,8 @@ var layerout = new baseLayerout.BaseLayerout({
 
     receiveMemberNoticeCallback = battleNoticeRequest.receiveMemberNoticeLoop(roomId,{
       success:function(notices){
+
+        console.log("...notices1:" + JSON.stringify(notices));
         var isEnd = outThis.data.isEnd;
         setTimeout(function(){
           if(!isEnd){
@@ -655,6 +660,8 @@ var layerout = new baseLayerout.BaseLayerout({
 
     receiveRoomNoticeCallback = battleNoticeRequest.receiveRoomNoticeLoop(roomId, {
       success: function (notices) {
+
+        console.log("...notices2:"+JSON.stringify(notices));
         var isEnd = outThis.data.isEnd;
         setTimeout(function(){
           if(!isEnd){
