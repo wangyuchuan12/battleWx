@@ -6,6 +6,8 @@
 
 @import '../assembly/toastOutPlug/toastOutPlug.wxss';
 
+@import '../assembly/memberWaitPlug/memberWaitPlug.wxss';
+
 .battleHome{
   /*height: 110vh;*/
 }

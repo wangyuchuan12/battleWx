@@ -3,11 +3,9 @@ var baseLayerout = require("../assembly/baseLayerout/baseLayerout.js");
 var battleMemberInfoRequest = require("../../utils/battleMemberInfoRequest.js");
 var battleMembersRequest = require("../../utils/battleMembersRequest.js");
 
+var battleStageTakepartRequest = require("../../utils/battleStageTakepartRequest.js");
 var questionRequest = require
 ("../../utils/questionRequest.js");
-
-var battleStageTakepartRequest = require("../../utils/battleStageTakepartRequest.js");
-
 var membersRankUtil = require("../../utils/membersRankUtil.js");
 
 var questionAnswerRequest = require("../../utils/questionAnswerRequest.js");
@@ -18,7 +16,13 @@ var battleNoticeRequest = require("../../utils/battleNoticeRequest.js");
 
 var battleGiftRequest = require("../../utils/battleGiftRequest.js");
 
+var socketUtil = require("../../utils/socketUtil.js");
+
+var takepartRequest = require("../../utils/takepartRequest.js");
+
 var outThis;
+
+var waitInterval;
 
 var questionSelector;
 
@@ -52,7 +56,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
     isRankShow:0,
 
-    //0为正常状态 1位答题状态
+    //0为正常状态 1位答题状态 2等待模式
     mode:0,
 
     isEnd:0,
@@ -77,6 +81,11 @@ var layerout = new baseLayerout.BaseLayerout({
 
   eventListener: {
 
+    questinSelectorClose:function(){
+      outThis.setData({
+        questionSelectorDisplay:"none"
+      });
+    },
     inputSubmit: function (questionId, answer) {
       outThis.showLoading();
       var memberInfo = outThis.data.memberInfo;
@@ -100,11 +109,11 @@ var layerout = new baseLayerout.BaseLayerout({
     },
 
     againClick: function () {
-      var pages = getCurrentPages();
+      /*var pages = getCurrentPages();
       var prevPage = pages[pages.length - 2];
       if (prevPage.restart) {
         prevPage.restart();
-      }
+      }*/
       wx.navigateBack({
 
       });
@@ -154,6 +163,7 @@ var layerout = new baseLayerout.BaseLayerout({
     },
 
     selectComplete: function (subjects) {
+      outThis.questinSelectorClose();
       var subjectIds = new Array();
 
       for (var i = 0; i < subjects.length; i++) {
@@ -170,6 +180,7 @@ var layerout = new baseLayerout.BaseLayerout({
           outThis.questinSelectorClose();
         },
         success: function (data) {
+          outThis.questinSelectorClose();
           var costBean = data.costBean;
           if (costBean) {
             outThis.showToast("消耗" + costBean + "豆豆");
@@ -196,6 +207,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
         },
         fail: function () {
+          outThis.questinSelectorClose();
           outThis.hideLoading();
           console.log("fail");
         }
@@ -206,20 +218,32 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   showEnd:function(){
-    
+    var outThis = this;
     var memberInfo = this.data.memberInfo;
     var roomStatus = memberInfo.roomStatus;
     var status = memberInfo.status;
     var rewardBean = memberInfo.rewardBean;
+    var rewardLove = memberInfo.rewardLove;
     var rank = memberInfo.rank;
     if(roomStatus==3){
+      this.hideLoading();
+      outThis.setData({
+        mode: 0
+      });
       if (rank <= memberInfo.places){
-        outThis.setData({
-          mode:0
+        outThis.showFullAlert("比赛已经结束", "胜利，第" + rank + "名", rewardBean, rewardLove, "确定");
+        outThis.initAccountInfo({
+          success:function(){
+
+          }
         });
-        outThis.showFullAlert("比赛已经结束", "胜利，第" + rank + "名", rewardBean, "确定");
       }else{
-        outThis.showFullAlert("比赛已经结束", "失败，第" + rank + "名", rewardBean, "确定");
+        outThis.showFullAlert("比赛已经结束", "失败，第" + rank + "名", rewardBean, rewardLove, "确定");
+        outThis.initAccountInfo({
+          success: function () {
+
+          }
+        });
       }
       
       outThis.setData({
@@ -277,22 +301,33 @@ var layerout = new baseLayerout.BaseLayerout({
       }
       loveCount--;
       outThis.setLove(loveLimit, loveCount);
+
+      if(loveCount<=0){
+        outThis.setData({
+          questionSelectorDisplay: "none",
+          mode:0
+        });
+        outThis.battleSyncData();
+      }else{
+        questionSelector.next();
+        outThis.empty();
+      }
+    }else{
+      questionSelector.next();
+      outThis.empty();
     }
-    outThis.hideLoading();
-    questionSelector.next();
-    outThis.empty();
+    
   },
 
   battleSyncData:function(){
-    console.log("................battleSyncData");
     var battleId = this.data.battleId;
     var roomId = this.data.roomId;
     battleSyncDataRequest.requestSyncPaperData(battleId,roomId,{
       success:function(data){
-        console.log("data2:"+JSON.stringify(data));
         var memberInfo = outThis.data.memberInfo;
         memberInfo.roomStatus = data.roomStatus;
         memberInfo.rewardBean = data.rewardBean;
+        memberInfo.rewardLove = data.rewardLove;
         memberInfo.rank = data.rank;
         outThis.setData({
           memberInfo:memberInfo
@@ -307,7 +342,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
   startProcessTo:function(memberId,toProcess,callback){
     var positions = this.getPostions();
-    var members = this.data.members;
+    var members = this.getMembers();
     var begin = 0;
     var thisMember;
     for (var i = 0; i < members.length; i++) {
@@ -396,6 +431,7 @@ var layerout = new baseLayerout.BaseLayerout({
       return;
     }
 
+    
     if (memberInfo.status == 2 || memberInfo.roomStatus == 3) {
       outThis.hideLoading();
       return;
@@ -515,7 +551,7 @@ var layerout = new baseLayerout.BaseLayerout({
         });
       },
       fail: function () {
-
+        questionSelector.next();
       }
     }, {
         step: function (data) {
@@ -558,6 +594,7 @@ var layerout = new baseLayerout.BaseLayerout({
           }else if(love>0){
             outThis.battleSyncData();
           }else{
+            /*
             outThis.loveCheck({
               confirm:function(){
                 outThis.battleSyncData();
@@ -565,16 +602,178 @@ var layerout = new baseLayerout.BaseLayerout({
               cancel:function(){
                 outThis.battleSyncData();
               }
-            });
+            });*/
+            outThis.battleSyncData();
           }
          
         },
         fail: function () {
-          
+          questionSelector.next();
         }
       });
   },
 
+
+
+  reckonTime: function () {
+    var outThis = this;
+    var flag = false;
+    var memberInfo = this.data.memberInfo;
+    var mininum = memberInfo.mininum;
+    var timeDiffer = memberInfo.timeDiffer;
+    var num = memberInfo.num;
+    var isStart = memberInfo.isStart;
+    if(isStart==1)
+    {
+      this.battleSyncData();
+      this.setData({
+        mode:0
+      });
+      outThis.stopLuying();
+      setTimeout(function(){
+        outThis.initPositions();
+      },2000);
+      return;
+    }
+    /*
+    var interval = setInterval(function () {
+      
+      var hour = parseInt(timeDiffer / 3600);
+      var min = parseInt((timeDiffer - hour * 3600) / 60);
+      var second = timeDiffer - (hour * 3600 + min * 60);
+
+      if (hour < 10) {
+        hour = "0" + hour;
+      }
+
+      if (min < 10) {
+        min = "0" + min;
+      }
+
+      if (second < 10) {
+        second = "0" + second;
+      }
+
+      timeDiffer--;
+      outThis.setData({
+        timeDiffer: timeDiffer,
+        remainderHour: hour,
+        remainderMin: min,
+        remainderSecond: second
+      });
+      if (timeDiffer <= 0 && num >= mininum) {
+        clearInterval(interval);
+        if (!flag) {
+          flag = true;
+          outThis.battleSyncData();
+          outThis.initPositions();
+          outThis.setData({
+            mode: 0
+          });
+          return;
+
+        }
+      }
+
+      flag = false;
+    }, 1000);*/
+  },
+
+  registerBattleEndCodeCallback:function(){
+    socketUtil.registerCallback("battleEndCode", {
+      call: function (ranks) {
+        var memberInfo = outThis.data.memberInfo;
+        for (var i = 0; i < ranks.length; i++) {
+          var rank = ranks[i];
+          if (memberInfo.id == rank.memberId) {
+            memberInfo.rank = rank.rank;
+            memberInfo.roomStatus = 3;
+            outThis.setData({
+              memberInfo: memberInfo
+            });
+            outThis.showEnd();
+            return;
+          }
+        }
+      }
+    });
+  },
+
+  registerRoomStartCodeCallback:function(){
+    var outThis = this;
+    socketUtil.registerCallback("roomStartCode", {
+      call: function (room) {
+        outThis.setData({
+          mode:0
+        });
+        outThis.stopLuying();
+        outThis.battleSyncData();
+      }
+    });
+  },
+
+
+  registerTakepartCodeCallback:function(){
+    var outThis = this;
+    socketUtil.registerCallback("takepartCode", {
+      call: function (memberInfo) {
+        var members = outThis.data.members;
+        members.push(memberInfo);
+        outThis.showMembers();
+        outThis.initPositions();
+      }
+    });
+  },
+
+  registerProgressCodeCallback:function(){
+    var outThis = this;
+    socketUtil.registerCallback("progressCode", {
+      call: function (callbackMembers) {
+        var memberInfo = outThis.data.memberInfo;
+        for (var i = 0; i < callbackMembers.length; i++) {
+          var callbackMember = callbackMembers[i];
+          var member = null;
+          var members = outThis.getMembers();
+          for (var i = 0; i < members.length; i++) {
+            if (members[i].id == callbackMember.memberId) {
+              member = members[i];
+            }
+          }
+
+          if (member.process == callbackMember.process) {
+            member.score = callbackMember.score;
+            member.loveResidule = callbackMember.loveCount;
+            if (callbackMember.roomStatus == 3) {
+              memberInfo.roomStatus = callbackMember.roomStatus;
+              outThis.setData({
+                memberInfo: memberInfo
+              });
+              //outThis.showEnd();
+            }
+
+            outThis.setMembers(members);
+
+          } else {
+            outThis.startProcessTo(callbackMember.memberId, callbackMember.process, {
+              success: function () {
+                member.score = callbackMember.score;
+                member.loveResidule = callbackMember.loveCount;
+                if (callbackMember.roomStatus == 3) {
+                  memberInfo.roomStatus = callbackMember.roomStatus;
+                  outThis.setData({
+                    memberInfo: memberInfo
+                  });
+                  //outThis.showEnd();
+                }
+                outThis.setMembers(members);
+
+              }
+            });
+          }
+        }
+      }
+    })
+  },
   
 
   /**
@@ -582,7 +781,33 @@ var layerout = new baseLayerout.BaseLayerout({
    */
   onLoad: function (options) {
 
+    var noWait = options.noWait;
     outThis = this;
+
+    //等待模式
+    if(!noWait){
+      this.setData({
+        mode: 2
+      });
+      waitInterval = setInterval(function () {
+        outThis.luying();
+      }, 1500);
+    }else{
+      this.setData({
+        mode: 0
+      });
+    }
+    
+
+    this.registerProgressCodeCallback();
+
+    this.registerBattleEndCodeCallback();
+
+    this.registerTakepartCodeCallback();
+
+    this.registerRoomStartCodeCallback();
+
+    
 
     this.setData({
       isDekorn:1
@@ -597,6 +822,7 @@ var layerout = new baseLayerout.BaseLayerout({
     });
 
     var roomId = options.roomId;
+
     var battleId = options.battleId;
     this.setData({
       roomId:roomId,
@@ -605,18 +831,27 @@ var layerout = new baseLayerout.BaseLayerout({
 
     this.initMemberInfo({
       success:function(){
-        outThis.initPositions();
-        outThis.battleSyncData();
+        outThis.initMembers({
+          success: function () {
+            outThis.showMembers();
+            if(noWait){
+              outThis.battleSyncData();
+            }else{
+              outThis.reckonTime();
+            }
+            /*setTimeout(function () {
+             
+              
+             // outThis.battleSyncData();
+            }, 5000);*/
+            
+          }
+        });
       }
     });
+    
 
-    this.initMembers({
-      success:function(){
-        outThis.initPositions();
-        outThis.showMembers();
-      }
-    });
-
+    /*
     receiveMemberNoticeCallback = battleNoticeRequest.receiveMemberNoticeLoop(roomId,{
       success:function(notices){
 
@@ -691,6 +926,8 @@ var layerout = new baseLayerout.BaseLayerout({
         }, 1000);
       }
     });
+
+    */
   },
 
 
@@ -727,6 +964,27 @@ var layerout = new baseLayerout.BaseLayerout({
     var members = this.data.members;
     membersRankUtil.rankByProcess(members);
     this.setMembers(members);
+    var waitMembers = this.getWaitMembers();
+    if(!waitMembers){
+      waitMembers = new Array();
+    }
+    for (var i = 0; i < members.length; i++) {
+      var member = members[i];
+      var flag = false;
+      for (var j = 0; j < waitMembers.length;j++){
+        if(member.id==waitMembers.id){
+          flag = true;
+        }
+      }
+      if(!flag){
+        var waitMember = new Object();
+        waitMember.index = i + 1;
+        waitMember.imgUrl = member.headImg;
+        waitMember.id = member.id;
+        waitMembers.push(waitMember);
+      }
+    }
+    this.setWaitMembers(waitMembers);
   },
 
   initPositions: function () {
@@ -777,6 +1035,8 @@ var layerout = new baseLayerout.BaseLayerout({
         outThis.setData({
           memberInfo:memberInfo
         });
+
+        console.log("memberInfo:"+JSON.stringify(memberInfo));
 
         outThis.setScore(memberInfo.score);
 
@@ -865,25 +1125,27 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
-  skipToTakepart: function () {
+  signout: function () {
     /*wx.redirectTo({
       url: '../battleTakepart/battleTakepart?battleId=' + this.data.battleId+"&roomId="+this.data.roomId
     });*/
-
-    outThis.showConfirm("提示", "你确定要退出吗？", {
-      confirm: function () {
         var pages = getCurrentPages();
         var prevPage = pages[pages.length - 2];
 
         if (prevPage.signoutListener) {
           prevPage.signoutListener();
+        }else{
+          var battleId = this.data.battleId;
+          var roomId = this.data.roomId;
+          takepartRequest.battleSignout(battleId,roomId,{
+            success:function(){
+
+            },
+            fail:function(){
+
+            }
+          });
         }
-
-        wx.navigateBack({
-
-        });
-      }
-    });
 
   },
 
@@ -922,7 +1184,7 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-
+    
   },
 
   /**
@@ -930,12 +1192,11 @@ var layerout = new baseLayerout.BaseLayerout({
    */
   onUnload: function () {
     this.setData({
-      isEnd:1
+      isEnd: 1
     });
     var isRest = this.data.isRest;
-    if (!isRest){
-      console.log(".....battleSyncData......");
-      this.battleSyncData();
+    if (!isRest) {
+      this.signout();
     }
   },
 
@@ -973,4 +1234,5 @@ layerout.addAircraftPlug();
 layerout.addToastOutPlug();
 
 layerout.addQuestionInputPlug();
+layerout.addMemberWaitPlug();
 layerout.begin();

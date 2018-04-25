@@ -272,7 +272,7 @@ var layerout = new baseLayerout.BaseLayerout({
       if (this.data.isEnd == 0) {
         console.log("isEnd10:" + this.data.isEnd)
         wx.navigateTo({
-          url: '../progressScore/progressScore2?battleId=' + battleId + "&roomId=" + roomId
+          url: '../progressScore/progressScore2?battleId=' + battleId + "&roomId=" + roomId+"&noWait=1"
         });
         this.setData({
           isEnd: 1

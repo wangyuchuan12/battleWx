@@ -126,9 +126,11 @@ var layerout = new baseLayerout.BaseLayerout({
         }
         var isSign = dan.isSign;
         if(isSign==1){
-          wx.navigateTo({
-            url: '../danInfo/daninfo3?danId=' + dan.danId
+          outThis.setData({
+            roomId: data.roomId,
+            battleId: data.battleId
           });
+          outThis.startTo();
         }else{
           this.setData({
             isDanAlert: 1,
@@ -156,6 +158,14 @@ var layerout = new baseLayerout.BaseLayerout({
     }
   },
 
+  startTo:function(){
+    var roomId = this.data.roomId;
+    var battleId = this.data.battleId;
+    wx.redirectTo({
+      url: '../progressScore/progressScore2?roomId=' + roomId + "&battleId=" + battleId + "&againButton=返回"
+    });
+  },
+
   signClick:function(){
     var outThis = this;
     var alertDan = this.data.alertDan;
@@ -171,9 +181,11 @@ var layerout = new baseLayerout.BaseLayerout({
             takepartRequest.battleTakepart(data.battleId, data.roomId, {
               success: function (member) {
                 outThis.hideLoading();
-                wx.navigateTo({
-                  url: '../danInfo/daninfo3?danId=' + alertDan.id
+                outThis.setData({
+                  roomId:data.roomId,
+                  battleId:data.battleId
                 });
+                outThis.startTo();
               },
               beanNotEnough: function () {
                 
@@ -190,9 +202,11 @@ var layerout = new baseLayerout.BaseLayerout({
                 }
               },
               battleIn: function () {
-                wx.navigateTo({
-                  url: '../danInfo/daninfo3?danId=' + alertDan.id
+                outThis.setData({
+                  roomId: data.roomId,
+                  battleId: data.battleId
                 });
+                outThis.startTo();
               },
               battleEnd: function () {
                 

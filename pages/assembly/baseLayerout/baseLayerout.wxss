@@ -58,24 +58,30 @@
 }
 
 .fullAlertReward{
+  position: fixed;
+  width:100%;
+  top:150px;
+  text-align: center;
+}
+
+.fullAlertBean{
   background:url('http://otsnwem87.bkt.clouddn.com/bean.png');
   background-size:100% 100%;
-  width:100px;
-  height:100px;
-  position: fixed;
-  left:50%;
-  margin-left:-50px;
-  top:200px;
+  width:80px;
+  height:80px;
+  display: inline-block;
 }
 
 .fullAlertNum{
-  position: fixed;
-  width:100%;
+  width:100px;
   text-align: center;
-  top:300px;
   color:rgba(255,222,20,1);
   font-size:20px;
   font-weight: bolder;
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+  top:30px;
 }
 
 .fullAlertButton{

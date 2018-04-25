@@ -40,14 +40,18 @@ function QuestionSelector(battleId, ids, roomId,callback,stepCallback){
 
   var index = 0;
   this.next = function(){
+    console.log("nexg1");
     if (index <= questionIds.length-1){
+      console.log("nexg2");
       var id = questionIds[index];
       index++;
       requestQuestionInfo(id,{
         success:function(data){
+          console.log("requestQuestionInfo");
           stepCallback.step(data)
         },
         fail:function(){
+          console.log("fail");
           stepCallback.fail();
         }
       });
@@ -64,6 +68,7 @@ function requestQuestionInfo(id,callback){
          if(resp.success){
            callback.success(resp.data);
          }else{
+           console.log("requestQuestionInfo.fail:"+JSON.stringify(resp));
            callback.fail();
          }
       },

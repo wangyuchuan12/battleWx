@@ -1,4 +1,4 @@
-// pages/stock/stock.js
+var socketUtil = require("../../utils/socketUtil.js");
 Page({
 
   /**
@@ -12,33 +12,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    wx.connectSocket({
-      url: 'ws://192.168.1.101/api/websocket',
-      data: {
-        x: '',
-        y: ''
-      },
-      header: {
-        'content-type': 'application/json'
-      },
-      method: 'GET',
-      success: function (res) {
-        console.log('connect success: ', res)
-      },
-      complete: function (res) {
-        console.log('complete: ', res)
-      },
-      fail: function (err) {
-        console.log('connect error: ', err)
-      }
-    });
-
-    wx.onSocketOpen(function (res) {
-      console.log('WebSocket连接已打开！')
-    });
-    wx.onSocketError(function (res) {
-      console.log('WebSocket连接打开失败，请检查！')
-    });
+    socketUtil.openSocket();
   },
 
   /**

@@ -1,7 +1,8 @@
 {
   "pages": [
-    "pages/battleHome/battleHome",
     "pages/battleHome/battleHome3",
+    "pages/stock/stock",
+    "pages/battleHome/battleHome",
     "pages/battleHome/battleHome4",
     "pages/progressScore/progressScore2",
     "pages/luckDraw/luckDraw",
@@ -48,7 +49,6 @@
     "pages/battleInfo/battleInfo",
     "pages/logs/logs",
     "pages/myBattleRooms/myBattleRooms",
-    "pages/stock/stock",
     "pages/test/test"
   ],
   "window": {

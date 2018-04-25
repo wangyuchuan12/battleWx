@@ -9,7 +9,6 @@ function requestSyncPaperData(battleId, roomId,callback) {
   params.roomId = roomId;
   request.requestWithLogin(syncPaperDataUrl, params, {
     success:function(resp){
-      console.log("resp1111:"+JSON.stringify(resp));
       if(resp.success){
         callback.success(resp.data);
       }else{

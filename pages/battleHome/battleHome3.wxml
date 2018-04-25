@@ -9,7 +9,16 @@
 <import src="../assembly/toastOutPlug/toastOutPlug.wxml"/>
 
 <import src="../assembly/baseLayerout/baseLayerout"/>
+
+<import src="../assembly/memberWaitPlug/memberWaitPlug"/>
 <import src="../assembly/attrPlug/attrPlug"/>
+
+<!--
+<view style="position:fixed;z-index:1000;width:100%;" >
+  <template is="memberWaitPlug" data="{{...memberWaitData}}"/>
+</view>
+-->
+
 <template is="attrPlug" data="{{...attrPlugData}}"/>
 <template is="baseLayerout" data="{{...baseData}}"/>
 <template is="alertPlug" data="{{...alertPlugData}}"/>

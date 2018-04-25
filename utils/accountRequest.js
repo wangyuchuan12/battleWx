@@ -10,7 +10,6 @@ var accountResultInfoUrl = domain + "/api/battle/dan/accountResultInfo";
 function accountInfo(callback){
   request.requestWithLogin(accountInfoUrl, {}, {
     success: function (resp) {
-      console.log("resp:"+JSON.stringify(resp));
       if(resp.success){
         callback.success(resp.data);
       }else{
@@ -69,7 +68,6 @@ function payGood(good,callback){
   }else if(good.costType==1){
     request.requestPayMentWithBean(id,{
       success: function () {
-        console.log("支付类型为智慧豆支付");
         callback.success();
       },
       fail: function () {

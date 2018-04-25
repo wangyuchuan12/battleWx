@@ -6,8 +6,6 @@ var receiveGiftRequest = domain + "/api/battleGift/receiveGift";
 function receiveGift(callback) {
   request.requestWithLogin(receiveGiftRequest, {}, {
     success: function (resp) {
-
-      console.log("resp:"+JSON.stringify(resp));
       if (resp.success) {
         if(resp.code==0||resp.code==1){
           if (callback.isReceive){

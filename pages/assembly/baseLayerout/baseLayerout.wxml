@@ -19,8 +19,16 @@
     <view class="fullAlertlight" animation="{{fullAlertAnimation}}">
       
     </view>
-    <view class="fullAlertReward"></view>
-    <view class="fullAlertNum">奖励 ×{{fullAlertRewardNum}}</view>
+    <view class="fullAlertReward">
+      <view class="fullAlertBean"></view>
+      <view class="fullAlertNum">奖励 ×{{fullAlertRewardBeanNum}}</view>
+    </view>
+
+    <view class="fullAlertReward" style="top:250px;">
+      <view class="fullAlertBean" style="background:url('http://7xugu1.com1.z0.glb.clouddn.com/lifeLoveSolid.png');background-size:100% 100%;"></view>
+      <view class="fullAlertNum" style="color:red;top:25px;">奖励 ×{{fullAlertRewardLoveNum}}</view>
+    </view>
+
     <view class="fullAlertTitle">{{fullAlertTitle}}</view>
 
     <view class="fullAlertTitle2">{{fullAlertTitle2}}</view>

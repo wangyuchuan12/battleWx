@@ -3,6 +3,8 @@ var progressScoreMember = require("../progressScoreMemberPlug/progressScoreMembe
 
 var aircraftPlug = require("../aircraftPlug/aircraftPlug.js");
 
+var memberWaitPlug = require("../memberWaitPlug/memberWaitPlug.js");
+
 var beanNotEnoughAlertPlug = require("../beanNotEnoughAlertPlug/beanNotEnoughAlertPlug.js");
 
 var alertPlug = require("../alertPlug/alertPlug.js");
@@ -28,7 +30,8 @@ function BaseLayerout(config){
       toastMsg:"ok",
       toastDuration:1000,
       "fullAlertTitle": "恭喜您",
-      "fullAlertRewardNum": 20,
+      "fullAlertRewardBeanNum": 0,
+      "fullAlertRewardLoveNum": 0,
       "fullAlertButton": "确定",
       fullAlertAnimation:null,
       fullAlertDisplay:"none",
@@ -83,12 +86,20 @@ function BaseLayerout(config){
         }
       });
     }
-    baseConfig.showFullAlert = function(title,title2,rewardNum,button){
+    baseConfig.showFullAlert = function(title,title2,rewardBeanNum,rewardLoveNum,button){
 
+      if (!rewardBeanNum){
+        rewardBeanNum = 0;
+      }
+
+      if (!rewardLoveNum){
+        rewardLoveNum = 0;
+      }
       this.setData({
         "baseData.fullAlertTitle":title,
         "baseData.fullAlertTitle2": title2,
-        "baseData.fullAlertRewardNum":rewardNum,
+        "baseData.fullAlertRewardBeanNum": rewardBeanNum,
+        "baseData.fullAlertRewardLoveNum": rewardLoveNum,
         "baseData.fullAlertButton":button,
         "baseData.fullAlertDisplay":"block"
       });
@@ -209,6 +220,14 @@ function BaseLayerout(config){
     var progressScorePlugData = progressScorePlug.progressScorePlug.data;
     var data = Object.assign(configData, progressScorePlugData);
     config = Object.assign(config, progressScorePlug.progressScorePlug);
+    config.data = data;
+  }
+
+  this.addMemberWaitPlug = function(){
+    var configData = config.data;
+    var memberWaitPlugData = memberWaitPlug.memberWaitPlug.data;
+    var data = Object.assign(configData, memberWaitPlugData);
+    config = Object.assign(config, memberWaitPlug.memberWaitPlug);
     config.data = data;
   }
 

@@ -103,7 +103,6 @@ function homeIntoRequest(callback){
   var params = new Object();
   request.requestWithLogin(homeIntoUrl, params, {
     success: function (resp) {
-      console.log("resp:"+JSON.stringify(resp));
       if (resp.success) {
         callback.success(resp.data);
       } else {

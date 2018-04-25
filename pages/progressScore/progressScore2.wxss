@@ -1,5 +1,6 @@
 @import 'progressScore.wxss';
 @import '../assembly/questionInputPlug/questionInputPlug.wxss';
+@import '../assembly/memberWaitPlug/memberWaitPlug.wxss';
 .progressScoreInput{
   width:100%;
   height: 100vh;
@@ -42,7 +43,6 @@
   padding-right: 20px;
   padding-top:50px;
 }
-
 .resultRanks{
   position: fixed;
   z-index: 5000000000;

@@ -44,6 +44,7 @@ var progressScoreMembers={
   },
 
   setMembers:function(ms){
+    console.log(".........看看这里被调用几次");
     var members = new Array();
     for(var i=0;i<ms.length;i++){
       var member = ms[i];
@@ -60,6 +61,8 @@ var progressScoreMembers={
 
       }
       var loveResidule = member.loveResidule;
+
+      console.log(".........loveResidule:" + loveResidule);
       var percent =0;
       if(process){
         percent = score / scrollGogal*100;

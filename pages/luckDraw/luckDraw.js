@@ -35,6 +35,35 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
+  startDrawClick:function(){
+    var outThis = this;
+    this.showConfirm("参加需要消耗一颗爱心", "是否继续", {
+      confirm:function(){
+        luckDrawRequest.drawTakepart({
+            success:function(){
+              outThis.startDraw();
+            },
+            loveNotEnough:function(){
+              outThis.showConfirm("爱心不够", "是否要充值", {
+                confirm:function(){
+                  wx.navigateTo({
+                    url: '../mall/mall?type=3'
+                  });
+                },
+                cancel:function(){
+
+                }
+              }, "确定", "取消");
+            }
+        });
+        
+      },
+      cancel:function(){
+
+      }
+    });
+  },
+
   startDraw:function(e,flag){
     var outThis = this;
     if(!flag){
@@ -242,7 +271,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
         setTimeout(function(){
           outThis.loadPreProgress();
-          outThis.startDraw();
+          //outThis.startDraw();
         },1000);
       },
       fail:function(){

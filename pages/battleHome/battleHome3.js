@@ -1,7 +1,10 @@
 var baseLayerout = require("../assembly/baseLayerout/baseLayerout.js");
+var memberWaitPlug = require("../assembly/memberWaitPlug/memberWaitPlug.js");
 var battleRoomsRequest = require("../../utils/battleRoomsRequest.js");
 var randomRoomRequest = require("../../utils/randomRoomRequest.js");
 var battlesRequest = require("../../utils/battlesRequest.js");
+
+var socketUtil = require("../../utils/socketUtil.js");
 
 var battleGiftRequest = require("../../utils/battleGiftRequest.js");
 
@@ -177,11 +180,12 @@ var layerout = new baseLayerout.BaseLayerout({
     var outThis = this;
     battleGiftRequest.receiveGift({
         success:function(data){
+          console.log("data:"+JSON.stringify(data));
           var bean = data.bean;
           var love = data.love;
           var count = data.count;
           outThis.showAlertPlug("今天第"+count+"次送您"+bean+"豆");
-          outThis.initAccountInfo();
+          //outThis.initAccountInfo();
         },
         isReceive:function(){
           console.log("今天礼物已经领取完了");
@@ -199,6 +203,18 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+
+
+    var arr = [0,1,2,3,4,5,6,7,8,9,10]
+
+    arr.sort(function () { return 0.5 - Math.random() })
+    
+    console.log("array:"+arr);
+
+    console.log("arr[0]:"+arr[0]);
+    console.log("arr[1]:" + arr[1]);
+
+    var outThis = this;
     /*var outThis = this;
 
     request.requestLogin({
@@ -209,16 +225,19 @@ var layerout = new baseLayerout.BaseLayerout({
       }
     });*/
 
+    socketUtil.openSocket("/socket");
+
     var skipType = options.skipType;
     var registUserId = options.registUserId;
 
     var outThis = this;
     request.requestLogin({
       success: function (userInfo) {
-        outThis.receiveGift();
+        console.log(".......11");
         outThis.setData({
           userId:userInfo.id
         });
+        outThis.loadPreProgress();
         outThis.registRankBattle(registUserId,{
           success:function(){
             //这里跳转到排位赛
@@ -246,7 +265,7 @@ var layerout = new baseLayerout.BaseLayerout({
             }
           },
           fail:function(){
-
+            console.error("fail");
           }
         });
         if (userInfo.openid == "o6hwf0S9JT_Ff0LVBORFsBrhAtpM") {
@@ -386,11 +405,10 @@ var layerout = new baseLayerout.BaseLayerout({
     var outThis = this;
     this.initAccountInfo({
       success:function(){
+        console.log("........2")
         outThis.setData({
           csIsShow:1
         });
-        outThis.loadPreProgress();
-
         /*outThis.startAnim();
 
         setTimeout(function(){
@@ -457,5 +475,8 @@ layerout.addAircraftPlug();
 layerout.addAircraftPlug();
 
 layerout.addToastOutPlug();
+
+
+layerout.addMemberWaitPlug();
 
 layerout.begin();

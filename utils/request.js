@@ -16,13 +16,18 @@ var isLogin;
 var openSettingFlag = false;
 
 var openUserSettingCallbacks = new Array();
+
+var loginLuck = false;
+
 //请求总函数，是所有请求的工具
+
 
 function getDomain(){
   return domain;
 }
 
 function requestWithLogin(url,params,callback){
+  console.log(".........77777");
   if (!isLogin){
     requestLogin({
       success: function () {
@@ -73,7 +78,6 @@ function request(url, params, callback,data) {
   var sessionId = wx.getStorageSync("SESSIONID");
   var header;
   if (sessionId) {
-    console.log("sessionId:" + sessionId + ",url:" + url);
     header = {
       'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
       'Cookie': 'JSESSIONID=' + sessionId
@@ -84,8 +88,6 @@ function request(url, params, callback,data) {
     }
   }
 
-  //token = "9ba50cc7-6dd0-4de5-96aa-3f555aa9e6f9";
-  //token = 'e551d44a-cbe5-48e4-a1a7-0beab113beab';
   //token = 'e859df6b-a182-4f8a-8dc2-7059cc77ca3a';
   //token = 'adebd855-6c2c-4bbe-8004-9900c8085b57';
   //token = 'f3cd9d98-7c60-411b-bea2-5c5b85e6fd11';
@@ -322,7 +324,14 @@ function requestRegist(callback,code,userInfo){
 }
 
 //请求登陆
-function requestLogin(callback,time) {
+function requestLogin(callback,time,flag) {
+  if (loginLuck&&!flag){
+    setTimeout(function(){
+      requestLogin(callback,time);
+    },1000);
+    return;
+  }
+  loginLuck = true;
   wx.login({
     success: function (loginCode) {
       getUserInfo({
@@ -336,13 +345,14 @@ function requestLogin(callback,time) {
                   token = resp.data.token;
                   isLogin = true;
                   callback.success(resp.data.userInfo);
+                  loginLuck = false;
                 }else{
                   if(resp.errorCode==401){
                     wx.login({
                       success:function(loginCode){
                         requestRegist({
                           success: function () {
-                            requestLogin(callback);
+                            requestLogin(callback,null,true);
                           },
                           fail: function () {
                             callback.fail();
@@ -393,7 +403,6 @@ module.exports = {
   requestLogin: requestLogin,
   requestWxPayConfig: requestWxPayConfig,
   getDomain:getDomain,
-  requestLogin: requestLogin,
   testSetUserInfo: testSetUserInfo,
   requestWithLogin:requestWithLogin,
   requestUpload: requestUpload,

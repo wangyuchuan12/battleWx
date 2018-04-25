@@ -468,6 +468,7 @@ var attrPlug = {
 
 
   initAccountInfo:function(callback){
+    console.log("...........33333");
     var animationData = wx.createAnimation({
      
     });
@@ -475,6 +476,7 @@ var attrPlug = {
     var outThis = this;
     accountRequest.accountInfo({
       success:function(account){
+        console.log("...........444444");
         outThis.setData({
           "attrPlugData.wisdomCount": account.wisdomCount,
           "attrPlugData.loveLife": account.loveLife,

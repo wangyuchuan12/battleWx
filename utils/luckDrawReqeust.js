@@ -6,6 +6,24 @@ var randomLevelUrl = domain + "/api/battle/battleDraw/randomLevel";
 
 var roomInfoUrl = domain + "/api/battle/battleDraw/roomInfo";
 
+var drawTakepartUrl = domain + "/api/battle/battleDraw/drawTakepart";
+
+function drawTakepart(callback){
+  request.requestWithLogin(drawTakepartUrl, {}, {
+      success:function(resp){
+        if(resp.success){
+          callback.success();
+        }else{
+          callback.loveNotEnough();
+        }
+        
+      },
+      fail:function(){
+        callback.fail();
+      }
+  });
+}
+
 function luckDrawsRequest(callback){
   request.requestWithLogin(luckDrawUrl, {}, {
     success: function (resp) {
@@ -62,5 +80,6 @@ function randomLevelRequest(callback){
 module.exports = {
   luckDrawsRequest: luckDrawsRequest,
   randomLevelRequest: randomLevelRequest,
-  roomInfoRequest: roomInfoRequest
+  roomInfoRequest: roomInfoRequest,
+  drawTakepart: drawTakepart
 }
