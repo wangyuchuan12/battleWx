@@ -1,5 +1,6 @@
 var baseLayerout = require("../assembly/baseLayerout/baseLayerout.js");
-var battlePkRequest = require("../../utils/battlePkRequest.js");
+var battlePkRequest = require("../../utils/battleSyncPkRequest.js");
+var socketUtil = require("../../utils/socketUtil.js");
 var layerout = new baseLayerout.BaseLayerout({
 
   /**
@@ -43,6 +44,8 @@ var layerout = new baseLayerout.BaseLayerout({
     });
 
     this.init();
+
+    this.registerRoomStartCodeCallback();
     
   },
 
@@ -53,12 +56,6 @@ var layerout = new baseLayerout.BaseLayerout({
     } else {
       this.beatInto();
     }
-
-    var outThis = this;
-    setTimeout(function () {
-      console.log(".......isEnd99:"+outThis.data.isEnd);
-      outThis.immediate();
-    }, 5000);
   },
 
   doReady:function(){
@@ -72,6 +69,7 @@ var layerout = new baseLayerout.BaseLayerout({
     battlePkRequest.readyRequest(id,roomId,battleId,role,{
       success: function (data) {
         outThis.hideLoading();
+        /*
         outThis.setData({
           homeUserId: data.homeUserId,
           homeUsername: data.homeUsername,
@@ -84,10 +82,7 @@ var layerout = new baseLayerout.BaseLayerout({
           beatStatus: data.beatStatus,
           roomStatus: data.roomStatus,
           battleCount: data.battleCount
-        });
-        if (data.roomStatus == 2) {
-          outThis.skipToProgress();
-        }
+        });*/
       },
       fail: function () {
         outThis.showToast("网络繁忙，请稍后再试");
@@ -199,9 +194,6 @@ var layerout = new baseLayerout.BaseLayerout({
           roomId: data.roomId,
           role:data.role
         });
-        if(data.roomStatus==2){
-          outThis.skipToProgress();
-        }
       },
       fail:function(){
         console.log("fail");
@@ -209,68 +201,13 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
-  immediate:function(){
-    var outThis = this;
-    var id = this.data.id;
-    console.log(".....immediate1");
-    console.log("...isEnd2:" + outThis.data.isEnd);
-    battlePkRequest.immediateRequest(id,{
-      success:function(data){
-        console.log(".....immediate.data:"+JSON.stringify(data));
-        outThis.setData({
-          homeUserId: data.homeUserId,
-          homeUsername: data.homeUsername,
-          homeUserImgurl: data.homeUserImgurl,
-          beatUserId: data.beatUserId,
-          beatUsername: data.beatUsername,
-          beatUserImgurl: data.beatUserImgurl,
-          homeStatus: data.homeStatus,
-          beatStatus: data.beatStatus,
-          roomStatus: data.roomStatus,
-          roomId:data.roomId
-        });
-
-        if (data.roomStatus == 2) {
-          outThis.skipToProgress();
-        }
-
-        setTimeout(function(){
-          if(outThis.data.isEnd==0){
-            outThis.immediate();
-          }
-        },5000);
-        
-      },
-      fail:function(){
-        console.log("....fail:");
-        setTimeout(function () {
-          if (outThis.data.isEnd == 0) {
-            var errorCount = outThis.data.errorCount;
-            if(errorCount>=10){
-              outThis.immediate();
-              if (!errorCount) {
-                errorCount++;
-                outThis.setData({
-                  errorCount: errorCount,
-                  isEnd:1
-                });
-              }
-            }
-            
-          }
-        }, 5000);
-      }
-    });
-  },
-
   skipToProgress:function(){
     var roomStatus = this.data.roomStatus;
-    console.log("..........roomStatus:" + roomStatus);
+    var isEnd = this.data.isEnd;
     if(roomStatus==2){
       var battleId = this.data.battleId;
       var roomId = this.data.roomId;
       if (this.data.isEnd == 0) {
-        console.log("isEnd10:" + this.data.isEnd)
         wx.navigateTo({
           url: '../progressScore/progressScore2?battleId=' + battleId + "&roomId=" + roomId+"&noWait=1"
         });
@@ -281,11 +218,36 @@ var layerout = new baseLayerout.BaseLayerout({
     }
   },
 
+  registerRoomStartCodeCallback: function () {
+    var outThis = this;
+    socketUtil.registerCallback("pkStatusCode", {
+      call: function (data) {
+        console.log("data:"+JSON.stringify(data));
+        outThis.setData({
+          battleId: data.battleId,
+          roomId: data.roomId,
+          homeStatus: data.homeStatus,
+          homeUserImgurl: data.homeImg,
+          homeUsername: data.homeNickname,
+          //homeUserId: data.homeUserId,
+         // beatUserId: data.beatUserId,
+          roomStatus: data.roomStatus,
+          beatUsername: data.beatNickname,
+          beatUserImgurl: data.beatImg,
+          beatStatus: data.beatStatus,
+        });
+
+        outThis.skipToProgress();
+      }
+    });
+  },
+
   beatInto:function(){
     var outThis = this;
     var id = this.data.id;
     battlePkRequest.beatIntoRequest(id,{
       success: function (data) {
+        console.log("data:"+JSON.stringify(data));
         outThis.loadPreProgress();
         outThis.setData({
           id: data.id,
@@ -305,11 +267,7 @@ var layerout = new baseLayerout.BaseLayerout({
           roomId: data.roomId,
           role:data.role
         });
-        if (data.roomStatus == 2) {
-          
-          outThis.skipToProgress();
-          
-        }
+        outThis.skipToProgress();
       },
       fail: function () {
         console.log("fail");
@@ -328,7 +286,9 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.setData({
+      isEnd:0
+    });
   },
 
   /**

@@ -56,7 +56,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
     isRankShow:0,
 
-    //0为正常状态 1位答题状态 2等待模式
+    //0为正常状态 1位答题状态 2等待模式 3选择题目模式
     mode:0,
 
     isEnd:0,
@@ -250,6 +250,9 @@ var layerout = new baseLayerout.BaseLayerout({
         isLast: 1
       });
     }else{
+      outThis.setData({
+        mode:0
+      });
       outThis.startSelector();
     }
   },
@@ -271,8 +274,9 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   answerResultHandle:function(data){
-    var members = this.getMembers();
+    var members = this.data.members;
     var memberInfo = this.data.memberInfo;
+    var scrollGogal = this.getScrollGogal();
     for(var i=0;i<members.length;i++){
       var member = members[i];
       if (member.id == memberInfo.id){
@@ -301,8 +305,8 @@ var layerout = new baseLayerout.BaseLayerout({
       }
       loveCount--;
       outThis.setLove(loveLimit, loveCount);
-
-      if(loveCount<=0){
+      console.log("scrollGogal:" + scrollGogal + ",data.memberScore:" + data.memberScore);
+      if (loveCount <= 0 ){
         outThis.setData({
           questionSelectorDisplay: "none",
           mode:0
@@ -313,8 +317,17 @@ var layerout = new baseLayerout.BaseLayerout({
         outThis.empty();
       }
     }else{
-      questionSelector.next();
-      outThis.empty();
+      if(scrollGogal <= data.memberScore){
+        outThis.setData({
+          questionSelectorDisplay: "none",
+          mode: 0
+        });
+        outThis.battleSyncData();
+      }else{
+        questionSelector.next();
+        outThis.empty();
+      }
+      
     }
     
   },
@@ -342,7 +355,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
   startProcessTo:function(memberId,toProcess,callback){
     var positions = this.getPostions();
-    var members = this.getMembers();
+    var members = this.data.members;
     var begin = 0;
     var thisMember;
     for (var i = 0; i < members.length; i++) {
@@ -404,6 +417,10 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   startSelector: function (e) {
+    var mode = this.data.mode;
+    if(mode==1||mode==2){
+      return;
+    }
     var isLast = this.data.isLast;
     if (isLast) {
       return;
@@ -442,6 +459,10 @@ var layerout = new baseLayerout.BaseLayerout({
     var subjectCount = this.data.subjectCount;
     var selectorType = this.data.selectorType;
     var outThis = this;
+    outThis.setData({
+      mode: 3
+    });
+    outThis.stopWait();
     this.initBattleSubjects(subjectCount, battleId, roomId, {
       success: function () {
         outThis.hideLoading();
@@ -449,6 +470,7 @@ var layerout = new baseLayerout.BaseLayerout({
           questionSelectorDisplay: "block",
           displayPanel: 0
         });
+        
         outThis.showSelector();
       },
       isLast: function () {
@@ -729,16 +751,32 @@ var layerout = new baseLayerout.BaseLayerout({
     var outThis = this;
     socketUtil.registerCallback("progressCode", {
       call: function (callbackMembers) {
+        var members = outThis.data.members;
         var memberInfo = outThis.data.memberInfo;
         for (var i = 0; i < callbackMembers.length; i++) {
           var callbackMember = callbackMembers[i];
           var member = null;
-          var members = outThis.getMembers();
+          
           for (var i = 0; i < members.length; i++) {
             if (members[i].id == callbackMember.memberId) {
               member = members[i];
             }
           }
+
+          /*
+          if(!member){
+            outThis.initMembers({
+              success: function () {
+                outThis.showMembers();
+                members = outThis.getMembers();
+                for (var i = 0; i < members.length; i++) {
+                  if (members[i].id == callbackMember.memberId) {
+                    member = members[i];
+                  }
+                }
+              }
+            });
+          }*/
 
           if (member.process == callbackMember.process) {
             member.score = callbackMember.score;
@@ -776,10 +814,36 @@ var layerout = new baseLayerout.BaseLayerout({
   },
   
 
+  startWait:function(){
+
+    var outThis = this;
+    waitInterval = setInterval(function(){
+      outThis.luying();
+    },1000);
+    
+  },
+  stopWait:function(){
+    outThis.stopLuying();
+    if (waitInterval){
+      clearInterval(waitInterval);
+    }
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+
+    var roomId = options.roomId;
+
+    var battleId = options.battleId;
+
+    console.log("roomId:"+roomId+",battleId:"+battleId);
+    this.setData({
+      roomId: roomId,
+      battleId: battleId
+    });
+
 
     var noWait = options.noWait;
     outThis = this;
@@ -789,9 +853,17 @@ var layerout = new baseLayerout.BaseLayerout({
       this.setData({
         mode: 2
       });
-      waitInterval = setInterval(function () {
-        outThis.luying();
-      }, 1500);
+      
+
+      setTimeout(function () {
+        var mode = outThis.data.mode;
+        if(mode==2){
+          outThis.battleSyncData();
+          outThis.initPositions();
+        }
+      }, 20000);
+
+      outThis.startWait();
     }else{
       this.setData({
         mode: 0
@@ -821,13 +893,7 @@ var layerout = new baseLayerout.BaseLayerout({
       }
     });
 
-    var roomId = options.roomId;
-
-    var battleId = options.battleId;
-    this.setData({
-      roomId:roomId,
-      battleId: battleId
-    });
+    
 
     this.initMemberInfo({
       success:function(){
@@ -836,6 +902,7 @@ var layerout = new baseLayerout.BaseLayerout({
             outThis.showMembers();
             if(noWait){
               outThis.battleSyncData();
+              outThis.initPositions();
             }else{
               outThis.reckonTime();
             }
@@ -989,41 +1056,47 @@ var layerout = new baseLayerout.BaseLayerout({
 
   initPositions: function () {
     var outThis = this;
-    var members = this.data.members;
-    if (!members){
-      return;
-    }
-    var memberInfo = this.data.memberInfo;
-    if(!memberInfo){
-      return;
-    }
-    var process = memberInfo.process;
-    if (!process) {
-      process = 0;
-    }
 
-    var positions = new Array();
-    for (var i = 0; i < members.length; i++) {
-      var member = members[i];
-      var isMy = 0;
-      if (member.id == memberInfo.id) {
-        isMy = 1;
+    try{
+      var members = this.data.members;
+      if (!members) {
+        return;
       }
-      positions.push({
-        id: member.id,
-        imgUrl: member.headImg,
-        animationData: {},
-        begin: member.process,
-        end: 0,
-        isMy: isMy
-      });
-    }
+      var memberInfo = this.data.memberInfo;
+      if (!memberInfo) {
+        return;
+      }
+      var process = memberInfo.process;
+      if (!process) {
+        process = 0;
+      }
 
-    setTimeout(function () {
-      outThis.setPositions(positions);
-    }, 2000);
-    outThis.containerScrollToDom(process);
-    
+      var positions = new Array();
+      for (var i = 0; i < members.length; i++) {
+        var member = members[i];
+        var isMy = 0;
+        if (member.id == memberInfo.id) {
+          isMy = 1;
+        }
+        positions.push({
+          id: member.id,
+          imgUrl: member.headImg,
+          animationData: {},
+          begin: member.process,
+          end: 0,
+          isMy: isMy
+        });
+      }
+
+      setTimeout(function () {
+        outThis.setPositions(positions);
+      }, 2000);
+      outThis.containerScrollToDom(process);
+    }catch(e){
+      setTimeout(function(){
+        outThis.initPositions();
+      },1000);
+    }
   },
 
   initMemberInfo:function(callback){
@@ -1035,8 +1108,6 @@ var layerout = new baseLayerout.BaseLayerout({
         outThis.setData({
           memberInfo:memberInfo
         });
-
-        console.log("memberInfo:"+JSON.stringify(memberInfo));
 
         outThis.setScore(memberInfo.score);
 
@@ -1054,9 +1125,13 @@ var layerout = new baseLayerout.BaseLayerout({
 
   initMembers:function(callback){
     var outThis = this;
+    outThis.setData({
+      members:null
+    });
     var battleId = this.data.battleId;
     var roomId = this.data.roomId;
     var groupId = "";
+    console.log("..........battleId2:"+battleId+",roomId2:"+roomId);
     battleMembersRequest.getBattleMembers(battleId, roomId, {
       cache: function (battleMembers) {
 
@@ -1065,6 +1140,8 @@ var layerout = new baseLayerout.BaseLayerout({
         outThis.setData({
           members: battleMembers
         });
+
+        var members = outThis.data.members;
         callback.success();
       },
       fail: function () {
@@ -1126,27 +1203,28 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   signout: function () {
-    /*wx.redirectTo({
-      url: '../battleTakepart/battleTakepart?battleId=' + this.data.battleId+"&roomId="+this.data.roomId
-    });*/
-        var pages = getCurrentPages();
-        var prevPage = pages[pages.length - 2];
+    var memberInfo = this.data.memberInfo;
+    var loveResidule = memberInfo.loveResidule;
+    var roomStatus = memberInfo.roomStatus;
+    if (loveResidule>0||roomStatus==3){
+      var pages = getCurrentPages();
+      var prevPage = pages[pages.length - 2];
 
-        if (prevPage.signoutListener) {
-          prevPage.signoutListener();
-        }else{
-          var battleId = this.data.battleId;
-          var roomId = this.data.roomId;
-          takepartRequest.battleSignout(battleId,roomId,{
-            success:function(){
+      if (prevPage.signoutListener) {
+        prevPage.signoutListener();
+      } else {
+        var battleId = this.data.battleId;
+        var roomId = this.data.roomId;
+        takepartRequest.battleSignout(battleId, roomId, {
+          success: function () {
 
-            },
-            fail:function(){
+          },
+          fail: function () {
 
-            }
-          });
-        }
-
+          }
+        });
+      }
+    }
   },
 
   mallClick: function () {
@@ -1198,6 +1276,7 @@ var layerout = new baseLayerout.BaseLayerout({
     if (!isRest) {
       this.signout();
     }
+    outThis.stopWait();
   },
 
 

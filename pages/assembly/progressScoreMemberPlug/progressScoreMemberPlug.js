@@ -62,7 +62,6 @@ var progressScoreMembers={
       }
       var loveResidule = member.loveResidule;
 
-      console.log(".........loveResidule:" + loveResidule);
       var percent =0;
       if(process){
         percent = score / scrollGogal*100;

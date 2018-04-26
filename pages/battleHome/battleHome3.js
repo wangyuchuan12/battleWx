@@ -204,15 +204,11 @@ var layerout = new baseLayerout.BaseLayerout({
    */
   onLoad: function (options) {
 
-
+    socketUtil.openSocket();
     var arr = [0,1,2,3,4,5,6,7,8,9,10]
 
     arr.sort(function () { return 0.5 - Math.random() })
     
-    console.log("array:"+arr);
-
-    console.log("arr[0]:"+arr[0]);
-    console.log("arr[1]:" + arr[1]);
 
     var outThis = this;
     /*var outThis = this;
@@ -225,7 +221,7 @@ var layerout = new baseLayerout.BaseLayerout({
       }
     });*/
 
-    socketUtil.openSocket("/socket");
+    
 
     var skipType = options.skipType;
     var registUserId = options.registUserId;

@@ -10,47 +10,14 @@ function setBattleMembersCache(members){
 }
 
 function getBattleMembers(battleId,roomId, callback,time,groupId) {
-  flag = true;
-  if (battleMembers){
-    if(callback.cache){
-      callback.cache(battleMembers);
+  requestBattleMembers(battleId, roomId, groupId, {
+    success: function (members) {
+      callback.success(members);
+    },
+    fail: function () {
+      callback.fail();
     }
-   
-  }
-  requestBattleMembers(battleId,roomId,groupId,{
-      success:function(members){
-          wx.setStorageSync("battleMembers", members);
-          callback.success(members);
-      },
-      fail:function(){
-        callback.fail();
-      }
   });
-
-  var interval;
-  if(time&&time>0){
-    interval  = setInterval(function () {
-     if(flag){
-       requestBattleMembers(battleId, roomId, groupId,{
-         success: function (members) {
-           wx.setStorageSync("battleMembers", members);
-           callback.success(members);
-         },
-         fail: function () {
-           callback.fail();
-         }
-       });
-     }
-    }, time);
-  }
-
-  var target = new Object();
-  target.stop = function(){
-    flag = false;
-    clearInterval(interval);
-  }
-  
-  return target;
 
 }
 

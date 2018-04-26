@@ -76,7 +76,7 @@ var layerout = new baseLayerout.BaseLayerout({
             takepartRequest.battleTakepart(battleId, roomId, {
               success: function (member) {
                 wx.redirectTo({
-                  url: '../luckDrawWait/luckDrawWait?roomId=' + roomId
+                  url: '../progressScore/progressScore2?roomId=' + roomId + "&battleId=" + battleId + "&againButton=返回"
                 });
               },
               beanNotEnough: function () {
@@ -95,7 +95,7 @@ var layerout = new baseLayerout.BaseLayerout({
               },
               battleIn: function () {
                 wx.redirectTo({
-                  url: '../luckDrawWait/luckDrawWait?roomId=' + roomId
+                  url: '../progressScore/progressScore2?roomId=' + roomId + "&battleId=" + battleId + "&againButton=返回"
                 });
               },
               battleEnd: function () {

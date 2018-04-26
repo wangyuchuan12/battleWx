@@ -3,6 +3,8 @@ var request = require("request.js");
 var token;
 var callbacks = new Array();
 
+var openCallback;
+
 var isOpen = 0;
 
 function closeSocket(){
@@ -10,6 +12,7 @@ function closeSocket(){
 }
 
 function registerCallback(code,callback){
+  removeCallback(code);
   var obj = new Object();
   obj.code = code;
   obj.callback = callback;
@@ -25,25 +28,45 @@ function removeCallback(code){
   }
 }
 
-function openSocket(){
+function openSocket(callback){
+  isOpen = 0;
   request.requestLogin({
-    success:function(userInfo){
+    success: function (userInfo) {
       token = userInfo.token;
-
-      doOpenSocket();
-
       console.log("this");
+      var url = "/socket";
+      wx.closeSocket({
+        url: domain + url + "?token=" + token,
+        data: {
 
+        },
+        header: {
+          'content-type': 'application/json'
+        },
+        method: 'POST',
+        success: function (data) {
+          doOpenSocket();
+        },
+        complete: function (res) {
+          console.log('complete: ', res);
+        },
+        fail: function (err) {
+          doOpenSocket();
+        }
+      });
     }
   })
+  openCallback = callback
+  
   
   function doOpenSocket(){
+    console.log("..............doOpenSocket1");
     callbacks = new Array();
     var url = "/socket";
     if(isOpen==1){
       return;
     }
-    console.log("..............doOpenSocket");
+    console.log("..............doOpenSocket2");
     wx.connectSocket({
       url: domain + url+"?token=" + token,
       data: {
@@ -70,14 +93,12 @@ function openSocket(){
   }
 
   wx.onSocketMessage(function (resp) {
-    console.log("onSocketMessage:"+JSON.stringify(resp));
     data = resp.data;
     data = data.replace(" ", "");
     if (typeof data != 'object') {
       data = data.replace(/\ufeff/g, "");//重点
     }
     var data = JSON.parse(data);
-    console.log("onSocketMessage:"+JSON.stringify(data));
     for (var i = 0; i < callbacks.length; i++) {
       var callback = callbacks[i];
       if (callback.code == data.code) {
@@ -89,6 +110,10 @@ function openSocket(){
   wx.onSocketOpen(function (res) {
     console.log("连接打开了");
     isOpen = 1
+    if (openCallback){
+      openCallback.open();
+      openCallback = null;
+    }
     /*wx.sendSocketMessage({
       data: "你好，我叫王煜川",
       success:function(res){
@@ -101,11 +126,12 @@ function openSocket(){
   });
 
   wx.onSocketClose(function (res) {
+    isOpen = 0;
     console.log("onSocketClose");
     setTimeout(function () {
       doOpenSocket();
     }, 5000);
-    isOpen = 0;
+    
   });
 
   wx.onSocketError(function (res) {
