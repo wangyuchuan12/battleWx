@@ -37,6 +37,9 @@
   background-size: 100% 100%;
   background:rgba(129,148,170,0.5);
   padding-top:45vh;
+
+  position: fixed;
+  z-index:100000000000000;
 }  
   
 .waitAnimation {  

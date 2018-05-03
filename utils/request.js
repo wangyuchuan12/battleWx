@@ -1,6 +1,7 @@
 //var domain = "http://www.vlingquan.com";
-var domain = "https://www.chengxihome.com";
+//var domain = "https://www.chengxihome.com";
 //var domain = "http://www.fisherman7.com";
+var domain = "http://192.168.0.101";
 //根据code登陆用户bbin
 var loginByJsCodeUrl = domain + "/api/common/login/loginByJsCode";
 var registerUserByJsCode = domain +"/api/common/login/registerUserByJsCode";
@@ -27,7 +28,6 @@ function getDomain(){
 }
 
 function requestWithLogin(url,params,callback){
-  console.log(".........77777");
   if (!isLogin){
     requestLogin({
       success: function () {
@@ -88,7 +88,7 @@ function request(url, params, callback,data) {
     }
   }
 
-  //token = 'e859df6b-a182-4f8a-8dc2-7059cc77ca3a';
+  token = 'e859df6b-a182-4f8a-8dc2-7059cc77ca3a';
   //token = 'adebd855-6c2c-4bbe-8004-9900c8085b57';
   //token = 'f3cd9d98-7c60-411b-bea2-5c5b85e6fd11';
   //token = 'f16021b7-893f-454a-831f-4c29666e3810';
@@ -325,13 +325,6 @@ function requestRegist(callback,code,userInfo){
 
 //请求登陆
 function requestLogin(callback,time,flag) {
-  if (loginLuck&&!flag){
-    setTimeout(function(){
-      requestLogin(callback,time);
-    },1000);
-    return;
-  }
-  loginLuck = true;
   wx.login({
     success: function (loginCode) {
       getUserInfo({
@@ -343,9 +336,7 @@ function requestLogin(callback,time,flag) {
               success: function (resp) {
                 if(resp.success){
                   token = resp.data.token;
-                  isLogin = true;
                   callback.success(resp.data.userInfo);
-                  loginLuck = false;
                 }else{
                   if(resp.errorCode==401){
                     wx.login({

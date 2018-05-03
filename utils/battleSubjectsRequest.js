@@ -34,7 +34,8 @@ function getBattleSubjects(battleId,roomId,callback){
           callback.isLast();
         }
       },
-      fail:function(){
+      fail:function(resp){
+        console.log("resp:"+JSON.stringify(resp));
         callback.fail();
       }
   })

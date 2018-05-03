@@ -1,7 +1,7 @@
 
 <template name="progressScorePlug">
   <view class='progressScore'>
-    <view class="progressScoreContainerHeader">
+    <view class="progressScoreContainerHeader" wx:if="{{scrollGogal>0}}">
         
           <view class="progressScoreContainerHeaderScore">
             <view class="progressScoreContainerHeaderAllScore">

@@ -161,7 +161,7 @@ var layerout = new baseLayerout.BaseLayerout({
   startTo:function(){
     var roomId = this.data.roomId;
     var battleId = this.data.battleId;
-    wx.redirectTo({
+    wx.navigateTo({
       url: '../progressScore/progressScore2?roomId=' + roomId + "&battleId=" + battleId + "&againButton=返回"
     });
   },

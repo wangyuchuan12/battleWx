@@ -185,7 +185,7 @@ var layerout = new baseLayerout.BaseLayerout({
           var love = data.love;
           var count = data.count;
           outThis.showAlertPlug("今天第"+count+"次送您"+bean+"豆");
-          //outThis.initAccountInfo();
+          outThis.initAccountInfo();
         },
         isReceive:function(){
           console.log("今天礼物已经领取完了");
@@ -203,13 +203,6 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
-    socketUtil.openSocket();
-    var arr = [0,1,2,3,4,5,6,7,8,9,10]
-
-    arr.sort(function () { return 0.5 - Math.random() })
-    
-
     var outThis = this;
     /*var outThis = this;
 
@@ -227,40 +220,21 @@ var layerout = new baseLayerout.BaseLayerout({
     var registUserId = options.registUserId;
 
     var outThis = this;
-    request.requestLogin({
-      success: function (userInfo) {
-        console.log(".......11");
+    socketUtil.openSocket({
+      open:function(userInfo){
+        outThis.receiveGift();
         outThis.setData({
-          userId:userInfo.id
+          userId: userInfo.id
         });
         outThis.loadPreProgress();
-        outThis.registRankBattle(registUserId,{
-          success:function(){
+        outThis.registRankBattle(registUserId, {
+          success: function () {
             //这里跳转到排位赛
-            if (skipType == 0) {
-              wx.navigateTo({
-                url: '../rankBattle/rankBattle'
-              });
-              //跳转到闯关
-            }else if(skipType==1){
-              /*wx.navigateTo({
-                url: '../danList/danList'
-              });*/
-            }else if(skipType==2){
-              var roomId = options.roomId;
-              wx.navigateTo({
-                url: '../pkRoom/pkRoom?role=1&id='+roomId
-              });
-              //挑战赛
-            }else if(skipType==3){
-              
-            }else if (skipType == 4) {
-              wx.navigateTo({
-                url: '../rankDanBattle/rankDanBattle'
-              });
-            }
+            // setTimeout(function(){
+
+            // },4000);
           },
-          fail:function(){
+          fail: function () {
             console.error("fail");
           }
         });
@@ -271,11 +245,41 @@ var layerout = new baseLayerout.BaseLayerout({
         } else {
 
         }
+        if (skipType == 0) {
+          wx.navigateTo({
+            url: '../rankBattle/rankBattle'
+          });
+          //跳转到闯关
+        } else if (skipType == 1) {
+          /*wx.navigateTo({
+            url: '../danList/danList'
+          });*/
+        } else if (skipType == 2) {
+          var roomId = options.roomId;
+          wx.navigateTo({
+            url: '../pkRoom/pkRoom?role=1&id=' + roomId
+          });
+          //挑战赛
+        } else if (skipType == 3) {
+
+        } else if (skipType == 4) {
+          wx.navigateTo({
+            url: '../rankDanBattle/rankDanBattle'
+          });
+        }
+      }
+    });
+
+    /*
+    request.requestLogin({
+      success: function (userInfo) {
+        console.log(".......11");
+        
       },
       fail: function () {
 
       }
-    });
+    });*/
   },
 
   init: function () {
@@ -392,6 +396,7 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
+  
   },
 
   /**
@@ -471,8 +476,5 @@ layerout.addAircraftPlug();
 layerout.addAircraftPlug();
 
 layerout.addToastOutPlug();
-
-
-layerout.addMemberWaitPlug();
 
 layerout.begin();

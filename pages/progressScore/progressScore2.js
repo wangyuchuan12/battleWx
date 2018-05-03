@@ -28,8 +28,158 @@ var questionSelector;
 
 var receiveMemberNoticeCallback;
 var receiveRoomNoticeCallback;
+
+//自定义组件
+var timeSecond;
+var luckDraw;
+var danList;
+var pk;
+var memberWait;
+var questionSelector;
 var layerout = new baseLayerout.BaseLayerout({
 
+
+  selectComplete:function(e){
+    var outThis = this;
+    var subjects = e.detail.selectContentList;
+
+    questionSelector.questinSelectorClose();
+    var subjectIds = new Array();
+
+    for (var i = 0; i < subjects.length; i++) {
+      subjectIds.push(subjects[i].targetId);
+    }
+    var roomId = outThis.data.roomId;
+    outThis.showLoading();
+
+
+    battleStageTakepartRequest.stageTakepart(outThis.data.battleId, subjectIds, roomId, {
+      beanNotEnough: function () {
+        outThis.hideLoading();
+        outThis.showBeanNotEnoughAlertPlug();
+        questionSelector.questinSelectorClose();
+      },
+      success: function (data) {
+        questionSelector.questinSelectorClose();
+        var costBean = data.costBean;
+        if (costBean) {
+          outThis.showToast("消耗" + costBean + "豆豆");
+          outThis.subBean(costBean);
+        }
+        outThis.hideLoading();
+        var ids = data.questionIds;
+        var questionIds = "";
+        var isLast = data.isLast;
+        outThis.setData({
+          isLast: isLast
+        });
+        for (var i = 0; i < ids.length; i++) {
+          var questionId = ids[i];
+          if (!questionIds) {
+            questionIds = questionId;
+          } else {
+            questionIds = questionIds + "," + questionId;
+          }
+        }
+        setTimeout(function () {
+          outThis.initQuestionsView(questionIds.split(","));
+        }, 2000);
+
+      },
+      fail: function () {
+        questionSelector.questinSelectorClose();
+        outThis.hideLoading();
+        console.log("fail");
+      }
+    });
+  },
+
+  initQuestionSelector:function(){
+    questionSelector = this.selectComponent("#questionSelector");
+    var battleId = this.data.battleId;
+    var roomId = this.data.roomId;
+    questionSelector.initBattleSubjects(3, battleId, roomId,null,1);
+  },
+
+  drawStop: function (e) {
+
+    this.setData({
+      mode: 2
+    });
+    var waitId = e.detail.waitId;
+    memberWait = this.selectComponent("#memberWait");
+    memberWait.startWait(waitId);
+  },
+
+  waitEnd:function(e){
+
+   var battleId = e.detail.battleId;
+   var roomId = e.detail.roomId;
+
+    this.toStart(roomId,battleId,1);
+  },
+
+  toBack:function(){
+    luckDraw.stopRun();
+    this.setData({
+      mode:5
+    });
+  },
+
+  //play事件
+  toPlay:function(){
+    this.showDrawLuck();
+  },
+
+  //初始化抽奖数据事件
+  initDraws: function () {
+    console.log("......sssss");
+    luckDraw.startDraw();
+  },
+
+
+  showDrawLuck: function () {
+    this.setData({
+      mode: 4
+    });
+    luckDraw = this.selectComponent("#luckDraw");
+    luckDraw.initDraws();
+  },
+
+  toDanList:function(){
+    this.setData({
+      mode:6
+    });
+    danList = this.selectComponent("#danList");
+    danList.initBattleDans();
+    danList.initAccountResult();
+  },
+
+  toPk:function(){
+    this.setData({
+      mode: 7
+    });
+    pk = this.selectComponent("#pk");
+  },
+
+  danTakepart:function(e){
+
+    this.setData({
+      mode:2
+    });
+    
+    var waitId = e.detail.waitId;
+    var danUserId = e.detail.danUserId;
+    
+    memberWait = this.selectComponent("#memberWait");
+
+    memberWait.startWait(waitId, danUserId);
+  },
+  toHome:function(){
+    this.setData({
+      mode:5
+    });
+  },
   /**
    * 页面的初始数据
    */
@@ -56,7 +206,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
     isRankShow:0,
 
-    //0为正常状态 1位答题状态 2等待模式 3选择题目模式
+    //0为正常状态 1位答题状态 2等待模式 3选择题目模式 4抽奖模式 5主题模式 6闯关模式 7好友pk
     mode:0,
 
     isEnd:0,
@@ -80,13 +230,13 @@ var layerout = new baseLayerout.BaseLayerout({
 
 
   eventListener: {
-
     questinSelectorClose:function(){
       outThis.setData({
         questionSelectorDisplay:"none"
       });
     },
     inputSubmit: function (questionId, answer) {
+      timeSecond.stopRoundProgress();
       outThis.showLoading();
       var memberInfo = outThis.data.memberInfo;
       questionAnswerRequest.requestBattleQuestionAnswer({
@@ -113,13 +263,15 @@ var layerout = new baseLayerout.BaseLayerout({
       var prevPage = pages[pages.length - 2];
       if (prevPage.restart) {
         prevPage.restart();
-      }*/
+      }
       wx.navigateBack({
 
-      });
+      });*/
+      outThis.toHome();
     },
     
     fillSubmit: function (questionId, answer) {
+      timeSecond.stopRoundProgress();
       outThis.showLoading();
       var memberInfo = outThis.data.memberInfo;
       questionAnswerRequest.requestBattleQuestionAnswer({
@@ -141,6 +293,7 @@ var layerout = new baseLayerout.BaseLayerout({
         });
     },
     selectSubmit: function (questionId, optionId) {
+      timeSecond.stopRoundProgress();
       outThis.showLoading();
       var memberInfo = outThis.data.memberInfo;
       questionAnswerRequest.requestBattleQuestionAnswer({
@@ -162,6 +315,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
     },
 
+    /*
     selectComplete: function (subjects) {
       outThis.questinSelectorClose();
       var subjectIds = new Array();
@@ -214,8 +368,9 @@ var layerout = new baseLayerout.BaseLayerout({
       });
 
 
-    }
+    }*/
   },
+
 
   showEnd:function(){
     var outThis = this;
@@ -225,6 +380,8 @@ var layerout = new baseLayerout.BaseLayerout({
     var rewardBean = memberInfo.rewardBean;
     var rewardLove = memberInfo.rewardLove;
     var rank = memberInfo.rank;
+
+    console.log("............roomStatus:"+roomStatus);
     if(roomStatus==3){
       this.hideLoading();
       outThis.setData({
@@ -274,6 +431,7 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   answerResultHandle:function(data){
+    
     var members = this.data.members;
     var memberInfo = this.data.memberInfo;
     var scrollGogal = this.getScrollGogal();
@@ -421,10 +579,10 @@ var layerout = new baseLayerout.BaseLayerout({
     if(mode==1||mode==2){
       return;
     }
-    var isLast = this.data.isLast;
+    /*var isLast = this.data.isLast;
     if (isLast) {
       return;
-    }
+    }*/
 
     this.receiveGift();
 
@@ -462,24 +620,17 @@ var layerout = new baseLayerout.BaseLayerout({
     outThis.setData({
       mode: 3
     });
-    outThis.stopWait();
-    this.initBattleSubjects(subjectCount, battleId, roomId, {
-      success: function () {
-        outThis.hideLoading();
-        outThis.setData({
-          questionSelectorDisplay: "block",
-          displayPanel: 0
-        });
-        
-        outThis.showSelector();
-      },
-      isLast: function () {
-
-      }
-    }, selectorType);
+    outThis.initQuestionSelector();
   },
 
   setFillData: function (data) {
+    var outThis = this;
+    timeSecond = outThis.selectComponent("#timeSecond");
+    timeSecond.startCoundDown(20, {
+      end: function () {
+        outThis.eventListener.inputSubmit(data.id, "");
+      }
+    });
 
     this.setData({
       "questionData.imgUrl": data.imgUrl,
@@ -491,12 +642,18 @@ var layerout = new baseLayerout.BaseLayerout({
     this.setQuestionId(data.id);
     this.fillWorld(null, answer.length);
     this.fillWorldCheck(data.fillWords);
-    this.setType(2);
+    this.setInputType(2);
   },
 
 
   setSelectData: function (data) {
-
+    var outThis = this;
+    timeSecond = outThis.selectComponent("#timeSecond");
+    timeSecond.startCoundDown(20, {
+      end: function () {
+        outThis.doSelectItem(data.id);
+      }
+    });
     this.setData({
       "questionData.imgUrl": data.imgUrl,
       "questionData.content": data.question
@@ -504,7 +661,7 @@ var layerout = new baseLayerout.BaseLayerout({
     this.hideLoading();
 
     this.setQuestionId(data.id);
-    this.setType(0);
+    this.setInputType(0);
     var array = new Array();
     var options = data.options;
     if (options) {
@@ -522,6 +679,12 @@ var layerout = new baseLayerout.BaseLayerout({
 
   setInputData: function (data) {
 
+    timeSecond = outThis.selectComponent("#timeSecond");
+    timeSecond.startCoundDown(20, {
+      end: function () {
+        outThis.eventListener.inputSubmit(data.id, "");
+      }
+    });
     this.setData({
       "questionData.imgUrl": data.imgUrl,
       "questionData.content": data.question,
@@ -530,9 +693,10 @@ var layerout = new baseLayerout.BaseLayerout({
     this.hideLoading();
     this.setQuestionId(data.id);
     this.setRightAnswer(data.answer);
-    this.setType(1);
+    this.setInputType(1);
   },
 
+  /*
   setSelectData: function (data) {
 
     this.setData({
@@ -542,7 +706,7 @@ var layerout = new baseLayerout.BaseLayerout({
     this.hideLoading();
 
     this.setQuestionId(data.id);
-    this.setType(0);
+    this.setInputType(0);
     var array = new Array();
     var options = data.options;
     if (options) {
@@ -556,7 +720,7 @@ var layerout = new baseLayerout.BaseLayerout({
       }
       this.setOptions(array);
     }
-  },
+  },*/
 
   initQuestionsView: function (ids) {
     var outThis = this;
@@ -635,72 +799,6 @@ var layerout = new baseLayerout.BaseLayerout({
       });
   },
 
-
-
-  reckonTime: function () {
-    var outThis = this;
-    var flag = false;
-    var memberInfo = this.data.memberInfo;
-    var mininum = memberInfo.mininum;
-    var timeDiffer = memberInfo.timeDiffer;
-    var num = memberInfo.num;
-    var isStart = memberInfo.isStart;
-    if(isStart==1)
-    {
-      this.battleSyncData();
-      this.setData({
-        mode:0
-      });
-      outThis.stopLuying();
-      setTimeout(function(){
-        outThis.initPositions();
-      },2000);
-      return;
-    }
-    /*
-    var interval = setInterval(function () {
-      
-      var hour = parseInt(timeDiffer / 3600);
-      var min = parseInt((timeDiffer - hour * 3600) / 60);
-      var second = timeDiffer - (hour * 3600 + min * 60);
-
-      if (hour < 10) {
-        hour = "0" + hour;
-      }
-
-      if (min < 10) {
-        min = "0" + min;
-      }
-
-      if (second < 10) {
-        second = "0" + second;
-      }
-
-      timeDiffer--;
-      outThis.setData({
-        timeDiffer: timeDiffer,
-        remainderHour: hour,
-        remainderMin: min,
-        remainderSecond: second
-      });
-      if (timeDiffer <= 0 && num >= mininum) {
-        clearInterval(interval);
-        if (!flag) {
-          flag = true;
-          outThis.battleSyncData();
-          outThis.initPositions();
-          outThis.setData({
-            mode: 0
-          });
-          return;
-
-        }
-      }
-
-      flag = false;
-    }, 1000);*/
-  },
-
   registerBattleEndCodeCallback:function(){
     socketUtil.registerCallback("battleEndCode", {
       call: function (ranks) {
@@ -722,21 +820,21 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
   registerRoomStartCodeCallback:function(){
-    var outThis = this;
+    /*var outThis = this;
     socketUtil.registerCallback("roomStartCode", {
       call: function (room) {
         outThis.setData({
           mode:0
         });
-        outThis.stopLuying();
+        //outThis.stopLuying();
         outThis.battleSyncData();
       }
-    });
+    });*/
   },
 
 
   registerTakepartCodeCallback:function(){
-    var outThis = this;
+    /*var outThis = this;
     socketUtil.registerCallback("takepartCode", {
       call: function (memberInfo) {
         var members = outThis.data.members;
@@ -744,41 +842,53 @@ var layerout = new baseLayerout.BaseLayerout({
         outThis.showMembers();
         outThis.initPositions();
       }
-    });
+    });*/
   },
 
-  registerProgressCodeCallback:function(){
-    var outThis = this;
-    socketUtil.registerCallback("progressCode", {
-      call: function (callbackMembers) {
-        var members = outThis.data.members;
-        var memberInfo = outThis.data.memberInfo;
-        for (var i = 0; i < callbackMembers.length; i++) {
-          var callbackMember = callbackMembers[i];
-          var member = null;
-          
-          for (var i = 0; i < members.length; i++) {
-            if (members[i].id == callbackMember.memberId) {
-              member = members[i];
+  progressStatusChange: function (callbackMembers){
+    var memberInfo = outThis.data.memberInfo;
+    var members = this.data.members;
+    for (var i = 0; i < callbackMembers.length; i++) {
+      var callbackMember = callbackMembers[i];
+      var member = null;
+
+      for (var i = 0; i < members.length; i++) {
+        if (members[i].id == callbackMember.memberId) {
+          member = members[i];
+        }
+      }
+
+      /*
+      if(!member){
+        outThis.initMembers({
+          success: function () {
+            outThis.showMembers();
+            members = outThis.getMembers();
+            for (var i = 0; i < members.length; i++) {
+              if (members[i].id == callbackMember.memberId) {
+                member = members[i];
+              }
             }
           }
+        });
+      }*/
 
-          /*
-          if(!member){
-            outThis.initMembers({
-              success: function () {
-                outThis.showMembers();
-                members = outThis.getMembers();
-                for (var i = 0; i < members.length; i++) {
-                  if (members[i].id == callbackMember.memberId) {
-                    member = members[i];
-                  }
-                }
-              }
-            });
-          }*/
+      if (member.process == callbackMember.process) {
+        member.score = callbackMember.score;
+        member.loveResidule = callbackMember.loveCount;
+        if (callbackMember.roomStatus == 3) {
+          memberInfo.roomStatus = callbackMember.roomStatus;
+          outThis.setData({
+            memberInfo: memberInfo
+          });
+          //outThis.showEnd();
+        }
 
-          if (member.process == callbackMember.process) {
+        outThis.setMembers(members);
+
+      } else {
+        outThis.startProcessTo(callbackMember.memberId, callbackMember.process, {
+          success: function () {
             member.score = callbackMember.score;
             member.loveResidule = callbackMember.loveCount;
             if (callbackMember.roomStatus == 3) {
@@ -788,88 +898,64 @@ var layerout = new baseLayerout.BaseLayerout({
               });
               //outThis.showEnd();
             }
-
             outThis.setMembers(members);
 
-          } else {
-            outThis.startProcessTo(callbackMember.memberId, callbackMember.process, {
-              success: function () {
-                member.score = callbackMember.score;
-                member.loveResidule = callbackMember.loveCount;
-                if (callbackMember.roomStatus == 3) {
-                  memberInfo.roomStatus = callbackMember.roomStatus;
-                  outThis.setData({
-                    memberInfo: memberInfo
-                  });
-                  //outThis.showEnd();
-                }
-                outThis.setMembers(members);
-
-              }
-            });
           }
+        });
+      }
+    }
+  },
+
+  registerProgressCodeCallback:function(){
+    var outThis = this;
+    socketUtil.registerCallback("progressCode", {
+      call: function (callbackMembers) {
+        var members = outThis.data.members;
+        if(!members||members.length==0){
+          var interval = setInterval(function(){
+            members = outThis.data.members;
+            if(members&&members.length>0){
+              clearInterval(interval);
+              outThis.progressStatusChange(callbackMembers);
+            }
+          },1000);
+        }else{
+          outThis.progressStatusChange(callbackMembers);
         }
+        
+        
       }
     })
   },
   
 
-  startWait:function(){
-
-    var outThis = this;
-    waitInterval = setInterval(function(){
-      outThis.luying();
-    },1000);
-    
-  },
-  stopWait:function(){
-    outThis.stopLuying();
-    if (waitInterval){
-      clearInterval(waitInterval);
-    }
-  },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
-    var roomId = options.roomId;
-
-    var battleId = options.battleId;
-
-    console.log("roomId:"+roomId+",battleId:"+battleId);
+  toStart:function(roomId,battleId,noWait){
+    outThis = this;
     this.setData({
       roomId: roomId,
       battleId: battleId
     });
-
-
-    var noWait = options.noWait;
-    outThis = this;
-
     //等待模式
-    if(!noWait){
+    if (!noWait) {
       this.setData({
         mode: 2
       });
-      
+
 
       setTimeout(function () {
         var mode = outThis.data.mode;
-        if(mode==2){
+        if (mode == 2) {
           outThis.battleSyncData();
           outThis.initPositions();
         }
       }, 20000);
 
-      outThis.startWait();
-    }else{
+    } else {
       this.setData({
         mode: 0
       });
     }
-    
+
 
     this.registerProgressCodeCallback();
 
@@ -879,45 +965,66 @@ var layerout = new baseLayerout.BaseLayerout({
 
     this.registerRoomStartCodeCallback();
 
-    
+
 
     this.setData({
-      isDekorn:1
+      isDekorn: 1
     });
 
     this.initAccountInfo();
 
-    this.loadPreProgress({
-      complite: function () {
-        
-      }
-    });
-
-    
-
     this.initMemberInfo({
-      success:function(){
+      success: function () {
         outThis.initMembers({
           success: function () {
             outThis.showMembers();
-            if(noWait){
+            if (noWait) {
               outThis.battleSyncData();
               outThis.initPositions();
-            }else{
-              outThis.reckonTime();
+            } else {
+              //outThis.reckonTime();
             }
             /*setTimeout(function () {
              
               
              // outThis.battleSyncData();
             }, 5000);*/
-            
+
           }
         });
       }
     });
-    
+  },
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
 
+    this.connSocket({
+      open:function(){
+        
+      }
+    });
+
+    var roomId = options.roomId;
+
+    var battleId = options.battleId;
+
+    var noWait = options.noWait;
+    
+    this.loadPreProgress({
+      complite: function () {
+
+      }
+    });
+
+    this.setData({
+      mode:5
+    });
+
+    //this.showDrawLuck();
+
+    
     /*
     receiveMemberNoticeCallback = battleNoticeRequest.receiveMemberNoticeLoop(roomId,{
       success:function(notices){
@@ -1031,27 +1138,6 @@ var layerout = new baseLayerout.BaseLayerout({
     var members = this.data.members;
     membersRankUtil.rankByProcess(members);
     this.setMembers(members);
-    var waitMembers = this.getWaitMembers();
-    if(!waitMembers){
-      waitMembers = new Array();
-    }
-    for (var i = 0; i < members.length; i++) {
-      var member = members[i];
-      var flag = false;
-      for (var j = 0; j < waitMembers.length;j++){
-        if(member.id==waitMembers.id){
-          flag = true;
-        }
-      }
-      if(!flag){
-        var waitMember = new Object();
-        waitMember.index = i + 1;
-        waitMember.imgUrl = member.headImg;
-        waitMember.id = member.id;
-        waitMembers.push(waitMember);
-      }
-    }
-    this.setWaitMembers(waitMembers);
   },
 
   initPositions: function () {
@@ -1103,6 +1189,8 @@ var layerout = new baseLayerout.BaseLayerout({
     var outThis = this;
     var battleId = this.data.battleId;
     var roomId = this.data.roomId;
+
+    console.log("initMemberInfo.battleId:"+battleId+",roomId:"+roomId);
     battleMemberInfoRequest.getBattleMemberInfo(battleId, roomId, {
       success:function(memberInfo){
         outThis.setData({
@@ -1118,7 +1206,7 @@ var layerout = new baseLayerout.BaseLayerout({
         callback.success();
       },
       fail:function(){
-
+        console.log("initMemberInfo.fail");
       }
     });
   },
@@ -1131,7 +1219,6 @@ var layerout = new baseLayerout.BaseLayerout({
     var battleId = this.data.battleId;
     var roomId = this.data.roomId;
     var groupId = "";
-    console.log("..........battleId2:"+battleId+",roomId2:"+roomId);
     battleMembersRequest.getBattleMembers(battleId, roomId, {
       cache: function (battleMembers) {
 
@@ -1242,6 +1329,14 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
+  connSocket:function(callback){
+    socketUtil.openSocket({
+      open: function (userInfo) {
+
+      }
+    });
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -1276,7 +1371,6 @@ var layerout = new baseLayerout.BaseLayerout({
     if (!isRest) {
       this.signout();
     }
-    outThis.stopWait();
   },
 
 
@@ -1304,7 +1398,6 @@ var layerout = new baseLayerout.BaseLayerout({
 
 layerout.addAttrPlug();
 layerout.addProgressScorePlug();
-layerout.addQuestionSelector();
 layerout.addProgressScoreMember();
 layerout.addQuestionResult();
 layerout.addBeanNotEnoughAlertPlug();
@@ -1313,5 +1406,4 @@ layerout.addAircraftPlug();
 layerout.addToastOutPlug();
 
 layerout.addQuestionInputPlug();
-layerout.addMemberWaitPlug();
 layerout.begin();

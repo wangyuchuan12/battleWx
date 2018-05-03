@@ -200,6 +200,7 @@ var questionInputPlug = {
 
   },
 
+
   fillWorldCheck:function(worlds){
     var worldChecks = this.data.questionInputData.worldChecks;
 
@@ -268,20 +269,20 @@ var questionInputPlug = {
       });
   },
 
-  worldCheckClick:function(e){
+  doWorldCheck:function(id){
+    var outThis = this;
     var worldChecks = this.data.questionInputData.worldChecks;
     var worlds = this.data.questionInputData.worlds;
-    var id = e.currentTarget.id;
     var worldCheck;
     var world;
-    for (var i = 0; i < worldChecks.length;i++){
+    for (var i = 0; i < worldChecks.length; i++) {
       var target = worldChecks[i];
-      if(target.id==id){
+      if (target.id == id) {
         worldCheck = target;
       }
     }
 
-    if(worldCheck.status==1){
+    if (worldCheck.status == 1) {
       for (var i = 0; i < worlds.length; i++) {
         var target = worlds[i];
         if (target.status == 0) {
@@ -318,20 +319,26 @@ var questionInputPlug = {
     }
     var worlds = this.data.questionInputData.worlds;
     var flag = true;
-    var worldStr="";
-    for(var i=0;i<worlds.length;i++){
+    var worldStr = "";
+    for (var i = 0; i < worlds.length; i++) {
       var world = worlds[i];
-      if(world.status==0){
+      if (world.status == 0) {
         flag = false;
-      }else{
-        worldStr = worldStr+world.content;
+      } else {
+        worldStr = worldStr + world.content;
       }
     }
 
-    if(flag){
-      this.eventListener.fillSubmit(this.data.questionInputData.questionId,worldStr);
+    if (flag) {
+      this.eventListener.fillSubmit(this.data.questionInputData.questionId, worldStr);
     }
+  },
 
+  worldCheckClick:function(e){
+   
+    var id = e.currentTarget.id;
+    
+    this.doWorldCheck(id);
   },
 
   inputChange:function(e){
@@ -351,55 +358,64 @@ var questionInputPlug = {
       this.eventListener.inputSubmit(this.data.questionInputData.questionId,this.data.questionInputData.answer);
     }
   },
+  
 
-  selectItemClick:function(e){
-    var id = e.currentTarget.id;
+  doSelectItem:function(id){
+    var outThis = this;
     var options = this.data.questionInputData.options;
     var rightOption = this.data.rightOption;
     var option;
-    for(var i=0;i<options.length;i++){
+    for (var i = 0; i < options.length; i++) {
       var target = options[i];
-      if(target.isRight==1){
+      if (target.isRight == 1) {
         target.background = "green";
-      }else{
+      } else {
         //target.background = "red";
       }
-      if(target.id==id){
+      if (target.id == id) {
         option = target;
       }
     }
 
     this.setData({
-      "questionInputData.options":options
+      "questionInputData.options": options
     });
 
-   
 
-    if(!option){
+
+    if (!option) {
+      setTimeout(function(){
+        outThis.eventListener.inputSubmit
+          (outThis.data.questionInputData.questionId, "");
+      },1000);
       return;
     }
-    var optionKey = "questionInputData.options["+option.index+"].background";
+    var optionKey = "questionInputData.options[" + option.index + "].background";
 
-    if(option.isRight==1){
+    if (option.isRight == 1) {
       this.setData({
         [optionKey]: "green"
       });
-    }else{
+    } else {
       this.setData({
         [optionKey]: "red"
       });
     }
-    
+
     var outThis = this;
     outThis.showLoading();
-    setTimeout(function(){
+    setTimeout(function () {
       outThis.eventListener.selectSubmit
         (outThis.data.questionInputData.questionId, id);
-    },1000);
-    
+    }, 1000);
   },
 
-  setType:function(type){
+  selectItemClick:function(e){
+    var id = e.currentTarget.id;
+    this.doSelectItem(id);
+  },
+
+  setInputType:function(type){
       this.setData({
         "questionInputData.type":type
       });

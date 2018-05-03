@@ -10,7 +10,6 @@
 
 <import src="../assembly/baseLayerout/baseLayerout"/>
 
-<import src="../assembly/memberWaitPlug/memberWaitPlug"/>
 <import src="../assembly/attrPlug/attrPlug"/>
 
 <!--
@@ -18,7 +17,6 @@
   <template is="memberWaitPlug" data="{{...memberWaitData}}"/>
 </view>
 -->
-
 <template is="attrPlug" data="{{...attrPlugData}}"/>
 <template is="baseLayerout" data="{{...baseData}}"/>
 <template is="alertPlug" data="{{...alertPlugData}}"/>
@@ -28,6 +26,7 @@
 <template is="toastOutPlug" data="{{...toastOutPlugData}}"/>
 
 <template is="aircraftPlug" data="{{...aircraftPlugData}}"/>
+
 
 <view class="shareAlertPlug" wx:if="{{shareAlert==1}}">
       <view class="shareAlertPlugClose fa fa-times-circle" bindtap='closeShareAlertPlug'></view>

@@ -1,9 +1,6 @@
-var questionSelector = require("../questionSelector/questionSelector.js"); 
 var progressScoreMember = require("../progressScoreMemberPlug/progressScoreMemberPlug.js");
 
 var aircraftPlug = require("../aircraftPlug/aircraftPlug.js");
-
-var memberWaitPlug = require("../memberWaitPlug/memberWaitPlug.js");
 
 var beanNotEnoughAlertPlug = require("../beanNotEnoughAlertPlug/beanNotEnoughAlertPlug.js");
 
@@ -128,8 +125,9 @@ function BaseLayerout(config){
     baseConfig.fullAlertButtonClick = function(){
       this.setData({
         "baseData.fullAlertDisplay": "none",
-        "baseData.againButtonDisplay":"inline-block"
+        "baseData.againButtonDisplay":"none"
       });
+      this.eventListener.againClick();
     }
 
 
@@ -180,13 +178,6 @@ function BaseLayerout(config){
       });
     }
     
-  this.addQuestionSelector = function(){
-    var configData = config.data;
-    var questionSelectorData = questionSelector.questionSelector.data;
-    var data = Object.assign(configData, questionSelectorData);
-    config = Object.assign(config, questionSelector.questionSelector);
-    config.data = data;
-  }
   this.begin = function(abc){
     Page(baseConfig);
   }
@@ -220,14 +211,6 @@ function BaseLayerout(config){
     var progressScorePlugData = progressScorePlug.progressScorePlug.data;
     var data = Object.assign(configData, progressScorePlugData);
     config = Object.assign(config, progressScorePlug.progressScorePlug);
-    config.data = data;
-  }
-
-  this.addMemberWaitPlug = function(){
-    var configData = config.data;
-    var memberWaitPlugData = memberWaitPlug.memberWaitPlug.data;
-    var data = Object.assign(configData, memberWaitPlugData);
-    config = Object.assign(config, memberWaitPlug.memberWaitPlug);
     config.data = data;
   }
 

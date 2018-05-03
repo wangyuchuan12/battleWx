@@ -11,6 +11,8 @@
   border:15px solid RGBA(33,39,47,1);
 
   border-radius:10px;
+
+  z-index: 1000000000000000000000;
 }
 
 .questionSelector2{
@@ -23,6 +25,7 @@
   border-radius:10px;
   padding-left:30px;
   background:RGBA(82,82,82,0.3);
+  z-index: 1000000000000000000000;
 }
 
 .questionSelectorHeader{

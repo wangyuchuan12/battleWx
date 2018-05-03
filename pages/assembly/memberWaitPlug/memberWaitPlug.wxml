@@ -1,4 +1,4 @@
-<template name="memberWaitPlug">
+
   <view class="waitContent">  
     <view class="waitAnimation">  
       <image bindtap="luying" animation="{{animationData1}}" class="waitImg" mode="widthFix" src="http://p42rx7glw.bkt.clouddn.com/1361f61b60c8d146dd98f223df611640.png"></image>  
@@ -46,4 +46,3 @@
 
     </block>
     </view>
-  </template>

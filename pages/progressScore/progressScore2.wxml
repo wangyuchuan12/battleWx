@@ -10,15 +10,23 @@
 <import src="../assembly/aircraftPlug/aircraftPlug.wxml"/>
 <import src="../assembly/toastOutPlug/toastOutPlug.wxml"/>
 <import src="../assembly/questionInputPlug/questionInputPlug.wxml"/>
-<import src="../assembly/memberWaitPlug/memberWaitPlug"/>
-<view style="position:fixed;z-index:1000000003;width:100%;height:100vh;top:0px;left:0px;" wx:if="{{mode==2}}">
-  <template is="memberWaitPlug" data="{{...memberWaitData}}"/>
-</view>
+
+<memberWait wx:if="{{mode==2}}" id="memberWait" bind:waitEnd="waitEnd"></memberWait>
+<pk wx:if="{{mode==7}}" id="pk"></pk>
+<danList wx:if="{{mode==6}}" id="danList" bind:danTakepart="danTakepart"></danList>
+<progressMenu wx:if="{{mode==5}}" bind:toPlay="toPlay" bind:toDanList="toDanList" bind:toPk="toPk"></progressMenu>
+<luckDraw id="luckDraw" wx:if="{{mode==4}}" bind:initDraws="initDraws" bind:drawStop="drawStop">
+</luckDraw>
+<questionSelector id="questionSelector" bind:selectComplete="selectComplete" wx:if="{{mode==3}}"></questionSelector>
+
 <view style="position:fixed;z-index:90000000000;background:green;">
   <template is="baseLayerout" data="{{...baseData}}"/>
 </view>
 <view style="position:absolute;z-index:30000000000" wx:if="{{mode!=1}}">
   <template is="attrPlug" data="{{...attrPlugData}}"/>
+</view>
+
+<view style="background:url('http://p7z4mg4io.bkt.clouddn.com/back2.png');width:100px;height:100px;position:absolute;z-index:30000000001;background-size:100% 100%;top:40px;" wx:if="{{mode==4||mode==6||mode==7}}" bindtap='toBack'>
 </view>
 
 <template is="alertPlug" data="{{...alertPlugData}}"/>
@@ -63,23 +71,16 @@
    
   </view>
 
-  <view style="position:absolute;width:100%;height:100%;z-index:100000000;" wx:if="{{mode==3}}">
-    <template is="questionSelector" data="{{...questionSelectorData}}" wx:if="{{selectorType==0}}">
-    </template>
-
-    <template is="questionSelector2" data="{{...questionSelectorData}}" wx:if="{{selectorType==1}}">
-    </template>
-  </view>
 
   <view style="position:absolute;width:100%;height:100%;z-index:10000">
   <template is="progressScoreMemberPlug" data="{{...progressScoreMemberData}}"></template>
   </view>
 
   <view style="position:absolute;width:100%;height:100%;">
-  <template is="progressScorePlug" data="{{...progressScoreData}}"></template>
+    <template is="progressScorePlug" data="{{...progressScoreData}}"></template>
   </view>
 
-  <view class="progressScoreButtons" style="z-index:1000000000;">
+  <view class="progressScoreButtons" style="z-index:1000000000;display:none;">
    <!--
     <view class="progressScoreStartButton" bindtap='startSelector' wx:if="{{isLast==0}}"></view>
    
@@ -114,8 +115,13 @@
   </view>
 
   <view class="progressScoreInput" wx:if="{{mode==1}}" style=" z-index: 1000000000;position:fixed;">
+    <view style="position:absolute;width:100%;text-align:center;">
+      <timeSecond id='timeSecond'>
+      </timeSecond>
+    </view>
     <view class="progressScoreInputSubjectHeader" wx:if="{{questionData.imgUrl}}">
-      <image class="progressScoreInputSubjectHeaderImg" src="{{questionData.imgUrl}}"></image>
+      <image class="progressScoreInputSubjectHeaderImg" 
+      src="{{questionData.imgUrl}}"></image>
       <view class="progressScoreInputSubjectHeaderContent">{{questionData.content}}</view>
    </view>
 
