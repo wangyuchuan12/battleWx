@@ -941,7 +941,7 @@ getLoveCoolMin:function(){
   return loveCoolMin;
 },
 
-  getLoveCoolSecond: function () {
+getLoveCoolSecond: function () {
     var loveCoolSecond = this.data.progressScoreData.loveCooling.second;
     return loveCoolSecond;
 },

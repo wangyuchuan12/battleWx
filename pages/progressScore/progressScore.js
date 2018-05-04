@@ -1065,7 +1065,6 @@ var layerout = new baseLayerout.BaseLayerout({
 
 layerout.addAttrPlug();
 layerout.addProgressScorePlug();
-layerout.addQuestionSelector();
 layerout.addProgressScoreMember();
 layerout.addQuestionResult();
 layerout.addBeanNotEnoughAlertPlug();

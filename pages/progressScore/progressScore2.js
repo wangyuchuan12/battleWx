@@ -5,7 +5,7 @@ var battleMembersRequest = require("../../utils/battleMembersRequest.js");
 
 var battleStageTakepartRequest = require("../../utils/battleStageTakepartRequest.js");
 var questionRequest = require
-("../../utils/questionRequest.js");
+  ("../../utils/questionRequest.js");
 var membersRankUtil = require("../../utils/membersRankUtil.js");
 
 var questionAnswerRequest = require("../../utils/questionAnswerRequest.js");
@@ -39,7 +39,7 @@ var questionSelector;
 var layerout = new baseLayerout.BaseLayerout({
 
 
-  selectComplete:function(e){
+  selectComplete: function (e) {
     var outThis = this;
     var subjects = e.detail.selectContentList;
 
@@ -50,12 +50,8 @@ var layerout = new baseLayerout.BaseLayerout({
       subjectIds.push(subjects[i].targetId);
     }
     var roomId = outThis.data.roomId;
-    outThis.showLoading();
-
-
     battleStageTakepartRequest.stageTakepart(outThis.data.battleId, subjectIds, roomId, {
       beanNotEnough: function () {
-        outThis.hideLoading();
         outThis.showBeanNotEnoughAlertPlug();
         questionSelector.questinSelectorClose();
       },
@@ -94,11 +90,16 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
-  initQuestionSelector:function(){
+  initQuestionSelector: function () {
+    var outThis = this;
     questionSelector = this.selectComponent("#questionSelector");
     var battleId = this.data.battleId;
     var roomId = this.data.roomId;
-    questionSelector.initBattleSubjects(3, battleId, roomId,null,1);
+    questionSelector.initBattleSubjects(3, battleId, roomId, {
+      success:function(){
+        outThis.hideLoading();
+      }
+    }, 1);
   },
 
   drawStop: function (e) {
@@ -111,23 +112,23 @@ var layerout = new baseLayerout.BaseLayerout({
     memberWait.startWait(waitId);
   },
 
-  waitEnd:function(e){
+  waitEnd: function (e) {
 
-   var battleId = e.detail.battleId;
-   var roomId = e.detail.roomId;
+    var battleId = e.detail.battleId;
+    var roomId = e.detail.roomId;
 
-    this.toStart(roomId,battleId,1);
+    this.toStart(roomId, battleId, 1);
   },
 
-  toBack:function(){
-    luckDraw.stopRun();
+  toBack: function () {
     this.setData({
-      mode:5
+      isDan:0
     });
+    this.toHome();
   },
 
   //play事件
-  toPlay:function(){
+  toPlay: function () {
     this.showDrawLuck();
   },
 
@@ -140,80 +141,93 @@ var layerout = new baseLayerout.BaseLayerout({
 
   showDrawLuck: function () {
     this.setData({
-      mode: 4
+      mode: 4,
+      isDan:0
     });
     luckDraw = this.selectComponent("#luckDraw");
     luckDraw.initDraws();
   },
 
-  toDanList:function(){
+  toDanList: function () {
     this.setData({
-      mode:6
+      mode: 6,
+      isDan:1
     });
     danList = this.selectComponent("#danList");
     danList.initBattleDans();
     danList.initAccountResult();
   },
 
-  toPk:function(){
-    this.setData({
+  toPk: function () {
+    /*this.setData({
       mode: 7
     });
-    pk = this.selectComponent("#pk");
+    pk = this.selectComponent("#pk");*/
+    this.skipToPk();
   },
 
-  danTakepart:function(e){
+  danTakepart: function (e) {
 
     this.setData({
-      mode:2
+      mode: 2
     });
-    
+
     var waitId = e.detail.waitId;
     var danUserId = e.detail.danUserId;
-    
+
     memberWait = this.selectComponent("#memberWait");
 
     memberWait.startWait(waitId, danUserId);
   },
-  toHome:function(){
-    this.setData({
-      mode:5
-    });
+  toHome: function () {
+    var isDan = this.data.isDan;
+    if(!isDan){
+      this.setData({
+        mode: 5
+      });
+      this.setMembers([]);
+      this.setScore(0);
+      this.setScrollGogal(0);
+      this.setPositions([]);
+    }else{
+      this.toDanList();
+    }
+    
   },
   /**
    * 页面的初始数据
    */
   data: {
     //答题结果显示
-    questionResultDisplay:"none",
+    questionResultDisplay: "none",
     //用户信息
-    memberInfo:null,
+    memberInfo: null,
     //用户数量
-    members:null,
+    members: null,
     //用户当前的进程
-    process:0,
+    process: 0,
     //在地图上的的位置坐标
-    positions:null,
+    positions: null,
     //是否已经结束
-    isLast:0,
+    isLast: 0,
     //0普通 1自动
     selectorType: 1,
 
     //总共需要选择的主题数量
-    subjectCount:3,
-    roomId:null,
+    subjectCount: 3,
+    roomId: null,
     battleId: null,
 
-    isRankShow:0,
+    isRankShow: 0,
 
     //0为正常状态 1位答题状态 2等待模式 3选择题目模式 4抽奖模式 5主题模式 6闯关模式 7好友pk
-    mode:0,
+    mode: 0,
 
-    isEnd:0,
+    isEnd: 0,
 
-    isRest:0,
+    isRest: 0,
 
-    questionData:{
+    questionData: {
       imgUrl: "",
       content: "答题开始",
       percent: 0,
@@ -222,17 +236,17 @@ var layerout = new baseLayerout.BaseLayerout({
       wrongCount: 0,
       process: 0,
       rewardBean: 0,
-      stageIndex:0,
-      rewardBean:0,
-      addExp:0
+      stageIndex: 0,
+      rewardBean: 0,
+      addExp: 0
     }
   },
 
 
   eventListener: {
-    questinSelectorClose:function(){
+    questinSelectorClose: function () {
       outThis.setData({
-        questionSelectorDisplay:"none"
+        questionSelectorDisplay: "none"
       });
     },
     inputSubmit: function (questionId, answer) {
@@ -269,7 +283,7 @@ var layerout = new baseLayerout.BaseLayerout({
       });*/
       outThis.toHome();
     },
-    
+
     fillSubmit: function (questionId, answer) {
       timeSecond.stopRoundProgress();
       outThis.showLoading();
@@ -284,7 +298,7 @@ var layerout = new baseLayerout.BaseLayerout({
         roomId: memberInfo.roomId
       }, {
           success: function (data) {
-          
+
             outThis.answerResultHandle(data);
           },
           fail: function () {
@@ -372,7 +386,7 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
 
-  showEnd:function(){
+  showEnd: function () {
     var outThis = this;
     var memberInfo = this.data.memberInfo;
     var roomStatus = memberInfo.roomStatus;
@@ -381,20 +395,20 @@ var layerout = new baseLayerout.BaseLayerout({
     var rewardLove = memberInfo.rewardLove;
     var rank = memberInfo.rank;
 
-    console.log("............roomStatus:"+roomStatus);
-    if(roomStatus==3){
+    console.log("............roomStatus:" + roomStatus);
+    if (roomStatus == 3) {
       this.hideLoading();
       outThis.setData({
         mode: 0
       });
-      if (rank <= memberInfo.places){
+      if (rank <= memberInfo.places) {
         outThis.showFullAlert("比赛已经结束", "胜利，第" + rank + "名", rewardBean, rewardLove, "确定");
         outThis.initAccountInfo({
-          success:function(){
+          success: function () {
 
           }
         });
-      }else{
+      } else {
         outThis.showFullAlert("比赛已经结束", "失败，第" + rank + "名", rewardBean, rewardLove, "确定");
         outThis.initAccountInfo({
           success: function () {
@@ -402,27 +416,27 @@ var layerout = new baseLayerout.BaseLayerout({
           }
         });
       }
-      
+
       outThis.setData({
         isLast: 1
       });
-    }else{
+    } else {
       outThis.setData({
-        mode:0
+        mode: 0
       });
       outThis.startSelector();
     }
   },
 
-  lovePaySuccess:function(){
+  lovePaySuccess: function () {
     var outThis = this;
     this.initAccountInfo({
-      success:function(){
+      success: function () {
         outThis.supplyLoveClick({
-          success:function(){
+          success: function () {
             outThis.battleSyncData();
           },
-          fail:function(){
+          fail: function () {
             outThis.battleSyncData();
           }
         });
@@ -430,14 +444,14 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
-  answerResultHandle:function(data){
-    
+  answerResultHandle: function (data) {
+
     var members = this.data.members;
     var memberInfo = this.data.memberInfo;
     var scrollGogal = this.getScrollGogal();
-    for(var i=0;i<members.length;i++){
+    for (var i = 0; i < members.length; i++) {
       var member = members[i];
-      if (member.id == memberInfo.id){
+      if (member.id == memberInfo.id) {
         member.score = data.memberScore;
         member.loveResidule = data.loveResidule;
       }
@@ -445,7 +459,7 @@ var layerout = new baseLayerout.BaseLayerout({
     var outThis = this;
     outThis.setData({
       "questionData.process": data.process,
-      "members":members
+      "members": members
     });
 
     outThis.showMembers();
@@ -464,54 +478,54 @@ var layerout = new baseLayerout.BaseLayerout({
       loveCount--;
       outThis.setLove(loveLimit, loveCount);
       console.log("scrollGogal:" + scrollGogal + ",data.memberScore:" + data.memberScore);
-      if (loveCount <= 0 ){
-        outThis.setData({
-          questionSelectorDisplay: "none",
-          mode:0
-        });
-        outThis.battleSyncData();
-      }else{
-        questionSelector.next();
-        outThis.empty();
-      }
-    }else{
-      if(scrollGogal <= data.memberScore){
+      if (loveCount <= 0) {
         outThis.setData({
           questionSelectorDisplay: "none",
           mode: 0
         });
         outThis.battleSyncData();
-      }else{
+      } else {
         questionSelector.next();
         outThis.empty();
       }
-      
+    } else {
+      if (scrollGogal <= data.memberScore) {
+        outThis.setData({
+          questionSelectorDisplay: "none",
+          mode: 0
+        });
+        outThis.battleSyncData();
+      } else {
+        questionSelector.next();
+        outThis.empty();
+      }
+
     }
-    
+
   },
 
-  battleSyncData:function(){
+  battleSyncData: function () {
     var battleId = this.data.battleId;
     var roomId = this.data.roomId;
-    battleSyncDataRequest.requestSyncPaperData(battleId,roomId,{
-      success:function(data){
+    battleSyncDataRequest.requestSyncPaperData(battleId, roomId, {
+      success: function (data) {
         var memberInfo = outThis.data.memberInfo;
         memberInfo.roomStatus = data.roomStatus;
         memberInfo.rewardBean = data.rewardBean;
         memberInfo.rewardLove = data.rewardLove;
         memberInfo.rank = data.rank;
         outThis.setData({
-          memberInfo:memberInfo
+          memberInfo: memberInfo
         });
         outThis.showEnd();
       },
-      fail:function(){
+      fail: function () {
         console.log(".............fail");
       }
     });
   },
 
-  startProcessTo:function(memberId,toProcess,callback){
+  startProcessTo: function (memberId, toProcess, callback) {
     var positions = this.getPostions();
     var members = this.data.members;
     var begin = 0;
@@ -524,7 +538,7 @@ var layerout = new baseLayerout.BaseLayerout({
       }
     }
     var end = toProcess;
-    if (end > begin){
+    if (end > begin) {
       thisMember.process = end;
       this.setData({
         members: members
@@ -541,42 +555,42 @@ var layerout = new baseLayerout.BaseLayerout({
         }
       });
     }
-    
+
   },
 
-  startProcess:function(memberId,process,callback){
+  startProcess: function (memberId, process, callback) {
     var positions = this.getPostions();
     var members = this.data.members;
     var begin = 0;
     var thisMember;
-    for(var i=0;i<members.length;i++){
+    for (var i = 0; i < members.length; i++) {
       var member = members[i];
-      if (member.id==memberId){
+      if (member.id == memberId) {
         begin = member.process;
         thisMember = member;
       }
     }
-    var end = begin+process;
+    var end = begin + process;
     thisMember.process = end;
     this.setData({
-      members:members
+      members: members
     });
     this.showMembers();
     outThis.trendBetween(memberId, begin, end, {
-      success:function(){
-        if(callback&&callback.success){
+      success: function () {
+        if (callback && callback.success) {
           callback.success(end);
         }
       },
-      step:function(index){
-        console.log("index:"+index)
+      step: function (index) {
+        console.log("index:" + index)
       }
     });
   },
 
   startSelector: function (e) {
     var mode = this.data.mode;
-    if(mode==1||mode==2){
+    if (mode == 1 || mode == 2) {
       return;
     }
     /*var isLast = this.data.isLast;
@@ -606,7 +620,7 @@ var layerout = new baseLayerout.BaseLayerout({
       return;
     }
 
-    
+
     if (memberInfo.status == 2 || memberInfo.roomStatus == 3) {
       outThis.hideLoading();
       return;
@@ -742,7 +756,7 @@ var layerout = new baseLayerout.BaseLayerout({
     }, {
         step: function (data) {
           outThis.setData({
-            mode:1,
+            mode: 1,
             questionSelectorDisplay: "none"
           });
           if (data.type == 0) {
@@ -763,23 +777,23 @@ var layerout = new baseLayerout.BaseLayerout({
 
           var process = outThis.data.questionData.process;
           var memberInfo = outThis.data.memberInfo;
-      
-          outThis.startProcess(memberInfo.id,process,{
-            success:function(end){
+
+          outThis.startProcess(memberInfo.id, process, {
+            success: function (end) {
               setTimeout(function () {
                 outThis.containerScrollToDom(end);
-              }, 1000); 
+              }, 1000);
             }
           });
 
           var love = outThis.getLoveCount();
           var scrollGogal = outThis.getScrollGogal();
           var score = outThis.getScore();
-          if (score >= scrollGogal){
+          if (score >= scrollGogal) {
             outThis.battleSyncData();
-          }else if(love>0){
+          } else if (love > 0) {
             outThis.battleSyncData();
-          }else{
+          } else {
             /*
             outThis.loveCheck({
               confirm:function(){
@@ -791,7 +805,7 @@ var layerout = new baseLayerout.BaseLayerout({
             });*/
             outThis.battleSyncData();
           }
-         
+
         },
         fail: function () {
           questionSelector.next();
@@ -799,7 +813,7 @@ var layerout = new baseLayerout.BaseLayerout({
       });
   },
 
-  registerBattleEndCodeCallback:function(){
+  registerBattleEndCodeCallback: function () {
     socketUtil.registerCallback("battleEndCode", {
       call: function (ranks) {
         var memberInfo = outThis.data.memberInfo;
@@ -819,7 +833,7 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
-  registerRoomStartCodeCallback:function(){
+  registerRoomStartCodeCallback: function () {
     /*var outThis = this;
     socketUtil.registerCallback("roomStartCode", {
       call: function (room) {
@@ -833,7 +847,7 @@ var layerout = new baseLayerout.BaseLayerout({
   },
 
 
-  registerTakepartCodeCallback:function(){
+  registerTakepartCodeCallback: function () {
     /*var outThis = this;
     socketUtil.registerCallback("takepartCode", {
       call: function (memberInfo) {
@@ -845,7 +859,7 @@ var layerout = new baseLayerout.BaseLayerout({
     });*/
   },
 
-  progressStatusChange: function (callbackMembers){
+  progressStatusChange: function (callbackMembers) {
     var memberInfo = outThis.data.memberInfo;
     var members = this.data.members;
     for (var i = 0; i < callbackMembers.length; i++) {
@@ -906,30 +920,30 @@ var layerout = new baseLayerout.BaseLayerout({
     }
   },
 
-  registerProgressCodeCallback:function(){
+  registerProgressCodeCallback: function () {
     var outThis = this;
     socketUtil.registerCallback("progressCode", {
       call: function (callbackMembers) {
         var members = outThis.data.members;
-        if(!members||members.length==0){
-          var interval = setInterval(function(){
+        if (!members || members.length == 0) {
+          var interval = setInterval(function () {
             members = outThis.data.members;
-            if(members&&members.length>0){
+            if (members && members.length > 0) {
               clearInterval(interval);
               outThis.progressStatusChange(callbackMembers);
             }
-          },1000);
-        }else{
+          }, 1000);
+        } else {
           outThis.progressStatusChange(callbackMembers);
         }
-        
-        
+
+
       }
     })
   },
-  
 
-  toStart:function(roomId,battleId,noWait){
+
+  toStart: function (roomId, battleId, noWait) {
     outThis = this;
     this.setData({
       roomId: roomId,
@@ -1000,9 +1014,20 @@ var layerout = new baseLayerout.BaseLayerout({
    */
   onLoad: function (options) {
 
+    var skipType = options.skipType;
+    var roomId = options.roomId;
+
+    if (skipType == 2) {
+      var roomId = options.roomId;
+      wx.navigateTo({
+        url: '../pkRoom/pkRoom?role=1&id=' + roomId
+      });
+      return;
+    } 
+    var outThis = this;
     this.connSocket({
-      open:function(){
-        
+      open: function () {
+        outThis.initAccountInfo();
       }
     });
 
@@ -1011,7 +1036,7 @@ var layerout = new baseLayerout.BaseLayerout({
     var battleId = options.battleId;
 
     var noWait = options.noWait;
-    
+
     this.loadPreProgress({
       complite: function () {
 
@@ -1019,12 +1044,12 @@ var layerout = new baseLayerout.BaseLayerout({
     });
 
     this.setData({
-      mode:5
+      mode: 5
     });
 
     //this.showDrawLuck();
 
-    
+
     /*
     receiveMemberNoticeCallback = battleNoticeRequest.receiveMemberNoticeLoop(roomId,{
       success:function(notices){
@@ -1133,8 +1158,8 @@ var layerout = new baseLayerout.BaseLayerout({
       }
     });
   },
-  
-  showMembers:function(){
+
+  showMembers: function () {
     var members = this.data.members;
     membersRankUtil.rankByProcess(members);
     this.setMembers(members);
@@ -1143,7 +1168,7 @@ var layerout = new baseLayerout.BaseLayerout({
   initPositions: function () {
     var outThis = this;
 
-    try{
+    try {
       var members = this.data.members;
       if (!members) {
         return;
@@ -1178,23 +1203,23 @@ var layerout = new baseLayerout.BaseLayerout({
         outThis.setPositions(positions);
       }, 2000);
       outThis.containerScrollToDom(process);
-    }catch(e){
-      setTimeout(function(){
+    } catch (e) {
+      setTimeout(function () {
         outThis.initPositions();
-      },1000);
+      }, 1000);
     }
   },
 
-  initMemberInfo:function(callback){
+  initMemberInfo: function (callback) {
     var outThis = this;
     var battleId = this.data.battleId;
     var roomId = this.data.roomId;
 
-    console.log("initMemberInfo.battleId:"+battleId+",roomId:"+roomId);
+    console.log("initMemberInfo.battleId:" + battleId + ",roomId:" + roomId);
     battleMemberInfoRequest.getBattleMemberInfo(battleId, roomId, {
-      success:function(memberInfo){
+      success: function (memberInfo) {
         outThis.setData({
-          memberInfo:memberInfo
+          memberInfo: memberInfo
         });
 
         outThis.setScore(memberInfo.score);
@@ -1205,16 +1230,18 @@ var layerout = new baseLayerout.BaseLayerout({
 
         callback.success();
       },
-      fail:function(){
-        console.log("initMemberInfo.fail");
+      fail: function () {
+        setTimeout(function(){
+          outThis.initMemberInfo(callback);
+        },5000);
       }
     });
   },
 
-  initMembers:function(callback){
+  initMembers: function (callback) {
     var outThis = this;
     outThis.setData({
-      members:null
+      members: null
     });
     var battleId = this.data.battleId;
     var roomId = this.data.roomId;
@@ -1237,25 +1264,25 @@ var layerout = new baseLayerout.BaseLayerout({
     }, null, groupId);
   },
 
-  loveCheck:function(callback){
+  loveCheck: function (callback) {
     var love = this.getLoveCount();
-    if(!love){
+    if (!love) {
       this.showConfirm("你已经阵亡，是否补一颗爱心复活", "", {
         confirm: function () {
           if (callback) {
-            
+
             outThis.supplyLoveClick({
-              success:function(){
+              success: function () {
                 callback.confirm();
               },
-              fail:function(){
+              fail: function () {
                 callback.cancel();
               }
             });
           }
         },
         cancel: function () {
-          if(callback){
+          if (callback) {
             callback.cancel();
           }
         }
@@ -1293,7 +1320,7 @@ var layerout = new baseLayerout.BaseLayerout({
     var memberInfo = this.data.memberInfo;
     var loveResidule = memberInfo.loveResidule;
     var roomStatus = memberInfo.roomStatus;
-    if (loveResidule>0||roomStatus==3){
+    if (loveResidule > 0 || roomStatus == 3) {
       var pages = getCurrentPages();
       var prevPage = pages[pages.length - 2];
 
@@ -1316,7 +1343,7 @@ var layerout = new baseLayerout.BaseLayerout({
 
   mallClick: function () {
     this.setData({
-      isRest:1
+      isRest: 1
     });
     wx.navigateTo({
       url: '../mall/mall'
@@ -1329,10 +1356,10 @@ var layerout = new baseLayerout.BaseLayerout({
     });
   },
 
-  connSocket:function(callback){
+  connSocket: function (callback) {
     socketUtil.openSocket({
       open: function (userInfo) {
-
+        callback.open();
       }
     });
   },
@@ -1341,7 +1368,7 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    
+
   },
 
   /**
@@ -1349,7 +1376,7 @@ var layerout = new baseLayerout.BaseLayerout({
    */
   onShow: function () {
     this.setData({
-      isRest:0
+      isRest: 0
     });
   },
 
@@ -1357,7 +1384,7 @@ var layerout = new baseLayerout.BaseLayerout({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-    
+
   },
 
   /**
@@ -1404,6 +1431,5 @@ layerout.addBeanNotEnoughAlertPlug();
 layerout.addAlertPlug();
 layerout.addAircraftPlug();
 layerout.addToastOutPlug();
-
 layerout.addQuestionInputPlug();
 layerout.begin();

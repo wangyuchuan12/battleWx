@@ -7,6 +7,7 @@ var socketUtil = require("../../../utils/socketUtil.js");
 var flushMembersInterval = null;
 var animation1;
 var animation2;
+var interval;
 Component({
   /**
    * 组件的属性列表
@@ -61,7 +62,7 @@ Component({
 
       this.registerWaitEndCallback();
 
-      var interval = setInterval(function(){
+      interval = setInterval(function(){
         outThis.luying();
       },1000);
     },
@@ -102,7 +103,7 @@ Component({
       var outThis = this;
       socketUtil.registerCallback("waitEndCode", {
         call: function (battleRoom) {
-
+          outThis.stopLuying();
           console.log("battleRoom:"+JSON.stringify(battleRoom));
           var myEventDetail = { battleId: battleRoom.battleId, roomId: battleRoom.id } // detail对象，提供给事件监听函数
           var myEventOption = {} // 触发事件的选项
@@ -158,6 +159,9 @@ Component({
       }
       if (animation2) {
         clearInterval(animation2);
+      }
+      if (interval){
+        clearInterval(interval);
       }
     },
 

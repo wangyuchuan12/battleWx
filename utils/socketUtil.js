@@ -1,5 +1,5 @@
 //var domain = "wss://www.chengxihome.com";
-var domain = "ws://192.168.0.101";
+var domain = "wss://www.chengxihome.com";
 var request = require("request.js");
 var token;
 var callbacks = new Array();

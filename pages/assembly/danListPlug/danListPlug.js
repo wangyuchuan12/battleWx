@@ -103,7 +103,9 @@ Component({
         var dan = dans[i];
         if (dan.id == id) {
           if (dan.status == 0) {
-            this.showConfirm("该段位未开启", "请先完成上一个段位", {
+            wx.showModal({
+              title: '该段位未开启',
+              content: '请先完成上一个段位',
               confirm: function () {
 
               },
@@ -171,35 +173,37 @@ Component({
       wx.showModal({
         title: '报名该关卡',
         content: '是否确定报名',
-        success:function(){
-          outThis.setData({
-            isDanAlert: 0
-          });
-          battleDanRequest.danSign(alertDan.id, {
-            success: function (data) {
-              var waitId = data.waitId;
-              var danUserId = data.danUserId;
-              outThis.startTo(waitId, danUserId);
+        success:function(res){
+          if(res.confirm){
+            outThis.setData({
+              isDanAlert: 0
+            });
+            battleDanRequest.danSign(alertDan.id, {
+              success: function (data) {
+                var waitId = data.waitId;
+                var danUserId = data.danUserId;
+                outThis.startTo(waitId, danUserId);
 
-            },
-            beanNotEnough: function () {
-              outThis.hideLoading();
-              outThis.showConfirm("智慧豆不足", "是否去充值", {
-                confirm: function () {
-                  wx.navigateTo({
-                    url: '../mall/mall'
-                  });
-                },
-                cancel: function () {
+              },
+              beanNotEnough: function () {
 
-                }
-              });
-            },
-            fail: function () {
-              outThis.hideLoading();
-              outThis.showToast("网络繁忙，请稍后再试");
-            }
-          });
+                wx.showModal({
+                  title: '智慧豆不足',
+                  content: '是否确定要充值',
+                  success: function (res) {
+                    if (res.confirm) {
+                      wx.navigateTo({
+                        url: '../mall/mall'
+                      });
+                    }
+                  }
+                });
+              },
+              fail: function () {
+
+              }
+            });
+          }
         }
       });
 
