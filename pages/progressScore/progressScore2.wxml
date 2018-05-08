@@ -11,10 +11,16 @@
 <import src="../assembly/toastOutPlug/toastOutPlug.wxml"/>
 <import src="../assembly/questionInputPlug/questionInputPlug.wxml"/>
 
+
 <memberWait wx:if="{{mode==2}}" id="memberWait" bind:waitEnd="waitEnd"></memberWait>
-<pk wx:if="{{mode==7}}" id="pk"></pk>
+<pk wx:if="{{mode==7}}" id="pk" bind:pkRoomStart="pkRoomStart"></pk>
 <danList wx:if="{{mode==6}}" id="danList" bind:danTakepart="danTakepart"></danList>
-<progressMenu wx:if="{{mode==5}}" bind:toPlay="toPlay" bind:toDanList="toDanList" bind:toPk="toPk"></progressMenu>
+
+<homeMenu wx:if="{{mode==5}}" bind:toPlay="toPlay" bind:toDanList="toDanList" bind:toPk="toHomePk"></homeMenu>
+
+<!--
+<progressMenu wx:if="{{mode==5}}" bind:toPlay="toPlay" bind:toDanList="toDanList" bind:toPk="toHomePk"></progressMenu>
+-->
 <luckDraw id="luckDraw" wx:if="{{mode==4}}" bind:initDraws="initDraws" bind:drawStop="drawStop">
 </luckDraw>
 <questionSelector id="questionSelector" bind:selectComplete="selectComplete" wx:if="{{mode==3}}"></questionSelector>

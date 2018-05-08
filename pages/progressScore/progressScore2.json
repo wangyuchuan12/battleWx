@@ -11,6 +11,7 @@
     "pk": "../assembly/pkPlug/pkPlug",
     "memberWait": "../assembly/memberWaitPlug/memberWaitPlug",
     "questionSelector": "../assembly/questionSelector/questionSelector",
-    "progressScore": "../assembly/progressScorePlug2/progressScorePlug"
+    "progressScore": "../assembly/progressScorePlug2/progressScorePlug",
+    "homeMenu": "../assembly/homeMenu/homeMenu"
   }
 }

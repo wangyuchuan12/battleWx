@@ -28,6 +28,7 @@
   margin: 10px;
   text-align: center;
   vertical-align: top;
+  padding-top:10px;
 }
 
 .pkRoomUserPlus{

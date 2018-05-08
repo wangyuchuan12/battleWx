@@ -194,6 +194,8 @@ var layerout = new baseLayerout.BaseLayerout({
           roomId: data.roomId,
           role:data.role
         });
+        outThis.registerRoomStartCodeCallback();
+        outThis.skipToProgress();
       },
       fail:function(){
         console.log("fail");
@@ -208,20 +210,11 @@ var layerout = new baseLayerout.BaseLayerout({
       var battleId = this.data.battleId;
       var roomId = this.data.roomId;
       if (this.data.isEnd == 0) {
-        /*wx.navigateTo({
+        wx.navigateTo({
           url: '../progressScore/progressScore2?battleId=' + battleId + "&roomId=" + roomId+"&noWait=1"
-        });*/
+        });
         this.setData({
           isEnd: 1
-        });
-
-        var pages = getCurrentPages();
-        var prevPage = pages[pages.length - 2];
-        if (prevPage.toStart) {
-          prevPage.toStart(roomId,battleId,1);
-        }
-        wx.navigateBack({
-          
         });
       }
     }
@@ -256,7 +249,6 @@ var layerout = new baseLayerout.BaseLayerout({
     var id = this.data.id;
     battlePkRequest.beatIntoRequest(id,{
       success: function (data) {
-        console.log("data:"+JSON.stringify(data));
         outThis.loadPreProgress();
         outThis.setData({
           id: data.id,
@@ -276,6 +268,7 @@ var layerout = new baseLayerout.BaseLayerout({
           roomId: data.roomId,
           role:data.role
         });
+        outThis.registerRoomStartCodeCallback();
         outThis.skipToProgress();
       },
       fail: function () {
@@ -340,7 +333,7 @@ var layerout = new baseLayerout.BaseLayerout({
     }else if(role==1){
       userId = this.data.beatUserId;
     }
-    var path = 'pages/progressScore/progressScore2?registUserId=' + userId+"&roomId="+this.data.id+"&skipType=2";
+    var path = 'pages/battleHome/battleHome3?registUserId=' + userId+"&roomId="+this.data.id+"&skipType=2";
     //var path = "pages/pkRoom/pkRoom?role=1&id="+this.data.id;
     return {
       path: path,

@@ -5,6 +5,8 @@ var accountRequest = require("../../../utils/accountRequest.js");
 
 var takepartRequest = require("../../../utils/takepartRequest.js");
 
+var request = require("../../../utils/request.js");
+
 Component({
   /**
    * 组件的属性列表
@@ -39,6 +41,34 @@ Component({
    * 组件的方法列表
    */
   methods: {
+
+    createPaymemberVoucher:function(callback){
+      var alertDan = this.data.alertDan;
+
+      if(alertDan){
+        wx.showModal({
+          title: '需要消耗' + alertDan.costBean + "智慧豆",
+          content: '是否确定支付',
+          success: function () {
+            request.createPaymemberVoucher(alertDan.costBean, null, {
+              success: function () {
+                callback.success();
+              },
+              fail: function () {
+                wx.showModal({
+                  title: '购买失败',
+                  content: '智慧豆不足'
+                });
+              }
+            });
+          }
+        });
+      }else{
+        callback.success();
+      }
+      
+    },
+
     initAccountResult: function () {
       var outThis = this;
       accountRequest.accountResultInfo({
@@ -170,11 +200,10 @@ Component({
       var outThis = this;
       var alertDan = this.data.alertDan;
 
-      wx.showModal({
-        title: '报名该关卡',
-        content: '是否确定报名',
-        success:function(res){
-          if(res.confirm){
+
+      outThis.createPaymemberVoucher({
+        success:function(){
+
             outThis.setData({
               isDanAlert: 0
             });
@@ -203,10 +232,8 @@ Component({
 
               }
             });
-          }
         }
       });
-
     }
   }
 })

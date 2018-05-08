@@ -37,6 +37,14 @@ Component({
    * 组件的方法列表
    */
   methods: {
+    showLoading:function(){
+      wx.showLoading({
+      });
+    },
+    hideLoading:function(){
+      wx.hideLoading();
+    },
+
     init: function () {
       var role = this.data.role;
       if (role == 0) {
@@ -53,6 +61,8 @@ Component({
       var battleId = this.data.battleId;
       var periodId = this.data.periodId;
       var roomId = this.data.roomId;
+
+      console.log("role:"+role);
       battlePkRequest.readyRequest(id, roomId, battleId, role, {
         success: function (data) {
           outThis.hideLoading();
@@ -111,25 +121,24 @@ Component({
             outThis.showToast("网路繁忙");
           }
         });*/
-        this.setData({
+        /*this.setData({
           role: 0,
           isEnd: 0,
           errorCount: 0,
           roomStatus: 0,
           roomId: ""
-        });
-        this.init();
+        });*/
+        this.beatInto();
       } else if (role == 1) {
-        this.setData({
+        /*this.setData({
           role: 1,
           isEnd: 0,
           errorCount: 0,
           roomStatus: 0,
           roomId: ""
-        });
-        this.init();
+        });*/
+        this.beatInto();
       }
-
     },
 
     beatOut: function () {
@@ -175,6 +184,9 @@ Component({
             roomId: data.roomId,
             role: data.role
           });
+
+          outThis.registerRoomStartCodeCallback();
+          outThis.skipToProgress();
         },
         fail: function () {
           console.log("fail");
@@ -185,13 +197,18 @@ Component({
     skipToProgress: function () {
       var roomStatus = this.data.roomStatus;
       var isEnd = this.data.isEnd;
+      console.log("roomStatus:"+roomStatus);
       if (roomStatus == 2) {
         var battleId = this.data.battleId;
         var roomId = this.data.roomId;
         if (this.data.isEnd == 0) {
-          wx.navigateTo({
+          /*wx.navigateTo({
             url: '../progressScore/progressScore2?battleId=' + battleId + "&roomId=" + roomId + "&noWait=1"
-          });
+          });*/
+          var myEventDetail = {battleId:battleId,roomId: roomId} // detail对象，提供给事件监听函数
+          console.log(".............这里有没有进来");
+          var myEventOption = {} // 触发事件的选项
+          this.triggerEvent('pkRoomStart', myEventDetail, myEventOption);
           this.setData({
             isEnd: 1
           });
@@ -201,9 +218,9 @@ Component({
 
     registerRoomStartCodeCallback: function () {
       var outThis = this;
+      console.log("pkStatusCode");
       socketUtil.registerCallback("pkStatusCode", {
         call: function (data) {
-          console.log("data:" + JSON.stringify(data));
           outThis.setData({
             battleId: data.battleId,
             roomId: data.roomId,
@@ -223,12 +240,13 @@ Component({
       });
     },
 
-    beatInto: function () {
+    beatInto: function (id) {
       var outThis = this;
-      var id = this.data.id;
+      if(!id){
+        id = outThis.data.id;
+      }
       battlePkRequest.beatIntoRequest(id, {
         success: function (data) {
-          console.log("data:" + JSON.stringify(data));
           outThis.setData({
             id: data.id,
             homeUserId: data.homeUserId,
@@ -247,12 +265,38 @@ Component({
             roomId: data.roomId,
             role: data.role
           });
+          
+          outThis.registerRoomStartCodeCallback();
           outThis.skipToProgress();
         },
         fail: function () {
           console.log("fail");
         }
       });
+    },
+
+    /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function () {
+    var role = this.data.role;
+    var userId = "";
+    if(role==0){
+      userId = this.data.homeUserId;
+    }else if(role==1){
+      userId = this.data.beatUserId;
     }
+
+    console.log("roomId:" + this.data.id);
+
+    var path = 'pages/progressScore/progressScore2?registUserId=' + userId+"&id="+this.data.id+"&skipType=2";
+    //var path = "pages/pkRoom/pkRoom?role=1&id="+this.data.id;
+    return {
+      path: path,
+      success: function () {
+      
+      }
+    }
+  }
   }
 })

@@ -38,6 +38,11 @@ var memberWait;
 var questionSelector;
 var layerout = new baseLayerout.BaseLayerout({
 
+  pkRoomStart:function(e){
+    var battleId = e.detail.battleId;
+    var roomId = e.detail.roomId;
+    this.toStart(roomId,battleId,1);
+  },
 
   selectComplete: function (e) {
     var outThis = this;
@@ -122,7 +127,8 @@ var layerout = new baseLayerout.BaseLayerout({
 
   toBack: function () {
     this.setData({
-      isDan:0
+      isDan:0,
+      isPk:0
     });
     this.toHome();
   },
@@ -158,12 +164,22 @@ var layerout = new baseLayerout.BaseLayerout({
     danList.initAccountResult();
   },
 
-  toPk: function () {
-    /*this.setData({
-      mode: 7
+  toHomePk: function () {
+    this.setData({
+      mode: 7,
+      isPk:1
     });
-    pk = this.selectComponent("#pk");*/
-    this.skipToPk();
+    pk = this.selectComponent("#pk");
+    pk.homeInto();
+  },
+
+  toBeatPk:function(id){
+    this.setData({
+      mode: 7,
+      isPk:1
+    });
+    pk = this.selectComponent("#pk");
+    pk.beatInto(id);
   },
 
   danTakepart: function (e) {
@@ -181,7 +197,14 @@ var layerout = new baseLayerout.BaseLayerout({
   },
   toHome: function () {
     var isDan = this.data.isDan;
-    if(!isDan){
+    var isPk = this.data.isPk;
+    isPk = 0;
+    if(isDan){
+      this.toDanList();
+      
+    }else if(isPk){
+      
+    }else{
       this.setData({
         mode: 5
       });
@@ -189,8 +212,6 @@ var layerout = new baseLayerout.BaseLayerout({
       this.setScore(0);
       this.setScrollGogal(0);
       this.setPositions([]);
-    }else{
-      this.toDanList();
     }
     
   },
@@ -281,7 +302,26 @@ var layerout = new baseLayerout.BaseLayerout({
       wx.navigateBack({
 
       });*/
-      outThis.toHome();
+
+      outThis.setMembers([]);
+      outThis.setScore(0);
+      outThis.setScrollGogal(0);
+      outThis.setPositions([]);
+
+      var isPk = outThis.data.isPk;
+      var isDan = outThis.data.isDan;
+      if(isPk){
+        outThis.setData({
+          mode: 7,
+          isPk: 1
+        });
+        pk = outThis.selectComponent("#pk");
+        pk.restart();
+      }else if(isDan){
+
+      }else{
+        outThis.toHome();
+      }
     },
 
     fillSubmit: function (questionId, answer) {
@@ -1014,38 +1054,32 @@ var layerout = new baseLayerout.BaseLayerout({
    */
   onLoad: function (options) {
 
-    var skipType = options.skipType;
-    var roomId = options.roomId;
-
-    if (skipType == 2) {
-      var roomId = options.roomId;
-      wx.navigateTo({
-        url: '../pkRoom/pkRoom?role=1&id=' + roomId
-      });
-      return;
-    } 
-    var outThis = this;
-    this.connSocket({
-      open: function () {
-        outThis.initAccountInfo();
-      }
-    });
-
-    var roomId = options.roomId;
-
-    var battleId = options.battleId;
-
-    var noWait = options.noWait;
-
+    outThis = this;
     this.loadPreProgress({
       complite: function () {
 
       }
     });
+    outThis.showLoading();
+    this.connSocket({
+      open: function () {
+        outThis.hideLoading();
+        outThis.initAccountInfo();
+        var skipType = options.skipType;
 
-    this.setData({
-      mode: 5
-    });
+        var id = options.id;
+
+        //roomId = "2a61bf74-0728-470c-a3f5-b497c1e6198f";
+        //skipType = 2;
+        if (skipType == 2) {
+          outThis.toBeatPk(id);
+        } else {
+          outThis.setData({
+            mode: 5
+          });
+        } 
+      }
+    });  
 
     //this.showDrawLuck();
 
@@ -1419,7 +1453,10 @@ var layerout = new baseLayerout.BaseLayerout({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-
+    var mode = this.data.mode;
+    if(mode==7){
+      return pk.onShareAppMessage();
+    }
   }
 });
 

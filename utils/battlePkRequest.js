@@ -89,6 +89,7 @@ function restartRequest(callback) {
       if (resp.success) {
         callback.success(resp.data);
       } else {
+        console.log("resp:"+resp);
         callback.fail();
       }
     },
